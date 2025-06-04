@@ -152,9 +152,6 @@ JOIN Profesional p ON n.CodigoProfesional = p.CodigoProfesional
 JOIN Especialidad_nutricionista e ON n.IdEspecialidad = e.IdEspecialidad;
 GO
 
-
-
-
 -- FINAL NUTRICIONISTA
 
 
