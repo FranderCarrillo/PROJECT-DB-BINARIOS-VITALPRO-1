@@ -7,23 +7,31 @@ CREATE TABLE Profesional
     Apellido1 VARCHAR(30) NOT NULL,
     Apellido2 VARCHAR(30) NOT NULL,
     CedProfesional VARCHAR(50) NOT NULL,
-    AniosExperiencia INT NOT NULL
+    AniosExperiencia INT NOT NULL,
+    CONSTRAINT PK_CodigoProfesional
+    PRIMARY KEY (CodigoProfesional)
 )
 GO
 exec sp_help Profesional
 GO
 
+--  CREACION DE LA TABLA PROFESIONAL, COMO TABLA MADRE  CON SU RESPECTIVA PRIMARY KEY 
+
+--  Horario profesional
 USE VITALPRO
 GO
-ALTER TABLE Profesional 
-ADD CONSTRAINT PK_CodigoProfesional
-PRIMARY KEY (CodigoProfesional)
+CREATE TABLE HorarioProfesional (
+    IdHorario INT PRIMARY KEY,
+    CodigoProfesional INT NOT NULL,
+    DiaSemana VARCHAR(10) NOT NULL, 
+    HoraInicio TIME NOT NULL,
+    HoraFin TIME NOT NULL,
+    FOREIGN KEY (CodigoProfesional) REFERENCES Profesional(CodigoProfesional)
+)
 GO
-exec sp_help Profesional
+exec sp_help HorarioProfesional
 GO
-
-
---  CREACION DE LA TABLA PROFESIONAL, COMO TABLA MADRE  CON SU RESPECTIVA PRIMARY KEY 
+--  Horario profesional
 
 
 USE VITALPRO
@@ -34,34 +42,18 @@ CREATE TABLE Nutricionista
     FechaInicio DATE NOT NULL,
     FechaFinal DATE NULL,
     CodigoProfesional INT NOT NULL,
-    IdEspecialidad INT NOT NULL
+    IdEspecialidad INT NOT NULL,
+    CONSTRAINT PK_IdNutricionista -- PK DE NUTRICIONISTA 
+    PRIMARY KEY (IdNutricionista), 
+    CONSTRAINT FK_Nutricionista_Profesional -- FK DE PROFESIONAL
+    FOREIGN KEY (CodigoProfesional)
+    REFERENCES Profesional(CodigoProfesional)
 )
 ON Nutricion
 GO
 exec sp_help Nutricionista
 GO
 -- SE CREA LA TABLA Nutricionista
-
-USE VITALPRO
-GO
-ALTER TABLE Nutricionista 
-ADD CONSTRAINT PK_IdNutricionista
-PRIMARY KEY (IdNutricionista)
-GO
-exec sp_help Nutricionista
-GO
--- SE AÑADE LA LLAVE PRIMARIA a NUTRICIONISTA
-
-
-USE VITALPRO
-GO
-ALTER TABLE Nutricionista
-ADD CONSTRAINT FK_Nutricionista_Profesional
-FOREIGN KEY (CodigoProfesional) REFERENCES Profesional(CodigoProfesional);
-GO
-exec sp_help Nutricionista
-GO
--- AGREGAR LA LLAVE FORANEA DE PROFESIONAL A NUTRICIONISTA
 
 --  CREACION DE LA TABLA NUTRICIONISTA DONDE SE GUARDA SU FECHA DE INGRESO Y SU FECHA DEL MOMENTO QUE DEJA DE TRABAJAR Y SE AGREGA SUS LLAVES FORANEAS Y PRIMARIAS 
 
@@ -70,23 +62,15 @@ GO
 CREATE TABLE Especialidad_nutricionista
 (
     IdEspecialidad INT NOT NULL,
-    NombreEspecialidad VARCHAR(50) NOT NULL
+    NombreEspecialidad VARCHAR(50) NOT NULL,
+    CONSTRAINT PK_IdEspecialidad -- PK DE LA TABLA,
+    PRIMARY KEY (IdEspecialidad)
 )
 ON Nutricion
 GO
 exec sp_help Especialidad_nutricionista
 GO
 -- CREACION DE LA TABLA QUE CONTIENE LAS ESPECIALIDADES PARA NUTRICIONISTA
-
-USE VITALPRO
-GO
-ALTER TABLE Especialidad_nutricionista
-ADD CONSTRAINT PK_IdEspecialidad
-PRIMARY KEY (IdEspecialidad)
-GO
-exec sp_help Especialidad_nutricionista
-GO
--- CREACION DE LA PK PARA LA ESPECIALIDAD NUTRICIONISTA
 
 
 USE VITALPRO
@@ -98,6 +82,7 @@ GO
 exec sp_help Nutricionista
 GO
 -- CREACION DE LA LLAVE FORANEA DE LAS ESPECIALIDADES EN LA TABLA DE NUTRICIONISTA 
+
 
 use VITALPRO
 GO
@@ -121,24 +106,34 @@ INSERT INTO Nutricionista (IdNutricionista, FechaInicio, FechaFinal, CodigoProfe
 VALUES 
 (1, '2022-02-01', NULL, 1, 2);
 GO
+
 -- Nutricionista vinculado al profesional #2 con especialidad 1 (Deportiva)
 INSERT INTO Nutricionista (IdNutricionista, FechaInicio, FechaFinal, CodigoProfesional, IdEspecialidad)
 VALUES 
 (2, '2021-05-15', '2024-05-30', 2, 1);
 GO
 
--- USE VITALPRO
--- GO
--- DROP TABLE Nutricionista
--- GO
--- DROP TABLE Profesional
--- GO
--- Drop table Especialidad_nutricionista
--- go
--- pruebas 
-
-use VITALPRO
+-- Horarios del profesional 1 (Laura Ramírez)
+INSERT INTO HorarioProfesional (IdHorario, CodigoProfesional, DiaSemana, HoraInicio, HoraFin)
+VALUES
+(1, 1, 'Lunes', '08:00', '16:00'),
+(2, 1, 'Martes', '08:00', '16:00'),
+(3, 1, 'Miércoles', '08:00', '16:00'),
+(4, 1, 'Jueves', '08:00', '16:00'),
+(5, 1, 'Viernes', '08:00', '14:00');
 GO
+
+-- Horarios del profesional 2 (Javier Soto)
+INSERT INTO HorarioProfesional (IdHorario, CodigoProfesional, DiaSemana, HoraInicio, HoraFin)
+VALUES
+(6, 2, 'Lunes', '09:00', '17:00'),
+(7, 2, 'Miércoles', '09:00', '17:00'),
+(8, 2, 'Viernes', '09:00', '15:00');
+GO
+
+-- SELECTS
+
+-- Consulta general de nutricionistas con especialidades
 SELECT 
     n.IdNutricionista,
     p.Nombre + ' ' + p.Apellido1 + ' ' + p.Apellido2 AS NombreCompleto,
@@ -152,7 +147,28 @@ JOIN Profesional p ON n.CodigoProfesional = p.CodigoProfesional
 JOIN Especialidad_nutricionista e ON n.IdEspecialidad = e.IdEspecialidad;
 GO
 
+-- Consulta de horarios por profesional
+SELECT 
+    p.Nombre + ' ' + p.Apellido1 + ' ' + p.Apellido2 AS Profesional,
+    h.DiaSemana,
+    FORMAT(h.HoraInicio, 'hh\:mm') AS HoraInicio,
+    FORMAT(h.HoraFin, 'hh\:mm') AS HoraFin
+FROM HorarioProfesional h
+JOIN Profesional p ON p.CodigoProfesional = h.CodigoProfesional
+ORDER BY p.CodigoProfesional,
+         CASE
+            WHEN h.DiaSemana = 'Lunes' THEN 1
+            WHEN h.DiaSemana = 'Martes' THEN 2
+            WHEN h.DiaSemana = 'Miércoles' THEN 3
+            WHEN h.DiaSemana = 'Jueves' THEN 4
+            WHEN h.DiaSemana = 'Viernes' THEN 5
+            WHEN h.DiaSemana = 'Sábado' THEN 6
+            WHEN h.DiaSemana = 'Domingo' THEN 7
+         END;
+GO
+
 -- FINAL NUTRICIONISTA
+
 
 
 
@@ -210,5 +226,3 @@ GO
 -- )
 -- go
  
--- exec sp_help Clientes
-
