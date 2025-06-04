@@ -169,38 +169,129 @@ GO
 
 -- FINAL NUTRICIONISTA
 
-
-
-
-
 USE VITALPRO
 GO
+-- CREACION DE LA TABLA ENTRENADOR DONDE SE GUARDA SU FECHA DE INGRESO Y FECHA DEL MOMENTO QUE DEJA DE TRABAJAR, Y SE AGREGA SU LLAVE PRIMARIA Y FORANEA RELACIONADA A LA TABLA PROFESIONAL
+
 CREATE TABLE Entrenador
 (
     IdEntrenador INT NOT NULL,
     FechaInicio DATE NOT NULL,
-    FechaFinal DATE NULL, 
+    FechaFinal DATE NULL,
+    CodigoProfesional INT NOT NULL,
+    IdEspecialidad INT NOT NULL,
+    CONSTRAINT PK_IdEntrenador -- PK DE ENTRENADOR
+    PRIMARY KEY (IdEntrenador),
+    CONSTRAINT FK_Entrenador_Profesional -- FK HACIA PROFESIONAL
+    FOREIGN KEY (CodigoProfesional)
+    REFERENCES Profesional(CodigoProfesional)
 )
 ON Entrenamiento
 GO
 exec sp_help Entrenador
 GO
 
---  CREACION DE LA TABLA ENTRENADOR CON SU FECHA DE INGRESO Y FECHA DEL MOMENTO QUE DEJA DE TRABAJAR
+-- CREACION DE LA TABLA DE ESPECIALIDADES PARA ENTRENADOR PARA ASOCIARLAS A UN ENTRENADOR
 
-USE VITALPRO
-GO
 CREATE TABLE Especialidad_Entrenador
 (
     IdEspecialidad INT NOT NULL,
-    NombreEspecialidad VARCHAR(50) NOT NULL
+    NombreEspecialidad VARCHAR(50) NOT NULL,
+    CONSTRAINT PK_EspecialidadEntrenador -- PK DE LA TABLA
+    PRIMARY KEY (IdEspecialidad)
 )
 ON Entrenamiento
 GO
 exec sp_help Especialidad_Entrenador
 GO
 
---  CREACION DE LA TABLA DE ESPECIALIDADES PARA ENTRENADOR PARA ASOCIARLAS A UN ENTRENAADOR
+-- CREACION DE LA LLAVE FORANEA DE LAS ESPECIALIDADES EN LA TABLA DE ENTRENADOR
+
+ALTER TABLE Entrenador
+ADD CONSTRAINT FK_Entrenador_Especialidad
+FOREIGN KEY (IdEspecialidad) REFERENCES Especialidad_Entrenador(IdEspecialidad);
+GO
+exec sp_help Entrenador
+GO
+
+-- INSERCIONES DE DATOS DE PRUEBA PARA ENTRENADOR
+
+-- Profesionales adicionales para entrenadores
+INSERT INTO Profesional (CodigoProfesional, Nombre, Apellido1, Apellido2, CedProfesional, AniosExperiencia)
+VALUES 
+(3, 'Carlos', 'Vargas', 'Lopez', '301112233', 10),
+(4, 'María', 'Fernández', 'Rojas', '112233445', 6);
+GO
+
+-- Especialidades disponibles para entrenadores
+INSERT INTO Especialidad_Entrenador (IdEspecialidad, NombreEspecialidad)
+VALUES 
+(1, 'Entrenamiento Funcional'),
+(2, 'Entrenamiento Personalizado'),
+(3, 'Preparación Física Deportiva');
+GO
+
+-- Entrenadores registrados
+INSERT INTO Entrenador (IdEntrenador, FechaInicio, FechaFinal, CodigoProfesional, IdEspecialidad)
+VALUES 
+(1, '2023-01-10', NULL, 3, 1),
+(2, '2022-09-05', '2024-04-15', 4, 2);
+GO
+
+-- Horarios del profesional 3 (Carlos Vargas)
+INSERT INTO HorarioProfesional (IdHorario, CodigoProfesional, DiaSemana, HoraInicio, HoraFin)
+VALUES
+(9, 3, 'Lunes', '07:00', '15:00'),
+(10, 3, 'Martes', '07:00', '15:00'),
+(11, 3, 'Jueves', '07:00', '13:00');
+GO
+
+-- Horarios del profesional 4 (María Fernández)
+INSERT INTO HorarioProfesional (IdHorario, CodigoProfesional, DiaSemana, HoraInicio, HoraFin)
+VALUES
+(12, 4, 'Martes', '10:00', '18:00'),
+(13, 4, 'Jueves', '10:00', '18:00'),
+(14, 4, 'Sábado', '08:00', '12:00');
+GO
+
+-- CONSULTAS
+
+-- Consulta general de entrenadores con especialidades
+SELECT 
+    e.IdEntrenador,
+    p.Nombre + ' ' + p.Apellido1 + ' ' + p.Apellido2 AS NombreCompleto,
+    p.CedProfesional,
+    p.AniosExperiencia,
+    esp.NombreEspecialidad,
+    e.FechaInicio,
+    e.FechaFinal
+FROM Entrenador e
+JOIN Profesional p ON e.CodigoProfesional = p.CodigoProfesional
+JOIN Especialidad_Entrenador esp ON e.IdEspecialidad = esp.IdEspecialidad;
+GO
+
+-- Consulta de horarios por entrenador (profesional)
+SELECT 
+    p.Nombre + ' ' + p.Apellido1 + ' ' + p.Apellido2 AS Profesional,
+    h.DiaSemana,
+    FORMAT(h.HoraInicio, 'hh\:mm') AS HoraInicio,
+    FORMAT(h.HoraFin, 'hh\:mm') AS HoraFin
+FROM HorarioProfesional h
+JOIN Profesional p ON p.CodigoProfesional = h.CodigoProfesional
+ORDER BY p.CodigoProfesional,
+         CASE
+            WHEN h.DiaSemana = 'Lunes' THEN 1
+            WHEN h.DiaSemana = 'Martes' THEN 2
+            WHEN h.DiaSemana = 'Miércoles' THEN 3
+            WHEN h.DiaSemana = 'Jueves' THEN 4
+            WHEN h.DiaSemana = 'Viernes' THEN 5
+            WHEN h.DiaSemana = 'Sábado' THEN 6
+            WHEN h.DiaSemana = 'Domingo' THEN 7
+         END;
+GO
+
+-- FINAL ENTRENADOR
+
 
 
 
