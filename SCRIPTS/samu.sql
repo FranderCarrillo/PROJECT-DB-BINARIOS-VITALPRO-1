@@ -1,4 +1,4 @@
--------------------------------------------------------
+	-------------------------------------------------------
 USE master
 GO
 ALTER DATABASE VITALPRO
@@ -39,7 +39,7 @@ CREATE TABLE Receta
 (	
 	id_Receta int NOT NULL,
 	Nombre VARCHAR (50) NOT NULL,
-	TiempoPreparación int NOT NULL
+	TiempoPreparaciÃ³n int NOT NULL
 )
 ON Nutricionista
 GO
@@ -53,11 +53,12 @@ go
 -------------------------------------------------------
 USE VITALPRO
 GO
+
 CREATE TABLE RecetaIngrediente
 (
 	id_RecetaIngredientes int NOT NULL,
 	Cantidad FLOAT NOT NULL,
-	TiempoPreparación int NOT NULL
+	TiempoPreparaciÃ³n int NOT NULL
 )
 ON Nutricionista
 GO
@@ -89,6 +90,7 @@ GO
 -------------------------------------------------------
 USE VITALPRO
 GO
+
 CREATE TABLE ComidaReceta
 (
 	id_ComidaReceta int NOT NULL
@@ -103,6 +105,22 @@ ADD CONSTRAINT PK_ComidaReceta
 PRIMARY KEY (id_ComidaReceta)
 GO
 -------------------------------------------------------
+
+USE VITALPRO
+GO
+ALTER TABLE ComidaReceta
+ADD id_Comida INT,
+    id_Receta INT;
+GO
+
+USE VITALPRO
+GO
+ALTER TABLE RecetaIngrediente
+ADD id_Receta INT,
+    id_Ingrediente INT;
+GO
+
+
 USE VITALPRO;
 GO
 ALTER TABLE ComidaReceta
@@ -117,6 +135,8 @@ FOREIGN KEY (id_ComidaReceta)
 REFERENCES Receta(id_Receta);
 GO
 -------------------------------------------------------
+USE VITALPRO;
+GO
 ALTER TABLE RecetaIngrediente
 ADD CONSTRAINT FK_RecetaIngrediente_Receta
 FOREIGN KEY (id_RecetaIngredientes)
