@@ -317,3 +317,112 @@ GO
 -- )
 -- go
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+USE VITALPRO
+GO
+
+-- Tabla Profesional
+CREATE TABLE Profesional (
+    CodigoProfesional INT NOT NULL,
+    Nombre VARCHAR(30) NOT NULL,
+    Apellido1 VARCHAR(30) NOT NULL,
+    Apellido2 VARCHAR(30) NOT NULL,
+    CedProfesional VARCHAR(50) NOT NULL,
+    AniosExperiencia INT NOT NULL,
+    CONSTRAINT PK_Profesional PRIMARY KEY (CodigoProfesional)
+)
+GO
+
+-- Tabla HorarioProfesional
+CREATE TABLE HorarioProfesional (
+    IdHorario INT NOT NULL,
+    CodigoProfesional INT NOT NULL,
+    DiaSemana VARCHAR(10) NOT NULL,
+    HoraInicio TIME NOT NULL,
+    HoraFin TIME NOT NULL,
+    CONSTRAINT PK_idHorario PRIMARY KEY (IdHorario),
+    CONSTRAINT FOREIGN KEY (CodigoProfesional) REFERENCES Profesional(CodigoProfesional)
+)
+GO
+
+-- Tabla Nutricionista
+CREATE TABLE Nutricionista (
+    IdNutricionista INT NOT NULL,
+    FechaInicio DATE NOT NULL,
+    FechaFinal DATE NULL,
+    CodigoProfesional INT NOT NULL,
+    CONSTRAINT PK_Nutricionista PRIMARY KEY (IdNutricionista),
+    CONSTRAINT FK_Nutricionista_Profesional FOREIGN KEY (CodigoProfesional)
+        REFERENCES Profesional(CodigoProfesional)
+)
+ON Nutricion
+GO
+
+-- Tabla Especialidad_nutricionista
+CREATE TABLE Especialidad_nutricionista (
+    IdEspecialidad INT  IDENTITY(1,1),
+    NombreEspecialidad VARCHAR(50) NOT NULL,
+    CONSTRAINT PK_Especialidad_nutricionista PRIMARY KEY (IdEspecialidad)
+)
+ON Nutricion
+GO
+
+-- Tabla intermedia Nutricionista_Especialidad
+CREATE TABLE Nutricionista_Especialidad (
+    Id INT IDENTITY(1,1),
+    IdNutricionista INT NOT NULL,
+    IdEspecialidad INT NOT NULL,
+    CONSTRAINT PK_Nutricionista_Especialidad PRIMARY KEY (Id),
+    CONSTRAINT UQ_Nutricionista_Especialidad UNIQUE (IdNutricionista, IdEspecialidad),
+    CONSTRAINT FK_NE_Nutricionista FOREIGN KEY (IdNutricionista) REFERENCES Nutricionista(IdNutricionista),
+    CONSTRAINT FK_NE_Especialidad FOREIGN KEY (IdEspecialidad) REFERENCES Especialidad_nutricionista(IdEspecialidad)
+)
+ON Nutricion
+GO
+
+-- Tabla Entrenador
+CREATE TABLE Entrenador (
+    IdEntrenador INT  IDENTITY(1,1),
+    FechaInicio DATE NOT NULL,
+    FechaFinal DATE NULL,
+    CodigoProfesional INT NOT NULL,
+    CONSTRAINT PK_Entrenador PRIMARY KEY (IdEntrenador),
+    CONSTRAINT FK_Entrenador_Profesional FOREIGN KEY (CodigoProfesional)
+        REFERENCES Profesional(CodigoProfesional)
+)
+ON Entrenamiento
+GO
+
+-- Tabla Especialidad_Entrenador
+CREATE TABLE Especialidad_Entrenador (
+    IdEspecialidad INT  IDENTITY(1,1),
+    NombreEspecialidad VARCHAR(50) NOT NULL,
+    CONSTRAINT PK_Especialidad_Entrenador PRIMARY KEY (IdEspecialidad)
+)
+ON Entrenamiento
+GO
+
+-- Tabla intermedia Entrenador_Especialidad
+CREATE TABLE Entrenador_Especialidad (
+    Id INT IDENTITY(1,1),
+    IdEntrenador INT NOT NULL,
+    IdEspecialidad INT NOT NULL,
+    CONSTRAINT PK_Entrenador_Especialidad PRIMARY KEY (Id),
+    CONSTRAINT UQ_Entrenador_Especialidad UNIQUE (IdEntrenador, IdEspecialidad),
+    CONSTRAINT FK_EE_Entrenador FOREIGN KEY (IdEntrenador) REFERENCES Entrenador(IdEntrenador),
+    CONSTRAINT FK_EE_Especialidad FOREIGN KEY (IdEspecialidad) REFERENCES Especialidad_Entrenador(IdEspecialidad)
+)
+ON Entrenamiento
+GO
