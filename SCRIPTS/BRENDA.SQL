@@ -72,10 +72,50 @@ go
 execute sp_help Clientes
 go
 
+--------------FOREIGN KEY---------------
+----------------CLIENTES----------------
 use VITALPRO
 go
 ALTER TABLE Clientes
 ADD CONSTRAINT FK_Clientes_CentroVitalPro
 FOREIGN KEY (CodigoUnicoCentro)
 REFERENCES CentroVitalPro(CodigoUnico)
+go
+
+use VITALPRO
+go
+ALTER TABLE Clientes
+ADD CONSTRAINT FK_Clientes_PlanAlimenticio
+FOREIGN KEY (CodigoPlanAlimenticio)
+REFERENCES PlanAlimenticio(CodigoPlan)
+go
+
+ALTER TABLE Clientes
+ADD CONSTRAINT FK_Clientes_Entrenador
+FOREIGN KEY (Id_Entrenador)
+REFERENCES 	Entrenador(IdEntrenador)
+go
+---------------SESION-------------------
+ALTER TABLE Sesion
+ADD CONSTRAINT FK_Sesion_CentroVitalPro
+FOREIGN KEY (CodigoUnicoCentro)
+REFERENCES 	CentroVitalPro(CodigoUnico)
+go
+
+ALTER TABLE Sesion
+ADD CONSTRAINT FK_Sesion_Profesional
+FOREIGN KEY (CodigoProfesional)
+REFERENCES 	Profesional(CodigoProfesional)
+go
+
+ALTER TABLE Sesion
+ADD CONSTRAINT FK_Sesion_Clientes
+FOREIGN KEY (NumAfiliación)
+REFERENCES 	Clientes(NumAfiliacion)
+go
+-----------HorarioCentro----------------
+ALTER TABLE HorarioCentro
+ADD CONSTRAINT FK_HorarioCentro_CentroVitalPro
+FOREIGN KEY (CodigoUnicoCentro)
+REFERENCES 	CentroVitalPro(CodigoUnico)
 go
