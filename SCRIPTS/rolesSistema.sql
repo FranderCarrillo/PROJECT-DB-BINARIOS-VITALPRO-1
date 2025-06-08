@@ -1,0 +1,1 @@
+HK_Nombre_MinLength CHECK (LEN(LTRIM(RTRIM(Nombre))) >= 3);
