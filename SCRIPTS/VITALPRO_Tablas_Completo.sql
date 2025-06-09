@@ -9,16 +9,16 @@ Create database VITALPRO
 ON PRIMARY
 (NAME = VITALPRO_Data,
 FILENAME = 'C:\SqlData\VITALPRO_Data.mdf',
-SIZE = 10MB,
-MAXSIZE = 15MB, 
-FILEGROWTH = 1MB
+SIZE = 1300MB,
+MAXSIZE = 6GB,
+FILEGROWTH = 390MB
 )
 LOG ON
 (NAME = VITALPRO_Log,
 FILENAME = 'C:\SqlLog\VITALPRO_Log.ldf',
-SIZE = 100MB,
-MAXSIZE = 150MB, 
-FILEGROWTH = 5MB
+SIZE = 500MB,
+MAXSIZE = 2GB, 
+FILEGROWTH = 100MB
 )
 GO
 
@@ -67,36 +67,48 @@ GO
 Use VITALPRO
 GO
 CREATE TABLE CentroVitalPro (
-    CodigoUnico INT NOT NULL,
+    CodigoUnico INT NOT NULL IDENTITY(1,1),
     Nombre VARCHAR(50) NOT NULL,
-    Provincia VARCHAR(50) NOT NULL,
-    Canton VARCHAR(50) NOT NULL,
-    Distrito VARCHAR(50) NOT NULL,
-    DireccionExacta VARCHAR(100) NOT NULL,
-    NumContacto VARCHAR(15) NOT NULL,
-    CONSTRAINT PK_CentroVitalPro PRIMARY KEY (CodigoUnico)
+    Provincia VARCHAR(15) NOT NULL,
+    Canton VARCHAR(20) NOT NULL,
+    Distrito VARCHAR(40) NOT NULL,
+    DireccionExacta TEXT NOT NULL,
+    NumContacto VARCHAR(20) NOT NULL,
+    CONSTRAINT PK_CentroVitalPro PRIMARY KEY (CodigoUnico),
+)
+GO
+
+-- HORARIO CENTRO
+CREATE TABLE HorarioCentro (
+    Id_Horario INT NOT NULL IDENTITY(1,1),
+    DiaSemana VARCHAR(12) NOT NULL,
+    HoraInicio TIME NOT NULL,
+    HoraFin TIME NOT NULL,
+    CodigoUnicoCentro INT NOT NULL,
+    CONSTRAINT PK_HorarioCentro PRIMARY KEY (Id_Horario),
+    CONSTRAINT FK_HorarioCentro_Centro FOREIGN KEY (CodigoUnicoCentro) REFERENCES CentroVitalPro(CodigoUnico),
 )
 GO
 
 -- PROFESIONAL
 CREATE TABLE Profesional (
-    CodigoProfesional INT NOT NULL,
+    CodigoProfesional INT NOT NULL IDENTITY(1,1),
     Nombre VARCHAR(30) NOT NULL,
     Apellido1 VARCHAR(30) NOT NULL,
     Apellido2 VARCHAR(30) NOT NULL,
     CedProfesional VARCHAR(50) NOT NULL,
-    AniosExperiencia INT NOT NULL,
-    CodigoCentro INT,
+    AniosExperiencia INT NOT NULL, 
+    CodigoCentro INT NOT NULL,
     CONSTRAINT PK_Profesional PRIMARY KEY (CodigoProfesional),
-    CONSTRAINT FK_Profesional_Centro FOREIGN KEY (CodigoCentro) REFERENCES CentroVitalPro(CodigoUnico)
+    CONSTRAINT FK_Profesional_Centro FOREIGN KEY (CodigoCentro) REFERENCES CentroVitalPro(CodigoUnico),
 )
 GO
 
 -- HORARIO PROFESIONAL
 CREATE TABLE HorarioProfesional (
-    IdHorario INT NOT NULL,
+    IdHorario INT NOT NULL IDENTITY(1,1),
     CodigoProfesional INT NOT NULL,
-    DiaSemana VARCHAR(10) NOT NULL,
+    DiaSemana VARCHAR(12) NOT NULL,
     HoraInicio TIME NOT NULL,
     HoraFin TIME NOT NULL,
     CONSTRAINT PK_idHorario PRIMARY KEY (IdHorario),
@@ -106,38 +118,38 @@ GO
 
 -- ENTRENADOR
 CREATE TABLE Entrenador (
-    IdEntrenador INT NOT NULL,
+    IdEntrenador VARCHAR(4) NOT NULL,
     FechaInicio DATE NOT NULL,
     FechaFinal DATE,
     CodigoProfesional INT NOT NULL,
     CONSTRAINT PK_Entrenador PRIMARY KEY (IdEntrenador),
-    CONSTRAINT FK_Entrenador_Profesional FOREIGN KEY (CodigoProfesional) REFERENCES Profesional(CodigoProfesional)
+    CONSTRAINT FK_Entrenador_Profesional FOREIGN KEY (CodigoProfesional) REFERENCES Profesional(CodigoProfesional),
 )
 GO
 
 -- ESPECIALIDAD ENTRENADOR
 CREATE TABLE Especialidad_Entrenador (
-    IdEspecialidad INT NOT NULL,
+    IdEspecialidad VARCHAR(5) NOT NULL,
     NombreEspecialidad VARCHAR(50) NOT NULL,
-    CONSTRAINT PK_Especialidad_Entrenador PRIMARY KEY (IdEspecialidad)
+    CONSTRAINT PK_Especialidad_Entrenador PRIMARY KEY (IdEspecialidad),
 )
 GO
 
 -- ENTRENADOR_ESPECIALIDAD
 CREATE TABLE Entrenador_Especialidad (
-    Id INT NOT NULL,
-    IdEntrenador INT NOT NULL,
-    IdEspecialidad INT NOT NULL,
+    Id VARCHAR(5) NOT NULL,
+    IdEntrenador VARCHAR(4) NOT NULL,
+    IdEspecialidad VARCHAR(5) NOT NULL,
     CONSTRAINT PK_Entrenador_Especialidad PRIMARY KEY (Id),
     CONSTRAINT UQ_Entrenador_Especialidad UNIQUE (IdEntrenador, IdEspecialidad),
     CONSTRAINT FK_EE_Entrenador FOREIGN KEY (IdEntrenador) REFERENCES Entrenador(IdEntrenador),
-    CONSTRAINT FK_EE_Especialidad FOREIGN KEY (IdEspecialidad) REFERENCES Especialidad_Entrenador(IdEspecialidad)
+    CONSTRAINT FK_EE_Especialidad FOREIGN KEY (IdEspecialidad) REFERENCES Especialidad_Entrenador(IdEspecialidad),
 )
 GO
 
 -- NUTRICIONISTA
 CREATE TABLE Nutricionista (
-    IdNutricionista INT NOT NULL,
+    IdNutricionista VARCHAR(4) NOT NULL,
     FechaInicio DATE NOT NULL,
     FechaFinal DATE,
     CodigoProfesional INT NOT NULL,
@@ -148,7 +160,7 @@ GO
 
 -- ESPECIALIDAD NUTRICIONISTA
 CREATE TABLE Especialidad_Nutricionista (
-    IdEspecialidad INT NOT NULL,
+    IdEspecialidad VARCHAR(5) NOT NULL,
     NombreEspecialidad VARCHAR(50) NOT NULL,
     CONSTRAINT PK_Especialidad_Nutricionista PRIMARY KEY (IdEspecialidad)
 )
@@ -156,9 +168,9 @@ GO
 
 -- NUTRICIONISTA_ESPECIALIDAD
 CREATE TABLE Nutricionista_Especialidad (
-    Id INT NOT NULL,
-    IdNutricionista INT NOT NULL,
-    IdEspecialidad INT NOT NULL,
+    Id VARCHAR(5) NOT NULL,
+    IdNutricionista VARCHAR(4) NOT NULL,
+    IdEspecialidad VARCHAR(5) NOT NULL,
     CONSTRAINT PK_Nutricionista_Especialidad PRIMARY KEY (Id),
     CONSTRAINT UQ_Nutricionista_Especialidad UNIQUE (IdNutricionista, IdEspecialidad),
     CONSTRAINT FK_NE_Nutricionista FOREIGN KEY (IdNutricionista) REFERENCES Nutricionista(IdNutricionista),
@@ -166,12 +178,145 @@ CREATE TABLE Nutricionista_Especialidad (
 )
 GO
 
+-- VALOR NUTRICIONAL
+CREATE TABLE ValorNutricional (
+    IdValorNutricional INT NOT NULL IDENTITY(1,1),
+    Calorias INT NOT NULL,
+    Proteinas FLOAT NOT NULL,
+    Carbohidratos FLOAT NOT NULL,
+    CONSTRAINT PK_ValorNutricional PRIMARY KEY (IdValorNutricional)
+)
+GO
+-- RECETA
+CREATE TABLE Receta (
+    Id_Receta INT NOT NULL,
+    Nombre VARCHAR(50) NOT NULL,
+    TiempoPreparacion INT NOT NULL,
+    IdValorNutricional INT,
+    CONSTRAINT PK_Receta PRIMARY KEY (Id_Receta),
+    CONSTRAINT FK_Receta_ValorNutricional FOREIGN KEY (IdValorNutricional) REFERENCES ValorNutricional(IdValorNutricional)
+)
+GO
 
+--Unidad de medida
+CREATE TABLE UnidadMedida (
+    Id_Unidad VARCHAR(4) NOT NULL,
+    NombreUnidad VARCHAR(20) NOT NULL,
+    CONSTRAINT PK_UnidadMedida PRIMARY KEY (Id_Unidad)
+)
 
--- ==============================================
--- Script de Creación de Tablas - Proyecto VITALPRO
--- Parte 2: Clientes, Rutinas, Evaluaciones, Comidas
--- ==============================================
+-- INGREDIENTES
+CREATE TABLE Ingrediente (
+    Id_Ingrediente INT NOT NULL IDENTITY(1,1),
+    Nombre VARCHAR(50) NOT NULL,
+    Id_Unidad VARCHAR(4) NOT NULL,
+    CONSTRAINT PK_Ingredientes PRIMARY KEY (Id_Ingrediente),
+    CONSTRAINT FK_Ingredientes_Unidad FOREIGN KEY (Id_Unidad) REFERENCES UnidadMedida(Id_Unidad)
+)
+GO
+
+-- RECETA INGREDIENTE
+CREATE TABLE RecetaIngrediente (
+    Id_RecetaIngredientes INT NOT NULL,
+    Id_Receta INT NOT NULL,
+    Id_Ingrediente INT NOT NULL,
+    Cantidad FLOAT NOT NULL,
+    TiempoPreparacion INT NOT NULL,
+    CONSTRAINT PK_RecetaIngrediente PRIMARY KEY (Id_RecetaIngredientes),
+    CONSTRAINT FK_RecetaIngrediente_Receta FOREIGN KEY (Id_Receta) REFERENCES Receta(Id_Receta),
+    CONSTRAINT FK_RecetaIngrediente_Ingrediente FOREIGN KEY (Id_Ingrediente) REFERENCES Ingrediente(Id_Ingrediente)
+)
+GO
+
+-- COMIDA
+CREATE TABLE Comida (
+    Id_Comida INT NOT NULL,
+    TipoComida VARCHAR(50) NOT NULL,
+    CodigoPlan INT NOT NULL,
+    CONSTRAINT PK_Comida PRIMARY KEY (Id_Comida)
+)
+GO
+
+-- COMIDA RECETA
+CREATE TABLE ComidaReceta (
+    Id_ComidaReceta INT NOT NULL,
+    Id_Comida INT NOT NULL,
+    Id_Receta INT NOT NULL,
+    CONSTRAINT PK_ComidaReceta PRIMARY KEY (Id_ComidaReceta),
+    CONSTRAINT FK_ComidaReceta_Comida FOREIGN KEY (Id_Comida) REFERENCES Comida(Id_Comida),
+    CONSTRAINT FK_ComidaReceta_Receta FOREIGN KEY (Id_Receta) REFERENCES Receta(Id_Receta)
+)
+GO
+
+-- PLAN ALIMENTICIO
+CREATE TABLE PlanAlimenticio (
+    CodigoPlan INT NOT NULL,
+    Nombre VARCHAR(50) NOT NULL,
+    MetaNutricional VARCHAR(100),
+    CaloriasDiariasEstim INT,
+    Observaciones TEXT,
+    IdNutricionista VARCHAR(4) NOT NULL,
+    CONSTRAINT PK_PlanAlimenticio PRIMARY KEY (CodigoPlan),
+    CONSTRAINT FK_PlanAlimenticio_Nutricionista FOREIGN KEY (IdNutricionista) REFERENCES Nutricionista(IdNutricionista)
+)
+GO
+
+-- PlanAlimenticio_Comida
+CREATE TABLE PlanAlimenticio_Comida(
+    Id_PlanAlimenticio_Comida INT NOT NULL,
+    Id_Comida INT NOT NULL,
+    CodigoPlan INT NOT NULL,
+    CONSTRAINT PK_PlanAlimenticio_Comida PRIMARY KEY ( Id_PlanAlimenticio_Comida),
+    CONSTRAINT FK_PlanAlimenticioComida_Comida FOREIGN KEY (Id_Comida) REFERENCES Comida(Id_Comida),
+    CONSTRAINT FK_PlanAlimenticioComida_PlanAlimenticio FOREIGN KEY (CodigoPlan) REFERENCES PlanAlimenticio(CodigoPlan)
+)
+
+-- EJERCICIO
+CREATE TABLE Ejercicio (
+    Id_Ejercicio INT NOT NULL,
+    Nombre VARCHAR(50) NOT NULL,
+    GrupoMuscularTrabajado VARCHAR(50) NOT NULL,
+    CantidadRepeticiones INT NOT NULL,
+    EquipamientoEspecial BIT NOT NULL,
+    CONSTRAINT PK_Ejercicio PRIMARY KEY (Id_Ejercicio)
+)
+GO
+
+-- RUTINA SEMANA
+CREATE TABLE RutinaSemana (
+    Id_RutinaSemana INT NOT NULL,
+    DiaSemana VARCHAR(12) NOT NULL,
+    HoraInicio TIME NOT NULL,
+    HoraFin TIME NOT NULL,
+    CONSTRAINT PK_RutinaSemana PRIMARY KEY (Id_RutinaSemana)
+)
+GO
+
+-- RUTINA EJERCICIO
+CREATE TABLE RutinaEjercicio (
+    Id_RutinaEjercicio INT NOT NULL,
+    Id_Ejercicio INT NOT NULL,
+    Id_RutinaSemana INT NOT NULL,
+    CONSTRAINT PK_RutinaEjercicio PRIMARY KEY (Id_RutinaEjercicio),
+    CONSTRAINT FK_RE_Ejercicio FOREIGN KEY (Id_Ejercicio) REFERENCES Ejercicio(Id_Ejercicio),
+    CONSTRAINT FK_RE_RutinaSemana FOREIGN KEY (Id_RutinaSemana) REFERENCES RutinaSemana(Id_RutinaSemana)
+)
+GO
+
+-- RUTINA ENTRENAMIENTO
+CREATE TABLE RutinaEntrenamiento (
+    Id_Rutina INT NOT NULL,
+    DescripcionObjetivo VARCHAR(100) NOT NULL,
+    Nivel VARCHAR(20) NOT NULL,
+    DuracionTotalxSemana INT NOT NULL,
+    EjerciciosXDia INT NOT NULL,
+    IdEntrenador VARCHAR(4) NOT NULL,
+    Id_RutinaSemana INT NOT NULL,
+    CONSTRAINT PK_Rutina PRIMARY KEY (Id_Rutina),
+    CONSTRAINT FK_Rutina_Entrenador FOREIGN KEY (IdEntrenador) REFERENCES Entrenador(IdEntrenador),
+    CONSTRAINT FK_RutinaSemana_Rutina FOREIGN KEY (Id_RutinaSemana) REFERENCES RutinaSemana(Id_RutinaSemana)
+)
+GO
 
 -- CLIENTES
 CREATE TABLE Clientes (
@@ -185,13 +330,26 @@ CREATE TABLE Clientes (
     Telefono VARCHAR(15) NOT NULL,
     CorreoElectronico VARCHAR(100) NOT NULL,
     FechaIngreso DATE NOT NULL,
-    Id_Entrenador INT NOT NULL,
-    CodigoPlanAlimenticio INT NOT NULL,
+    IdEntrenador VARCHAR(4) NOT NULL,
     CodigoUnicoCentro INT NOT NULL,
     CONSTRAINT PK_Clientes PRIMARY KEY (NumAfiliacion),
-    CONSTRAINT FK_Clientes_Entrenador FOREIGN KEY (Id_Entrenador) REFERENCES Entrenador(IdEntrenador),
-    CONSTRAINT FK_Clientes_Plan FOREIGN KEY (CodigoPlanAlimenticio) REFERENCES PlanAlimenticio(CodigoPlan),
+    CONSTRAINT FK_Clientes_Entrenador FOREIGN KEY (IdEntrenador) REFERENCES Entrenador(IdEntrenador),
     CONSTRAINT FK_Clientes_Centro FOREIGN KEY (CodigoUnicoCentro) REFERENCES CentroVitalPro(CodigoUnico)
+)
+GO
+
+-- PLAN PERSONALIZADO
+CREATE TABLE PlanPersonalizado (
+    IdPlanPersonalizado INT NOT NULL,
+    FechaInicio DATE NOT NULL,
+    FechaFin DATE NOT NULL,
+    IdRutina INT NOT NULL,
+    NumAfiliacion INT NOT NULL,
+    CodigoPlan INT NOT NULL,
+    CONSTRAINT PK_PlanPersonalizado PRIMARY KEY (IdPlanPersonalizado),
+    CONSTRAINT FK_PP_Rutina FOREIGN KEY (IdRutina) REFERENCES RutinaEntrenamiento(Id_Rutina),
+    CONSTRAINT FK_PP_Cliente FOREIGN KEY (NumAfiliacion) REFERENCES Clientes(NumAfiliacion),
+    CONSTRAINT FK_PP_Plan FOREIGN KEY (CodigoPlan) REFERENCES PlanAlimenticio(CodigoPlan),
 )
 GO
 
@@ -215,25 +373,13 @@ CREATE TABLE Sesion (
 )
 GO
 
--- HORARIO CENTRO
-CREATE TABLE HorarioCentro (
-    Id_Horario INT NOT NULL,
-    DiaSemana VARCHAR(20) NOT NULL,
-    HoraInicio TIME NOT NULL,
-    HoraFin TIME NOT NULL,
-    CodigoUnicoCentro INT NOT NULL,
-    CONSTRAINT PK_HorarioCentro PRIMARY KEY (Id_Horario),
-    CONSTRAINT FK_HorarioCentro_Centro FOREIGN KEY (CodigoUnicoCentro) REFERENCES CentroVitalPro(CodigoUnico)
-)
-GO
-
 -- EVALUACION FISICA
 CREATE TABLE EvaluacionFisica (
     Id_EvaluacionFisica INT NOT NULL,
     Fecha DATE NOT NULL,
     Peso FLOAT NOT NULL,
     Estatura FLOAT NOT NULL,
-    GrasaCorporal FLOAT NOT NULL,
+    PorcentajeGrasaCorporal FLOAT NOT NULL,
     MasaMuscular FLOAT NOT NULL,
     NivelResistencia VARCHAR(20),
     Flexibilidad VARCHAR(20),
@@ -247,163 +393,8 @@ CREATE TABLE EvaluacionFisica (
 )
 GO
 
-
-
--- ==============================================
--- Script de Creación de Tablas - Proyecto VITALPRO
--- Parte 3: Plan Alimenticio, Comidas, Recetas, Rutinas
--- ==============================================
-
--- PLAN ALIMENTICIO
-CREATE TABLE PlanAlimenticio (
-    CodigoPlan INT NOT NULL,
-    Nombre VARCHAR(50) NOT NULL,
-    MetalNutricional VARCHAR(100),
-    CaloriasDiariasEstim INT,
-    Observaciones TEXT,
-    CodigoUnicoCentro INT NOT NULL,
-    Id_Nutricion INT NOT NULL,
-    CONSTRAINT PK_PlanAlimenticio PRIMARY KEY (CodigoPlan),
-    CONSTRAINT FK_PlanAlimenticio_Centro FOREIGN KEY (CodigoUnicoCentro) REFERENCES CentroVitalPro(CodigoUnico),
-    CONSTRAINT FK_PlanAlimenticio_Nutricionista FOREIGN KEY (Id_Nutricion) REFERENCES Nutricionista(IdNutricionista)
-)
-GO
-
--- COMIDA
-CREATE TABLE Comida (
-    Id_Comida INT NOT NULL,
-    TipoComida VARCHAR(50) NOT NULL,
-    CodigoPlan INT NOT NULL,
-    CONSTRAINT PK_Comida PRIMARY KEY (Id_Comida),
-    CONSTRAINT FK_Comida_Plan FOREIGN KEY (CodigoPlan) REFERENCES PlanAlimenticio(CodigoPlan)
-)
-GO
-
--- COMIDA RECETA
-CREATE TABLE ComidaReceta (
-    Id_ComidaReceta INT NOT NULL,
-    Id_Comida INT NOT NULL,
-    Id_Receta INT NOT NULL,
-    CONSTRAINT PK_ComidaReceta PRIMARY KEY (Id_ComidaReceta),
-    CONSTRAINT FK_ComidaReceta_Comida FOREIGN KEY (Id_Comida) REFERENCES Comida(Id_Comida),
-    CONSTRAINT FK_ComidaReceta_Receta FOREIGN KEY (Id_Receta) REFERENCES Receta(Id_Receta)
-)
-GO
-
--- INGREDIENTES
-CREATE TABLE Ingredientes (
-    Id_Ingrediente INT NOT NULL,
-    Nombre VARCHAR(50) NOT NULL,
-    Unidad VARCHAR(20) NOT NULL,
-    CONSTRAINT PK_Ingredientes PRIMARY KEY (Id_Ingrediente)
-)
-GO
-
--- RECETA
-CREATE TABLE Receta (
-    Id_Receta INT NOT NULL,
-    Nombre VARCHAR(50) NOT NULL,
-    TiempoPreparacion INT NOT NULL,
-    IdValorNutricional INT,
-    CONSTRAINT PK_Receta PRIMARY KEY (Id_Receta),
-    CONSTRAINT FK_Receta_ValorNutricional FOREIGN KEY (IdValorNutricional) REFERENCES ValorNutricional(IdValorNutricional)
-)
-GO
-
--- RECETA INGREDIENTE
-CREATE TABLE RecetaIngrediente (
-    Id_RecetaIngredientes INT NOT NULL,
-    Id_Receta INT NOT NULL,
-    Id_Ingrediente INT NOT NULL,
-    Cantidad FLOAT NOT NULL,
-    TiempoPreparacion INT NOT NULL,
-    CONSTRAINT PK_RecetaIngrediente PRIMARY KEY (Id_RecetaIngredientes),
-    CONSTRAINT FK_RecetaIngrediente_Receta FOREIGN KEY (Id_Receta) REFERENCES Receta(Id_Receta),
-    CONSTRAINT FK_RecetaIngrediente_Ingrediente FOREIGN KEY (Id_Ingrediente) REFERENCES Ingredientes(Id_Ingrediente)
-)
-GO
-
--- VALOR NUTRICIONAL
-CREATE TABLE ValorNutricional (
-    IdValorNutricional INT NOT NULL IDENTITY(1,1),
-    Calorias INT NOT NULL,
-    Proteinas FLOAT NOT NULL,
-    Carbohidratos FLOAT NOT NULL,
-    CONSTRAINT PK_ValorNutricional PRIMARY KEY (IdValorNutricional)
-)
-GO
-
--- RUTINA ENTRENAMIENTO
-CREATE TABLE RutinaEntrenamiento (
-    Id_Rutina INT NOT NULL,
-    DescripcionObjetivo VARCHAR(100) NOT NULL,
-    Nivel VARCHAR(20) NOT NULL,
-    DuracionTotalxSemana INT NOT NULL,
-    EjerciciosXDia INT NOT NULL,
-    CodigoUnicoCcentro INT NOT NULL,
-    Id_Entrenador INT NOT NULL,
-    CONSTRAINT PK_Rutina PRIMARY KEY (Id_Rutina),
-    CONSTRAINT FK_Rutina_Centro FOREIGN KEY (CodigoUnicoCcentro) REFERENCES CentroVitalPro(CodigoUnico),
-    CONSTRAINT FK_Rutina_Entrenador FOREIGN KEY (Id_Entrenador) REFERENCES Entrenador(IdEntrenador)
-)
-GO
-
-
-
--- ==============================================
--- Script de Creación de Tablas - Proyecto VITALPRO
--- Parte 4: PlanPersonalizado, RutinaSemana, RutinaEjercicio
--- ==============================================
-
--- PLAN PERSONALIZADO
-CREATE TABLE PlanPersonalizado (
-    IdPlanPersonalizado INT NOT NULL,
-    FechaInicio DATE NOT NULL,
-    FechaFin DATE NOT NULL,
-    IdRutina INT NOT NULL,
-    NumAfiliacion INT NOT NULL,
-    CodigoPlan INT NOT NULL,
-    CodigoUnicoCentro INT,
-    CONSTRAINT PK_PlanPersonalizado PRIMARY KEY (IdPlanPersonalizado),
-    CONSTRAINT FK_PP_Rutina FOREIGN KEY (IdRutina) REFERENCES RutinaEntrenamiento(Id_Rutina),
-    CONSTRAINT FK_PP_Cliente FOREIGN KEY (NumAfiliacion) REFERENCES Clientes(NumAfiliacion),
-    CONSTRAINT FK_PP_Plan FOREIGN KEY (CodigoPlan) REFERENCES PlanAlimenticio(CodigoPlan),
-    CONSTRAINT FK_PP_Centro FOREIGN KEY (CodigoUnicoCentro) REFERENCES CentroVitalPro(CodigoUnico)
-)
-GO
-
--- EJERCICIO
-CREATE TABLE Ejercicio (
-    Id_Ejercicio INT NOT NULL,
-    Nombre VARCHAR(50) NOT NULL,
-    GrupoMuscularTrabajado VARCHAR(50) NOT NULL,
-    CantidadRepeticiones INT NOT NULL,
-    EquipamientoEspecial BIT NOT NULL,
-    CONSTRAINT PK_Ejercicio PRIMARY KEY (Id_Ejercicio)
-)
-GO
-
--- RUTINA SEMANA
-CREATE TABLE RutinaSemana (
-    Id_RutinaSemana INT NOT NULL,
-    DiaSemana VARCHAR(10) NOT NULL,
-    HoraInicio TIME NOT NULL,
-    HoraFin TIME NOT NULL,
-    Id_Rutina INT NOT NULL,
-    CONSTRAINT PK_RutinaSemana PRIMARY KEY (Id_RutinaSemana),
-    CONSTRAINT FK_RutinaSemana_Rutina FOREIGN KEY (Id_Rutina) REFERENCES RutinaEntrenamiento(Id_Rutina)
-)
-GO
-
--- RUTINA EJERCICIO
-CREATE TABLE RutinaEjercicio (
-    Id_RutinaEjercicio INT NOT NULL,
-    Id_Ejercicio INT NOT NULL,
-    Id_RutinaSemana INT NOT NULL,
-    CONSTRAINT PK_RutinaEjercicio PRIMARY KEY (Id_RutinaEjercicio),
-    CONSTRAINT FK_RE_Ejercicio FOREIGN KEY (Id_Ejercicio) REFERENCES Ejercicio(Id_Ejercicio),
-    CONSTRAINT FK_RE_RutinaSemana FOREIGN KEY (Id_RutinaSemana) REFERENCES RutinaSemana(Id_RutinaSemana)
-)
-GO
-
-
+--USE master;
+--GO
+--ALTER DATABASE VITALPRO SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+--GO
+--DROP DATABASE VITALPRO;
