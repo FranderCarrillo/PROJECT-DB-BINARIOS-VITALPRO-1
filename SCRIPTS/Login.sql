@@ -1,4 +1,3 @@
-
 -- se crea un login (genera credenciales )
 USE master
 GO

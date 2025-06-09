@@ -77,7 +77,7 @@ CREATE TABLE CentroVitalPro (
     CONSTRAINT PK_CentroVitalPro PRIMARY KEY (CodigoUnico),
 )
 GO
-
+EXECUTE sp_help CentroVitalPro;
 -- HORARIO CENTRO
 CREATE TABLE HorarioCentro (
     Id_Horario INT NOT NULL IDENTITY(1,1),
@@ -89,7 +89,7 @@ CREATE TABLE HorarioCentro (
     CONSTRAINT FK_HorarioCentro_Centro FOREIGN KEY (CodigoUnicoCentro) REFERENCES CentroVitalPro(CodigoUnico),
 )
 GO
-
+EXECUTE sp_help HorarioCentro;
 -- PROFESIONAL
 CREATE TABLE Profesional (
     CodigoProfesional INT NOT NULL IDENTITY(1,1),
@@ -103,7 +103,7 @@ CREATE TABLE Profesional (
     CONSTRAINT FK_Profesional_Centro FOREIGN KEY (CodigoCentro) REFERENCES CentroVitalPro(CodigoUnico),
 )
 GO
-
+EXECUTE sp_help Profesional;
 -- HORARIO PROFESIONAL
 CREATE TABLE HorarioProfesional (
     IdHorario INT NOT NULL IDENTITY(1,1),
@@ -115,7 +115,7 @@ CREATE TABLE HorarioProfesional (
     CONSTRAINT FK_HorarioProfesional_Profesional FOREIGN KEY (CodigoProfesional) REFERENCES Profesional(CodigoProfesional)
 )
 GO
-
+EXECUTE sp_help  HorarioProfesional;
 -- ENTRENADOR
 CREATE TABLE Entrenador (
     IdEntrenador VARCHAR(4) NOT NULL,
@@ -127,6 +127,9 @@ CREATE TABLE Entrenador (
 )
 GO
 
+EXECUTE sp_help Entrenador
+go
+
 -- ESPECIALIDAD ENTRENADOR
 CREATE TABLE Especialidad_Entrenador (
     IdEspecialidad VARCHAR(5) NOT NULL,
@@ -134,7 +137,7 @@ CREATE TABLE Especialidad_Entrenador (
     CONSTRAINT PK_Especialidad_Entrenador PRIMARY KEY (IdEspecialidad),
 )
 GO
-
+EXECUTE sp_help  Especialidad_Entrenador;
 -- ENTRENADOR_ESPECIALIDAD
 CREATE TABLE Entrenador_Especialidad (
     Id VARCHAR(5) NOT NULL,
@@ -147,6 +150,8 @@ CREATE TABLE Entrenador_Especialidad (
 )
 GO
 
+EXECUTE sp_help  Entrenador_Especialidad
+go
 -- NUTRICIONISTA
 CREATE TABLE Nutricionista (
     IdNutricionista VARCHAR(4) NOT NULL,
@@ -158,6 +163,8 @@ CREATE TABLE Nutricionista (
 )
 GO
 
+EXECUTE sp_help Nutricionista
+go
 -- ESPECIALIDAD NUTRICIONISTA
 CREATE TABLE Especialidad_Nutricionista (
     IdEspecialidad VARCHAR(5) NOT NULL,
@@ -166,8 +173,11 @@ CREATE TABLE Especialidad_Nutricionista (
 )
 GO
 
+EXECUTE sp_help  HorarioProfesional
+GO
+
 -- NUTRICIONISTA_ESPECIALIDAD
-CREATE TABLE Nutricionista_Especialidad (
+CREATE TABLE Especialidad_Nutricionista (
     Id VARCHAR(5) NOT NULL,
     IdNutricionista VARCHAR(4) NOT NULL,
     IdEspecialidad VARCHAR(5) NOT NULL,
@@ -178,6 +188,8 @@ CREATE TABLE Nutricionista_Especialidad (
 )
 GO
 
+EXECUTE sp_help Especialidad_Nutricionista
+go
 -- VALOR NUTRICIONAL
 CREATE TABLE ValorNutricional (
     IdValorNutricional INT NOT NULL IDENTITY(1,1),
@@ -187,6 +199,7 @@ CREATE TABLE ValorNutricional (
     CONSTRAINT PK_ValorNutricional PRIMARY KEY (IdValorNutricional)
 )
 GO
+EXECUTE sp_help ValorNutricional
 -- RECETA
 CREATE TABLE Receta (
     Id_Receta INT NOT NULL,
@@ -197,14 +210,16 @@ CREATE TABLE Receta (
     CONSTRAINT FK_Receta_ValorNutricional FOREIGN KEY (IdValorNutricional) REFERENCES ValorNutricional(IdValorNutricional)
 )
 GO
-
+EXECUTE sp_help Receta
+go
 --Unidad de medida
 CREATE TABLE UnidadMedida (
     Id_Unidad VARCHAR(4) NOT NULL,
     NombreUnidad VARCHAR(20) NOT NULL,
     CONSTRAINT PK_UnidadMedida PRIMARY KEY (Id_Unidad)
 )
-
+GO
+EXECUTE sp_help  UnidadMedida;
 -- INGREDIENTES
 CREATE TABLE Ingrediente (
     Id_Ingrediente INT NOT NULL IDENTITY(1,1),
@@ -214,6 +229,9 @@ CREATE TABLE Ingrediente (
     CONSTRAINT FK_Ingredientes_Unidad FOREIGN KEY (Id_Unidad) REFERENCES UnidadMedida(Id_Unidad)
 )
 GO
+EXECUTE sp_help  Ingrediente
+go
+
 
 -- RECETA INGREDIENTE
 CREATE TABLE RecetaIngrediente (
@@ -227,7 +245,8 @@ CREATE TABLE RecetaIngrediente (
     CONSTRAINT FK_RecetaIngrediente_Ingrediente FOREIGN KEY (Id_Ingrediente) REFERENCES Ingrediente(Id_Ingrediente)
 )
 GO
-
+EXECUTE sp_help RecetaIngrediente
+go
 -- COMIDA
 CREATE TABLE Comida (
     Id_Comida INT NOT NULL,
@@ -236,7 +255,8 @@ CREATE TABLE Comida (
     CONSTRAINT PK_Comida PRIMARY KEY (Id_Comida)
 )
 GO
-
+EXECUTE sp_help  Comida
+go
 -- COMIDA RECETA
 CREATE TABLE ComidaReceta (
     Id_ComidaReceta INT NOT NULL,
@@ -247,7 +267,8 @@ CREATE TABLE ComidaReceta (
     CONSTRAINT FK_ComidaReceta_Receta FOREIGN KEY (Id_Receta) REFERENCES Receta(Id_Receta)
 )
 GO
-
+EXECUTE sp_help  ComidaReceta
+go
 -- PLAN ALIMENTICIO
 CREATE TABLE PlanAlimenticio (
     CodigoPlan INT NOT NULL,
@@ -260,6 +281,8 @@ CREATE TABLE PlanAlimenticio (
     CONSTRAINT FK_PlanAlimenticio_Nutricionista FOREIGN KEY (IdNutricionista) REFERENCES Nutricionista(IdNutricionista)
 )
 GO
+EXECUTE sp_help PlanAlimenticio
+go
 
 -- PlanAlimenticio_Comida
 CREATE TABLE PlanAlimenticio_Comida(
@@ -270,7 +293,9 @@ CREATE TABLE PlanAlimenticio_Comida(
     CONSTRAINT FK_PlanAlimenticioComida_Comida FOREIGN KEY (Id_Comida) REFERENCES Comida(Id_Comida),
     CONSTRAINT FK_PlanAlimenticioComida_PlanAlimenticio FOREIGN KEY (CodigoPlan) REFERENCES PlanAlimenticio(CodigoPlan)
 )
-
+GO
+EXECUTE sp_help PlanAlimenticio_Comida
+go
 -- EJERCICIO
 CREATE TABLE Ejercicio (
     Id_Ejercicio INT NOT NULL,
@@ -281,6 +306,8 @@ CREATE TABLE Ejercicio (
     CONSTRAINT PK_Ejercicio PRIMARY KEY (Id_Ejercicio)
 )
 GO
+EXECUTE sp_help Ejercicio
+go
 
 -- RUTINA SEMANA
 CREATE TABLE RutinaSemana (
@@ -291,7 +318,8 @@ CREATE TABLE RutinaSemana (
     CONSTRAINT PK_RutinaSemana PRIMARY KEY (Id_RutinaSemana)
 )
 GO
-
+EXECUTE sp_help  RutinaSemana
+go
 -- RUTINA EJERCICIO
 CREATE TABLE RutinaEjercicio (
     Id_RutinaEjercicio INT NOT NULL,
@@ -302,7 +330,8 @@ CREATE TABLE RutinaEjercicio (
     CONSTRAINT FK_RE_RutinaSemana FOREIGN KEY (Id_RutinaSemana) REFERENCES RutinaSemana(Id_RutinaSemana)
 )
 GO
-
+EXECUTE sp_help RutinaEjercicio
+go
 -- RUTINA ENTRENAMIENTO
 CREATE TABLE RutinaEntrenamiento (
     Id_Rutina INT NOT NULL,
@@ -317,6 +346,8 @@ CREATE TABLE RutinaEntrenamiento (
     CONSTRAINT FK_RutinaSemana_Rutina FOREIGN KEY (Id_RutinaSemana) REFERENCES RutinaSemana(Id_RutinaSemana)
 )
 GO
+EXECUTE sp_help RutinaEntrenamiento
+go 
 
 -- CLIENTES
 CREATE TABLE Clientes (
@@ -338,6 +369,9 @@ CREATE TABLE Clientes (
 )
 GO
 
+EXECUTE sp_help Clientes
+go
+
 -- PLAN PERSONALIZADO
 CREATE TABLE PlanPersonalizado (
     IdPlanPersonalizado INT NOT NULL,
@@ -351,7 +385,10 @@ CREATE TABLE PlanPersonalizado (
     CONSTRAINT FK_PP_Cliente FOREIGN KEY (NumAfiliacion) REFERENCES Clientes(NumAfiliacion),
     CONSTRAINT FK_PP_Plan FOREIGN KEY (CodigoPlan) REFERENCES PlanAlimenticio(CodigoPlan),
 )
-GO
+GO  
+
+EXECUTE sp_help PlanPersonalizado
+go
 
 -- SESION
 CREATE TABLE Sesion (
@@ -373,6 +410,9 @@ CREATE TABLE Sesion (
 )
 GO
 
+EXECUTE sp_help Sesion
+go
+
 -- EVALUACION FISICA
 CREATE TABLE EvaluacionFisica (
     Id_EvaluacionFisica INT NOT NULL,
@@ -393,6 +433,8 @@ CREATE TABLE EvaluacionFisica (
 )
 GO
 
+EXECUTE sp_help EvaluacionFisica
+go
 --USE master;
 --GO
 --ALTER DATABASE VITALPRO SET SINGLE_USER WITH ROLLBACK IMMEDIATE;

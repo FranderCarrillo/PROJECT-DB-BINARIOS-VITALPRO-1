@@ -21,11 +21,10 @@ VALUES ('Centro San José', 'San José', 'San José', 'Catedral', 'Avenida Centr
 INSERT INTO CentroVitalPro (Nombre, Provincia, Canton, Distrito, DireccionExacta, NumContacto)
 VALUES ('Centro San José', 'San José', 'San José', 'Catedral', 'Avenida Central, Edificio Vital', '8988-5555');
 
-
+USE VITALPRO
+GO
 Select * from CentroVitalPro
 go
-
-
 
 INSERT INTO Profesional (Nombre, Apellido1, Apellido2, CedProfesional, AniosExperiencia, CodigoCentro)
 VALUES ('Carlos', 'Ramírez', 'Solano', 'P123456789', 5, 1);
@@ -112,4 +111,6 @@ VALUES (1, 'Martes', '09:00', '15:00');
 
 INSERT INTO Clientes (NumAfiliacion, Nombre, Apellido1, Apellido2, Cedula, Genero, FechaNacimiento, Telefono, CorreoElectronico, FechaIngreso, IdEntrenador, CodigoUnicoCentro)
 VALUES (1, 'María', 'Pérez', 'López', '206580134', 'F', '1995-06-12', '8888-1111', 'maria@example.com', '2024-01-01', 'E001', 1);
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
 

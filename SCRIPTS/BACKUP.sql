@@ -1,0 +1,32 @@
+-- BackUp Full
+USE VITALPRO
+GO
+DECLARE @backupFileName NVARCHAR(250);
+SET @backupFileName = 'C:\SqlBackup\VITALPRO_FULL' 
+    + CONVERT(NVARCHAR(20), GETDATE(), 112) 
+    + REPLACE(CONVERT(NVARCHAR(8), GETDATE(), 108), ':', '') 
+    + '.bak';
+
+BACKUP DATABASE [VITALPRO] 
+TO DISK = @backupFileName 
+WITH DESCRIPTION = N'BACK UP FULL', 
+NOFORMAT, NOINIT, 
+NAME = N'VITALPRO-Full Database Backup', 
+SKIP, NOREWIND, NOUNLOAD, STATS = 10;
+GO
+
+-- BackUp Diferencial
+USE VITALPRO
+GO
+DECLARE @backupFileName NVARCHAR(250);
+SET @backupFileName = 'C:\SqlBackup\VITALPRO_DIF' 
+    + CONVERT(NVARCHAR(20), GETDATE(), 112) 
+    + REPLACE(CONVERT(NVARCHAR(8), GETDATE(), 108), ':', '') 
+    + '.bak';
+
+BACKUP DATABASE [VITALPRO] TO 
+DISK = @backupFileName WITH
+DIFFERENTIAL,  DESCRIPTION = N'BackUp Diferencial',
+NOFORMAT, NOINIT,  NAME = N'VITALPRO-Diferencial Database Backup',
+SKIP, NOREWIND, NOUNLOAD,  STATS = 10;
+GO

@@ -1,4 +1,4 @@
--- Seguimiento de progreso físico por cliente
+-- Seguimiento de progreso fisico por cliente  1
 USE VITALPRO
 GO
 CREATE PROCEDURE SP_SEGUIMIENTO_PROGRESO_FISICO
@@ -20,7 +20,7 @@ END
 GO
 --FIN
 
---Reservas por profesional en una semana
+--Reservas por profesional en una semana 2
 USE VITALPRO
 GO
 CREATE PROCEDURE SP_RESERVAS_POR_PROFESIONAL_EN_UNA_SEMANA
@@ -38,7 +38,7 @@ END
 GO
 -- FIN
 
--- RUTINAS ACTIVAS POR NIVEL
+-- RUTINAS ACTIVAS POR NIVEL 3
 USE VITALPRO
 GO
 CREATE PROCEDURE SP_RUTINAS_ACTIVAS_POR_NIVEL
@@ -54,7 +54,7 @@ END
 GO
 --FIN
 
---Recetas más utilizadas por tipo de plan
+--Recetas mas utilizadas por tipo de plan 4
 USE VITALPRO
 GO
 CREATE PROCEDURE SP_RECETAS_MAS_UTILIZADAS_POR_TIPO_DE_PLAN
@@ -79,7 +79,7 @@ END
 GO
 --FIN
 
--- Clientes con mayor adherencia (porcentaje de sesiones asistidas vs. reservadas)
+-- Clientes con mayor adherencia (porcentaje de sesiones asistidas vs. reservadas) 5
 USE VITALPRO
 GO
 CREATE PROCEDURE SP_CLIENTES_CON_MAYOR_ADERENCIAS 
@@ -108,7 +108,7 @@ END
 GO
 --FIN
 
--- hace una lista de los entrenadores con el centro 
+-- hace una lista de los entrenadores con el centro 6
 USE VITALPRO
 GO
 CREATE PROCEDURE SP_ENTRENADOR_CON_EL_CENTRO 
@@ -126,7 +126,7 @@ END
 GO
 --FIN 
 
--- hace una lista de los nutricionistas con el centro 
+-- hace una lista de los nutricionistas con el centro 7
 USE VITALPRO
 GO
 CREATE PROCEDURE SP_NUTRICIONISTAS_CON_EL_CENTRO 
@@ -144,7 +144,7 @@ END
 GO
 --FIN 
 
--- CLIENTES QUE NO HAN TENIDO SESIONES EN EL ULTIMO MES
+-- CLIENTES QUE NO HAN TENIDO SESIONES EN EL ULTIMO MES 8
 USE VITALPRO
 GO
 CREATE PROCEDURE SP_CLIENTES_SIN_ASISTENCIA_EL_ULTIMO_MES
@@ -163,3 +163,122 @@ ORDER BY UltiimaSesion
 END
 GO
 -- FIN 
+
+--Clientes sin evaluacion fisica registrada 9 
+USE VITALPRO
+GO
+CREATE PROCEDURE SP_CLIENTES_SIN_EVALUACION
+AS
+BEGIN
+SELECT 
+    Clientes.NumAfiliacion,
+    RTRIM(Clientes.Nombre) + ' ' + 
+    RTRIM(Clientes.Apellido1) + ' ' + 
+    RTRIM(Clientes.Apellido2) AS NombreCompleto
+FROM Clientes 
+LEFT JOIN EvaluacionFisica ON Clientes.NumAfiliacion = EvaluacionFisica.NumAfiliacion
+WHERE EvaluacionFisica.NumAfiliacion IS NULL
+ORDER BY NombreCompleto
+END
+GO
+--FIN
+
+--Sesiones canceladas por mes 10
+USE VITALPRO
+GO
+CREATE PROCEDURE SP_SESIONES_CANCELADAS_POR_MES
+AS  
+BEGIN
+SELECT 
+    MONTH(Sesion.Fecha) AS Mes,
+    YEAR(Sesion.Fecha) AS years,
+    COUNT(Sesion.Id_Sesion) AS TotalCanceladas
+FROM Sesion
+WHERE Sesion.Estado = 'Cancelada'
+GROUP BY YEAR(Sesion.Fecha), MONTH(Sesion.Fecha)
+ORDER BY years DESC, Mes DESC
+END
+GO
+--FIN
+-- Planes alimenticios por nutricionista 11
+USE VITALPRO
+GO
+CREATE PROCEDURE SP_PLANES_ALIMENTICIOS_POR_NUTRICIONISTA
+AS
+BEGIN
+SELECT 
+    Nutricionista.IdNutricionista,
+    RTRIM(Profesional.Nombre) + ' ' + 
+    RTRIM(Profesional.Apellido1) + ' ' + 
+    RTRIM(Profesional.Apellido2) AS NombreCompleto,
+    COUNT(PlanAlimenticio.CodigoPlan) AS TotalPlanes
+FROM Nutricionista
+INNER JOIN Profesional     ON Nutricionista.CodigoProfesional = Profesional.CodigoProfesional
+INNER JOIN PlanAlimenticio ON Nutricionista.IdNutricionista = PlanAlimenticio.IdNutricionista
+GROUP BY Nutricionista.IdNutricionista, Profesional.Nombre, Profesional.Apellido1, Profesional.Apellido2
+ORDER BY TotalPlanes DESC
+END
+GO
+--FIN
+
+--  Frecuencia de uso de ejercicios por rutina 12
+USE VITALPRO
+GO
+CREATE PROCEDURE SP_EJERCICIOS_POR_RUTINA
+AS
+BEGIN
+SELECT 
+    RutinaEjercicio.Id_RutinaEjercicio,
+    E.Nombre AS NombreEjercicio,
+    COUNT(RutinaEjercicio.Id_Ejercicio) AS VecesUsado
+FROM RutinaEjercicio 
+INNER JOIN Ejercicio E ON RutinaEjercicio.Id_Ejercicio = E.Id_Ejercicio
+GROUP BY RutinaEjercicio.Id_Ejercicio, E.Nombre
+ORDER BY RutinaEjercicio.Id_Ejercicio, VecesUsado DESC
+END
+GO
+--FIN
+
+-- Profesionales sin sesiones asignadas 13
+USE VITALPRO
+GO
+CREATE PROCEDURE SP_PROFESIONALES_SIN_SESIONES
+AS
+BEGIN
+SELECT 
+    Profesional.CodigoProfesional,
+    RTRIM(Profesional.Nombre) + ' ' + 
+    RTRIM(Profesional.Apellido1) + ' ' + 
+    RTRIM(Profesional.Apellido2) AS NombreCompleto
+FROM Profesional 
+LEFT JOIN Sesion  ON Profesional.CodigoProfesional = Sesion.CodigoProfesional
+WHERE Sesion.CodigoProfesional IS NULL
+ORDER BY NombreCompleto
+END
+GO
+--FIN
+
+--Sesiones por estado general (Completadas, Canceladas, Pendientes) 14
+USE VITALPRO
+GO
+CREATE PROCEDURE SP_SESIONES_POR_ESTADO
+AS
+BEGIN
+    SELECT 
+    Estado,
+    COUNT(Sesion.Id_Sesion) AS Total
+FROM Sesion
+GROUP BY Estado
+END
+GO
+--FIN
+
+--Centros con mas clientes afiliados 15
+SELECT 
+    CentroVitalPro.Nombre AS Centro,
+    COUNT(Profesional.CodigoProfesional) AS TotalProfesionales
+FROM CentroVitalPro 
+LEFT JOIN Profesional  ON CentroVitalPro.CodigoUnico = Profesional.CodigoCentro
+GROUP BY CentroVitalPro.Nombre
+ORDER BY TotalProfesionales DESC;
+--FIN

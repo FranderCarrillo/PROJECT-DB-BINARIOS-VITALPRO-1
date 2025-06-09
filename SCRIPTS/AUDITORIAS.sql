@@ -208,7 +208,7 @@ GO
 
 
 
--- 3. Auditoría Entrenador
+-- 3. Auditorï¿½a Entrenador
 CREATE OR ALTER TRIGGER trg_Auditoria_Entrenador
 ON Entrenador
 AFTER INSERT, UPDATE, DELETE
@@ -250,7 +250,7 @@ END
 GO
 
 
--- 4. Auditoría Nutricionista
+-- 4. Auditorï¿½a Nutricionista
 CREATE OR ALTER TRIGGER trg_Auditoria_Nutricionista
 ON Nutricionista
 AFTER INSERT, UPDATE, DELETE
@@ -283,7 +283,7 @@ END
 GO
 
 
--- 5. Auditoría PlanAlimenticio
+-- 5. Auditorï¿½a PlanAlimenticio
 CREATE OR ALTER TRIGGER trg_Auditoria_PlanAlimenticio
 ON PlanAlimenticio
 AFTER INSERT, UPDATE, DELETE
@@ -316,7 +316,7 @@ END
 GO
 
 
--- 6. Auditoría PlanPersonalizado
+-- 6. Auditorï¿½a PlanPersonalizado
 CREATE OR ALTER TRIGGER trg_Auditoria_PlanPersonalizado
 ON PlanPersonalizado
 AFTER INSERT, UPDATE, DELETE
@@ -361,7 +361,7 @@ BEGIN
 END
 GO
 
--- 7. Auditoría RutinaEntrenamiento
+-- 7. Auditorï¿½a RutinaEntrenamiento
 CREATE OR ALTER TRIGGER trg_Auditoria_RutinaEntrenamiento
 ON RutinaEntrenamiento
 AFTER INSERT, UPDATE, DELETE
@@ -411,7 +411,7 @@ END
 GO
 
 
--- 8. Auditoría Receta
+-- 8. Auditoria Receta
 CREATE OR ALTER TRIGGER trg_Auditoria_Receta
 ON Receta
 AFTER INSERT, UPDATE, DELETE
@@ -451,3 +451,100 @@ BEGIN
     FROM deleted;
 END
 GO
+
+
+
+use VITALPRO
+go
+CREATE VIEW View_ClientesEntrenadorCentro AS
+SELECT 
+    C.NumAfiliacion,
+    C.Nombre AS NombreCliente,
+    C.Apellido1,
+    C.Apellido2,
+    C.Cedula,
+    E.IdEntrenador,
+    P.Nombre AS NombreProfesional,
+    CV.Nombre AS CentroNombre
+FROM Clientes C
+INNER JOIN Entrenador E ON C.IdEntrenador = E.IdEntrenador
+INNER JOIN Profesional P ON E.CodigoProfesional = P.CodigoProfesional
+INNER JOIN CentroVitalPro CV ON C.CodigoUnicoCentro = CV.CodigoUnico;
+
+
+ --Vista de Planes Alimenticios con nombre del nutricionista
+
+CREATE VIEW View_PlanesAlimenticios AS
+SELECT 
+    PA.CodigoPlan,
+    PA.Nombre AS NombrePlan,
+    PA.MetaNutricional,
+    PA.CaloriasDiariasEstim,
+    N.IdNutricionista,
+    P.Nombre AS NombreNutricionista
+FROM PlanAlimenticio PA
+INNER JOIN Nutricionista N ON PA.IdNutricionista = N.IdNutricionista
+INNER JOIN Profesional P ON N.CodigoProfesional = P.CodigoProfesional;
+
+--Vista de Rutinas con descripciÃ³n y entrenador
+
+
+CREATE VIEW View_RutinasEntrenamiento AS
+SELECT 
+    RE.Id_Rutina,
+    RE.DescripcionObjetivo,
+    RE.Nivel,
+    RE.DuracionTotalxSemana,
+    RE.EjerciciosXDia,
+    E.IdEntrenador,
+    P.Nombre AS NombreEntrenador
+FROM RutinaEntrenamiento RE
+INNER JOIN Entrenador E ON RE.IdEntrenador = E.IdEntrenador
+INNER JOIN Profesional P ON E.CodigoProfesional = P.CodigoProfesional;
+
+
+--Vista de Sesiones con Cliente y Profesional
+
+CREATE VIEW View_SesionesClientesProfesionales AS
+SELECT 
+    S.Id_Sesion,
+    S.TipoSesion,
+    S.Fecha,
+    S.Hora,
+    S.Estado,
+    C.Nombre + ' ' + C.Apellido1 AS Cliente,
+    P.Nombre + ' ' + P.Apellido1 AS Profesional
+FROM Sesion S
+INNER JOIN Clientes C ON S.NumAfiliacion = C.NumAfiliacion
+INNER JOIN Profesional P ON S.CodigoProfesional = P.CodigoProfesional;
+
+
+--Vista de Evaluaciones fÃ­sicas por cliente
+
+CREATE VIEW View_EvaluacionesFisicas AS
+SELECT 
+    EF.Id_EvaluacionFisica,
+    EF.Fecha,
+    EF.Peso,
+    EF.Estatura,
+    EF.PorcentajeGrasaCorporal,
+    EF.MasaMuscular,
+    C.Nombre + ' ' + C.Apellido1 AS Cliente
+FROM EvaluacionFisica EF
+INNER JOIN Clientes C ON EF.NumAfiliacion = C.NumAfiliacion;
+GO
+
+SELECT * FROM View_ClientesEntrenadorCentro;
+go
+
+SELECT * FROM View_PlanesAlimenticios
+go
+
+SELECT * FROM View_RutinasEntrenamiento
+go
+
+SELECT * FROM View_SesionesClientesProfesionales
+go
+
+SELECT * FROM View_EvaluacionesFisicas
+go
