@@ -1,458 +1,326 @@
 USE VITALPRO
 GO
 
-CREATE PROCEDURE EliminarCentroVitalPro
+ALTER PROCEDURE EliminarCentroVitalPro
     @IdCentro INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM CentroVitalPro
+    UPDATE CentroVitalPro
+    SET Estado = 0
     WHERE IdCentro = @IdCentro;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de centros 1
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarHorarioCentro
+ALTER PROCEDURE EliminarHorarioCentro
     @IdHorarioCentro INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM HorarioCentro
+    UPDATE HorarioCentro
+    SET Estado = 0
     WHERE IdHorarioCentro = @IdHorarioCentro;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de horarios de centros 2
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarProfesional
+ALTER PROCEDURE EliminarProfesional
     @CodigoProfesional INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Profesional
+    UPDATE Profesional
+    SET Estado = 0
     WHERE CodigoProfesional = @CodigoProfesional;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de profesionales 3
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarHorarioProfesional
+ALTER PROCEDURE EliminarHorarioProfesional
     @IdHorario INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM HorarioProfesional
+    UPDATE HorarioProfesional
+    SET Estado = 0
     WHERE IdHorario = @IdHorario;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de horarios de profesionales 4
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarEntrenador
+ALTER PROCEDURE EliminarEntrenador
     @IdEntrenador INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Entrenador
+    UPDATE Entrenador
+    SET Estado = 0
     WHERE IdEntrenador = @IdEntrenador;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de entrenadores 5
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarEspecialidadEntrenador
+ALTER PROCEDURE EliminarEspecialidadEntrenador
     @IdEspecialidad VARCHAR(5)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Especialidad_Entrenador
+    UPDATE Especialidad_Entrenador
+    SET Estado = 0
     WHERE IdEspecialidad = @IdEspecialidad;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de especialidades de entrenadores 6
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarEntrenadorEspecialidad
+ALTER PROCEDURE EliminarEntrenadorEspecialidad
     @Id VARCHAR(5)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Entrenador_Especialidad
+    UPDATE Entrenador_Especialidad
+    SET Estado = 0
     WHERE Id = @Id;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de relación entrenador-especialidad 7
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarNutricionista
+ALTER PROCEDURE EliminarNutricionista
     @IdNutricionista VARCHAR(4)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Nutricionista
+    UPDATE Nutricionista
+    SET Estado = 0
     WHERE IdNutricionista = @IdNutricionista;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de nutricionistas 8
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarEspecialidadNutricionista
+ALTER PROCEDURE EliminarEspecialidadNutricionista
     @IdEspecialidad VARCHAR(5)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Especialidad_Nutricionista
+    UPDATE Especialidad_Nutricionista
+    SET Estado = 0
     WHERE IdEspecialidad = @IdEspecialidad;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de especialidades de nutricionistas 9
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarNutricionistaEspecialidad
+ALTER PROCEDURE EliminarNutricionistaEspecialidad
     @Id VARCHAR(5)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Especialidad_Nutricionista
+    UPDATE Especialidad_Nutricionista
+    SET Estado = 0
     WHERE Id = @Id;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de relación nutricionista-especialidad 10
-
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarValorNutricional
+ALTER PROCEDURE EliminarValorNutricional
     @IdValorNutricional INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM ValorNutricional
+    UPDATE ValorNutricional
+    SET Estado = 0
     WHERE IdValorNutricional = @IdValorNutricional;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de valores nutricionales 11
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarReceta
+ALTER PROCEDURE EliminarReceta
     @Id_Receta INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Receta
+    UPDATE Receta
+    SET Estado = 0
     WHERE Id_Receta = @Id_Receta;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de recetas 12
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarUnidadMedida
+ALTER PROCEDURE EliminarUnidadMedida
     @Id_Unidad VARCHAR(4)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM UnidadMedida
+    UPDATE UnidadMedida
+    SET Estado = 0
     WHERE Id_Unidad = @Id_Unidad;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de unidades de medida 13
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarIngrediente
+ALTER PROCEDURE EliminarIngrediente
     @IdIngrediente INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Ingrediente
+    UPDATE Ingrediente
+    SET Estado = 0
     WHERE IdIngrediente = @IdIngrediente;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de ingredientes 14
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarRecetaIngrediente
+ALTER PROCEDURE EliminarRecetaIngrediente
     @Id_RecetaIngredientes INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM RecetaIngrediente
+    UPDATE RecetaIngrediente
+    SET Estado = 0
     WHERE Id_RecetaIngredientes = @Id_RecetaIngredientes;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de ingredientes por receta 15
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarComida
+ALTER PROCEDURE EliminarComida
     @Id_Comida INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Comida
+    UPDATE Comida
+    SET Estado = 0
     WHERE Id_Comida = @Id_Comida;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de comidas 16
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarComidaReceta
+ALTER PROCEDURE EliminarComidaReceta
     @Id_ComidaReceta INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM ComidaReceta
+    UPDATE ComidaReceta
+    SET Estado = 0
     WHERE Id_ComidaReceta = @Id_ComidaReceta;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de relaciones comida-receta 17
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarPlanAlimenticio
+ALTER PROCEDURE EliminarPlanAlimenticio
     @CodigoPlan INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM PlanAlimenticio
+    UPDATE PlanAlimenticio
+    SET Estado = 0
     WHERE CodigoPlan = @CodigoPlan;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de planes alimenticios 18
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarPlanAlimenticioComida
+ALTER PROCEDURE EliminarPlanAlimenticioComida
     @Id_PlanAlimenticio_Comida INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM PlanAlimenticio_Comida
+    UPDATE PlanAlimenticio_Comida
+    SET Estado = 0
     WHERE Id_PlanAlimenticio_Comida = @Id_PlanAlimenticio_Comida;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de relación plan alimenticio - comida 19
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarEjercicio
+ALTER PROCEDURE EliminarEjercicio
     @Id_Ejercicio INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Ejercicio
+    UPDATE Ejercicio
+    SET Estado = 0
     WHERE Id_Ejercicio = @Id_Ejercicio;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de ejercicios 20
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarRutinaSemana
+ALTER PROCEDURE EliminarRutinaSemana
     @Id_RutinaSemana INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM RutinaSemana
+    UPDATE RutinaSemana
+    SET Estado = 0
     WHERE Id_RutinaSemana = @Id_RutinaSemana;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de rutina semanal 21
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarRutinaEjercicio
+ALTER PROCEDURE EliminarRutinaEjercicio
     @Id_RutinaEjercicio INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM RutinaEjercicio
+    UPDATE RutinaEjercicio
+    SET Estado = 0
     WHERE Id_RutinaEjercicio = @Id_RutinaEjercicio;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de relación rutina-ejercicio 22
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarRutinaEntrenamiento
+ALTER PROCEDURE EliminarRutinaEntrenamiento
     @Id_Rutina INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM RutinaEntrenamiento
+    UPDATE RutinaEntrenamiento
+    SET Estado = 0
     WHERE Id_Rutina = @Id_Rutina;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de rutinas de entrenamiento 23
-
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarCliente
+ALTER PROCEDURE EliminarCliente
     @NumAfiliacion INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Clientes
+    UPDATE Clientes
+    SET Estado = 0
     WHERE NumAfiliacion = @NumAfiliacion;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de clientes 24
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarPlanPersonalizado
+ALTER PROCEDURE EliminarPlanPersonalizado
     @IdPlanPersonalizado INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM PlanPersonalizado
+    UPDATE PlanPersonalizado
+    SET Estado = 0
     WHERE IdPlanPersonalizado = @IdPlanPersonalizado;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de planes personalizados 25
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarSesion
+ALTER PROCEDURE EliminarSesion
     @Id_Sesion INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM Sesion
+    UPDATE Sesion
+    SET Estado = 0
     WHERE Id_Sesion = @Id_Sesion;
 END
 GO
 
--- procedimiento almacenado para realizar deletes de sesiones 26
-
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE EliminarEvaluacionFisica
+ALTER PROCEDURE EliminarEvaluacionFisica
     @Id_EvaluacionFisica INT
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    DELETE FROM EvaluacionFisica
+    UPDATE EvaluacionFisica
+    SET Estado = 0
     WHERE Id_EvaluacionFisica = @Id_EvaluacionFisica;
 END
 GO
-
--- procedimiento almacenado para realizar deletes de evaluaciones físicas 27

@@ -397,7 +397,6 @@ CREATE TABLE Sesion (
     Fecha DATE NOT NULL,
     Hora TIME NOT NULL,
     Duracion INT NOT NULL,
-    Estado VARCHAR(20) NOT NULL,
     CodigoUnicoCentro INT NOT NULL,
     CodigoProfesional INT NOT NULL,
     NumAfiliacion INT NOT NULL,
@@ -438,3 +437,44 @@ go
 -- ALTER DATABASE VITALPRO SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
 -- GO
 -- DROP DATABASE VITALPRO;
+USE VITALPRO
+GO
+ALTER TABLE CentroVitalPro ADD Estado BIT DEFAULT 1;
+ALTER TABLE Clientes ADD Estado BIT DEFAULT 1;
+ALTER TABLE PlanPersonalizado ADD Estado BIT DEFAULT 1;
+ALTER TABLE EvaluacionFisica ADD Estado BIT DEFAULT 1;
+ALTER TABLE RutinaEntrenamiento ADD Estado BIT DEFAULT 1;
+ALTER TABLE PlanAlimenticio ADD Estado BIT DEFAULT 1;
+ALTER TABLE Receta ADD Estado BIT DEFAULT 1;
+ALTER TABLE Comida ADD Estado BIT DEFAULT 1;
+ALTER TABLE ComidaReceta ADD Estado BIT DEFAULT 1;
+ALTER TABLE RecetaIngrediente ADD Estado BIT DEFAULT 1;
+ALTER TABLE Ingrediente ADD Estado BIT DEFAULT 1;
+ALTER TABLE ValorNutricional ADD Estado BIT DEFAULT 1;
+ALTER TABLE UnidadMedida ADD Estado BIT DEFAULT 1;
+ALTER TABLE HorarioCentro ADD Estado BIT DEFAULT 1;
+ALTER TABLE HorarioProfesional ADD Estado BIT DEFAULT 1;
+ALTER TABLE Profesional ADD Estado BIT DEFAULT 1;
+ALTER TABLE Entrenador ADD Estado BIT DEFAULT 1;
+ALTER TABLE Nutricionista ADD Estado BIT DEFAULT 1;
+ALTER TABLE Entrenador_Especialidad ADD Estado BIT DEFAULT 1;
+ALTER TABLE Nutricionista_Especialidad ADD Estado BIT DEFAULT 1;
+ALTER TABLE Especialidad_Entrenador ADD Estado BIT DEFAULT 1;
+ALTER TABLE Especialidad_Nutricionista ADD Estado BIT DEFAULT 1;
+ALTER TABLE RutinaSemana ADD Estado BIT DEFAULT 1;
+ALTER TABLE RutinaEjercicio ADD Estado BIT DEFAULT 1;
+ALTER TABLE Ejercicio ADD Estado BIT DEFAULT 1;
+ALTER TABLE PlanAlimenticio_Comida ADD Estado BIT DEFAULT 1;
+
+
+SELECT * FROM CentroVitalPro;
+SELECT * FROM Clientes; 
+SELECT * FROM PlanPersonalizado;
+SELECT * FROM EvaluacionFisica;
+SELECT * FROM RutinaEntrenamiento;
+SELECT * FROM PlanAlimenticio;
+SELECT * FROM Receta;
+SELECT * FROM Comida;
+SELECT * FROM ComidaReceta;
+
+SELECT * FROM CentroVitalPro WHERE Estado = 1;
