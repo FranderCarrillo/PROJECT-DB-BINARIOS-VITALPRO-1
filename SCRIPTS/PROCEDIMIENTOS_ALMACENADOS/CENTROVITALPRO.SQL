@@ -15,7 +15,7 @@ END
 GO 
 --FIN
 EXECUTE CENTROS_CON_MAS_CLIENTES_AFILIADOS;
-
+GO
 
 
 -- hace una lista de los entrenadores con el centro 6

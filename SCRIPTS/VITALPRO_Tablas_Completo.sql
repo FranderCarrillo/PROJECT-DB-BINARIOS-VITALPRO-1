@@ -177,7 +177,7 @@ EXECUTE sp_help  HorarioProfesional
 GO
 
 -- NUTRICIONISTA_ESPECIALIDAD
-CREATE TABLE Especialidad_Nutricionista (
+CREATE TABLE Nutricionista_Especialidad (
     Id VARCHAR(5) NOT NULL,
     IdNutricionista VARCHAR(4) NOT NULL,
     IdEspecialidad VARCHAR(5) NOT NULL,
@@ -202,7 +202,7 @@ GO
 EXECUTE sp_help ValorNutricional
 -- RECETA
 CREATE TABLE Receta (
-    Id_Receta INT NOT NULL,
+    Id_Receta INT NOT NULL IDENTITY(1,1),
     Nombre VARCHAR(50) NOT NULL,
     TiempoPreparacion INT NOT NULL,
     IdValorNutricional INT,
@@ -235,7 +235,7 @@ go
 
 -- RECETA INGREDIENTE
 CREATE TABLE RecetaIngrediente (
-    Id_RecetaIngredientes INT NOT NULL,
+    Id_RecetaIngredientes INT NOT NULL IDENTITY(1,1),
     Id_Receta INT NOT NULL,
     Id_Ingrediente INT NOT NULL,
     Cantidad FLOAT NOT NULL,
@@ -249,7 +249,7 @@ EXECUTE sp_help RecetaIngrediente
 go
 -- COMIDA
 CREATE TABLE Comida (
-    Id_Comida INT NOT NULL,
+    Id_Comida INT NOT NULL IDENTITY(1,1),
     TipoComida VARCHAR(50) NOT NULL,
     CodigoPlan INT NOT NULL,
     CONSTRAINT PK_Comida PRIMARY KEY (Id_Comida)
@@ -259,7 +259,7 @@ EXECUTE sp_help  Comida
 go
 -- COMIDA RECETA
 CREATE TABLE ComidaReceta (
-    Id_ComidaReceta INT NOT NULL,
+    Id_ComidaReceta INT NOT NULL IDENTITY(1,1),
     Id_Comida INT NOT NULL,
     Id_Receta INT NOT NULL,
     CONSTRAINT PK_ComidaReceta PRIMARY KEY (Id_ComidaReceta),
@@ -271,7 +271,7 @@ EXECUTE sp_help  ComidaReceta
 go
 -- PLAN ALIMENTICIO
 CREATE TABLE PlanAlimenticio (
-    CodigoPlan INT NOT NULL,
+    CodigoPlan INT NOT NULL IDENTITY(1,1),
     Nombre VARCHAR(50) NOT NULL,
     MetaNutricional VARCHAR(100),
     CaloriasDiariasEstim INT,
@@ -286,7 +286,7 @@ go
 
 -- PlanAlimenticio_Comida
 CREATE TABLE PlanAlimenticio_Comida(
-    Id_PlanAlimenticio_Comida INT NOT NULL,
+    Id_PlanAlimenticio_Comida INT NOT NULL IDENTITY(1,1),
     Id_Comida INT NOT NULL,
     CodigoPlan INT NOT NULL,
     CONSTRAINT PK_PlanAlimenticio_Comida PRIMARY KEY ( Id_PlanAlimenticio_Comida),
@@ -298,7 +298,7 @@ EXECUTE sp_help PlanAlimenticio_Comida
 go
 -- EJERCICIO
 CREATE TABLE Ejercicio (
-    Id_Ejercicio INT NOT NULL,
+    Id_Ejercicio INT NOT NULL IDENTITY(1,1),
     Nombre VARCHAR(50) NOT NULL,
     GrupoMuscularTrabajado VARCHAR(50) NOT NULL,
     CantidadRepeticiones INT NOT NULL,
@@ -311,7 +311,7 @@ go
 
 -- RUTINA SEMANA
 CREATE TABLE RutinaSemana (
-    Id_RutinaSemana INT NOT NULL,
+    Id_RutinaSemana INT NOT NULL IDENTITY(1,1),
     DiaSemana VARCHAR(12) NOT NULL,
     HoraInicio TIME NOT NULL,
     HoraFin TIME NOT NULL,
@@ -322,7 +322,7 @@ EXECUTE sp_help  RutinaSemana
 go
 -- RUTINA EJERCICIO
 CREATE TABLE RutinaEjercicio (
-    Id_RutinaEjercicio INT NOT NULL,
+    Id_RutinaEjercicio INT NOT NULL IDENTITY(1,1),
     Id_Ejercicio INT NOT NULL,
     Id_RutinaSemana INT NOT NULL,
     CONSTRAINT PK_RutinaEjercicio PRIMARY KEY (Id_RutinaEjercicio),
@@ -334,7 +334,7 @@ EXECUTE sp_help RutinaEjercicio
 go
 -- RUTINA ENTRENAMIENTO
 CREATE TABLE RutinaEntrenamiento (
-    Id_Rutina INT NOT NULL,
+    Id_Rutina INT NOT NULL IDENTITY(1,1),
     DescripcionObjetivo VARCHAR(100) NOT NULL,
     Nivel VARCHAR(20) NOT NULL,
     DuracionTotalxSemana INT NOT NULL,
@@ -351,7 +351,7 @@ go
 
 -- CLIENTES
 CREATE TABLE Clientes (
-    NumAfiliacion INT NOT NULL,
+    NumAfiliacion INT NOT NULL IDENTITY(1,1),
     Nombre VARCHAR(30) NOT NULL,
     Apellido1 VARCHAR(30) NOT NULL,
     Apellido2 VARCHAR(30) NOT NULL,
@@ -374,7 +374,7 @@ go
 
 -- PLAN PERSONALIZADO
 CREATE TABLE PlanPersonalizado (
-    IdPlanPersonalizado INT NOT NULL,
+    IdPlanPersonalizado INT NOT NULL IDENTITY(1,1),
     FechaInicio DATE NOT NULL,
     FechaFin DATE NOT NULL,
     IdRutina INT NOT NULL,
@@ -392,13 +392,11 @@ go
 
 -- SESION
 CREATE TABLE Sesion (
-    Id_Sesion INT NOT NULL,
+    Id_Sesion INT NOT NULL IDENTITY(1,1),
     TipoSesion VARCHAR(50) NOT NULL,
     Fecha DATE NOT NULL,
     Hora TIME NOT NULL,
-    PersonalAsignado VARCHAR(50) NOT NULL,
     Duracion INT NOT NULL,
-    Sede VARCHAR(50) NOT NULL,
     Estado VARCHAR(20) NOT NULL,
     CodigoUnicoCentro INT NOT NULL,
     CodigoProfesional INT NOT NULL,
@@ -415,7 +413,7 @@ go
 
 -- EVALUACION FISICA
 CREATE TABLE EvaluacionFisica (
-    Id_EvaluacionFisica INT NOT NULL,
+    Id_EvaluacionFisica INT NOT NULL IDENTITY(1,1),
     Fecha DATE NOT NULL,
     Peso FLOAT NOT NULL,
     Estatura FLOAT NOT NULL,
@@ -435,8 +433,8 @@ GO
 
 EXECUTE sp_help EvaluacionFisica
 go
---USE master;
---GO
---ALTER DATABASE VITALPRO SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
---GO
---DROP DATABASE VITALPRO;
+-- USE master;
+-- GO
+-- ALTER DATABASE VITALPRO SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+-- GO
+-- DROP DATABASE VITALPRO;

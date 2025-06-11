@@ -72,7 +72,6 @@ GO
 --  RESTRICCIONES EvaluaciónFisica
 USE VITALPRO
 GO
-
 ALTER TABLE EvaluacionFisica
 ADD CONSTRAINT CHK_EvaluacionFisica CHECK (
     Fecha <= GETDATE() AND

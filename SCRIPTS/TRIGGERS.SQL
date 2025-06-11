@@ -187,3 +187,33 @@ END;
 GO
 
 -- trigger para para asignar el consecutivo a los nutricionistas con sus especialidad
+
+
+CREATE TRIGGER trg_Insert_UnidadMedida
+ON UnidadMedida
+INSTEAD OF INSERT
+AS
+BEGIN
+    DECLARE @NextNumber INT;
+    DECLARE @FormattedId VARCHAR(4);
+
+   
+    SELECT @NextNumber = 
+        ISNULL(MAX(CAST(SUBSTRING(Id_Unidad, 2, LEN(Id_Unidad)) AS INT)), 0) + 1
+    FROM UnidadMedida;
+
+  
+    SET @FormattedId = 'U' + RIGHT('000' + CAST(@NextNumber AS VARCHAR), 3);
+
+   
+    INSERT INTO UnidadMedida (Id_Unidad, NombreUnidad)
+    SELECT 
+        @FormattedId,
+        NombreUnidad
+    FROM INSERTED;
+END;
+GO
+
+-- trigger unidad de medidad, asignar automaticamente el consecutivo
+-- Se durmio a las 2:00 am, y se desperto a las 6:00 am, y no pudo dormir mas, por eso se hizo este trigger
+
