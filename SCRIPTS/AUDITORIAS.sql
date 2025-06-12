@@ -91,9 +91,7 @@ CREATE TABLE Auditoria_RutinaEntrenamiento (
     DescripcionObjetivo VARCHAR(100),
     Nivel VARCHAR(20),
     DuracionTotalxSemana INT,
-    EjerciciosXDia INT,
     IdEntrenador VARCHAR(4),
-    Id_RutinaSemana INT
 )
 GO
 
@@ -371,8 +369,7 @@ BEGIN
 
     -- INSERT y UPDATE
     INSERT INTO Auditoria_RutinaEntrenamiento (
-        Operacion, Usuario, FechaOperacion, IdRutina, DescripcionObjetivo, Nivel, DuracionTotalxSemana, 
-        EjerciciosXDia, IdEntrenador, Id_RutinaSemana
+        Operacion, Usuario, FechaOperacion, IdRutina, DescripcionObjetivo, Nivel, DuracionTotalxSemana, IdEntrenador
     )
     SELECT
         CASE 
@@ -385,15 +382,12 @@ BEGIN
         DescripcionObjetivo,
         Nivel,
         DuracionTotalxSemana,
-        EjerciciosXDia,
-        IdEntrenador,
-        Id_RutinaSemana
+        IdEntrenador
     FROM inserted;
 
     -- DELETE
     INSERT INTO Auditoria_RutinaEntrenamiento (
-        Operacion, Usuario, FechaOperacion, IdRutina, DescripcionObjetivo, Nivel, DuracionTotalxSemana, 
-        EjerciciosXDia, IdEntrenador, Id_RutinaSemana
+        Operacion, Usuario, FechaOperacion, IdRutina, DescripcionObjetivo, Nivel, DuracionTotalxSemana,  IdEntrenador
     )
     SELECT
         'DELETE',
@@ -403,9 +397,7 @@ BEGIN
         DescripcionObjetivo,
         Nivel,
         DuracionTotalxSemana,
-        EjerciciosXDia,
-        IdEntrenador,
-        Id_RutinaSemana
+        IdEntrenador
     FROM deleted;
 END
 GO
@@ -495,7 +487,6 @@ GO
 --    RE.DescripcionObjetivo,
 --    RE.Nivel,
 --    RE.DuracionTotalxSemana,
---    RE.EjerciciosXDia,
 --    E.IdEntrenador,
 --    P.Nombre AS NombreEntrenador
 --FROM RutinaEntrenamiento RE

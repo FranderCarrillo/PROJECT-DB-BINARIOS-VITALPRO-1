@@ -340,7 +340,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE Especialidad_Nutricionista
+    UPDATE Nutricionista_Especialidad
     SET 
         IdNutricionista = @IdNutricionista,
         IdEspecialidad = @IdEspecialidad
@@ -724,7 +724,8 @@ CREATE PROCEDURE SP_ActualizarRutinaSemana
     @Id_RutinaSemana INT,
     @DiaSemana VARCHAR(12),
     @HoraInicio TIME,
-    @HoraFin TIME
+    @HoraFin TIME,
+    @Id_Rutina INT
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -733,7 +734,8 @@ BEGIN
     SET 
         DiaSemana = @DiaSemana,
         HoraInicio = @HoraInicio,
-        HoraFin = @HoraFin
+        HoraFin = @HoraFin,
+        Id_RutinaEntrenamiento = @Id_Rutina
     WHERE Id_RutinaSemana = @Id_RutinaSemana
     AND Estado = 1;
 END
@@ -794,9 +796,7 @@ CREATE PROCEDURE SP_ActualizarRutinaEntrenamiento
     @DescripcionObjetivo VARCHAR(100),
     @Nivel VARCHAR(20),
     @DuracionTotalxSemana INT,
-    @EjerciciosXDia INT,
-    @IdEntrenador VARCHAR(4),
-    @Id_RutinaSemana INT
+    @IdEntrenador VARCHAR(4)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -806,9 +806,7 @@ BEGIN
         DescripcionObjetivo = @DescripcionObjetivo,
         Nivel = @Nivel,
         DuracionTotalxSemana = @DuracionTotalxSemana,
-        EjerciciosXDia = @EjerciciosXDia,
-        IdEntrenador = @IdEntrenador,
-        Id_RutinaSemana = @Id_RutinaSemana
+        IdEntrenador = @IdEntrenador
     WHERE Id_Rutina = @Id_Rutina
     AND Estado = 1; 
 END

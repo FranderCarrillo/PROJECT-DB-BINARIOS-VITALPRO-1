@@ -383,14 +383,33 @@ GO
 EXECUTE sp_help Ejercicio
 GO
 
+-- Tabla RutinaEntrenamiento
+CREATE TABLE RutinaEntrenamiento (
+    Id_Rutina INT NOT NULL IDENTITY(1,1),
+    DescripcionObjetivo VARCHAR(100) NOT NULL,
+    Nivel VARCHAR(20) NOT NULL,
+    DuracionTotalxSemana INT NOT NULL,
+    IdEntrenador VARCHAR(4) NOT NULL,
+    Estado BIT DEFAULT 1,
+    CONSTRAINT PK_Rutina PRIMARY KEY (Id_Rutina),
+    CONSTRAINT FK_Rutina_Entrenador FOREIGN KEY (IdEntrenador) REFERENCES Entrenador(IdEntrenador)
+)
+ON Entrenamiento
+GO
+
+EXECUTE sp_help RutinaEntrenamiento
+GO
+                                                                                
 -- Tabla RutinaSemana
 CREATE TABLE RutinaSemana (
     Id_RutinaSemana INT NOT NULL IDENTITY(1,1),
     DiaSemana VARCHAR(12) NOT NULL,
     HoraInicio TIME NOT NULL,
     HoraFin TIME NOT NULL,
+    Id_RutinaEntrenamiento INT NOT NULL,
     Estado BIT DEFAULT 1,
-    CONSTRAINT PK_RutinaSemana PRIMARY KEY (Id_RutinaSemana)
+    CONSTRAINT PK_RutinaSemana PRIMARY KEY (Id_RutinaSemana),
+    CONSTRAINT FK_RutinaSemana_Rutina FOREIGN KEY (Id_RutinaEntrenamiento) REFERENCES RutinaSemana(Id_RutinaSemana)
 )
 ON Entrenamiento
 GO
@@ -411,26 +430,6 @@ CREATE TABLE RutinaEjercicio (
 ON Entrenamiento
 GO
 EXECUTE sp_help RutinaEjercicio
-GO
-
--- Tabla RutinaEntrenamiento
-CREATE TABLE RutinaEntrenamiento (
-    Id_Rutina INT NOT NULL IDENTITY(1,1),
-    DescripcionObjetivo VARCHAR(100) NOT NULL,
-    Nivel VARCHAR(20) NOT NULL,
-    DuracionTotalxSemana INT NOT NULL,
-    EjerciciosXDia INT NOT NULL,
-    IdEntrenador VARCHAR(4) NOT NULL,
-    Id_RutinaSemana INT NOT NULL,
-    Estado BIT DEFAULT 1,
-    CONSTRAINT PK_Rutina PRIMARY KEY (Id_Rutina),
-    CONSTRAINT FK_Rutina_Entrenador FOREIGN KEY (IdEntrenador) REFERENCES Entrenador(IdEntrenador),
-    CONSTRAINT FK_RutinaSemana_Rutina FOREIGN KEY (Id_RutinaSemana) REFERENCES RutinaSemana(Id_RutinaSemana)
-)
-ON Entrenamiento
-GO
-
-EXECUTE sp_help RutinaEntrenamiento
 GO
 
 -- Tabla Clientes

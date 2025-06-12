@@ -264,7 +264,7 @@ GO
 USE VITALPRO
 GO
 ALTER TABLE Ejercicio
-ADD CONSTRAINT UQ_Ejerci_Codigo UNIQUE(CodigoPlan);
+ADD CONSTRAINT UQ_Ejercicio_Codigo UNIQUE(Id_Ejercicio);
 ALTER Table Ejercicio
 ADD CONSTRAINT Ejercicio_Name UNIQUE (Nombre)
 GO
