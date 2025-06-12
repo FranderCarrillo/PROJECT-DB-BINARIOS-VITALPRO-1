@@ -1,872 +1,322 @@
+--restricción de CentroVitalPro Table 
+USE VITALPRO
+GO
+ALTER TABLE CentroVitalPro
+ADD CONSTRAINT UQ_Centro_NombreDistrito UNIQUE(Nombre,Distrito);
+GO
+ALTER TABLE CentroVitalPro
+ADD CONSTRAINT UQ_Centro_Numero UNIQUE(NumContacto);
+
+ALTER TABLE CentroVitalPro
+ADD CONSTRAINT UQ_Centro_Codigo UNIQUE(CodigoUnico);
+
+ALTER TABLE CentroVitalPro
+ADD CONSTRAINT CHK_CentroVitalPro CHECK (
+    LEN(LTRIM(RTRIM(Nombre)))>=3 AND
+    LEN(LTRIM(RTRIM( NumContacto))) >=8
+)
+--restricción de Profesional Table 
+USE VITALPRO
+GO
+ALTER TABLE Profesional
+ADD CONSTRAINT UC_CodigoProfesional UNIQUE (CedProfesional);
+GO 
+
+ALTER TABLE Profesional
+ADD CONSTRAINT CHK_profesional CHECK (
+    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
+    LEN(LTRIM(RTRIM(Apellido1))) >= 3 AND
+    LEN(LTRIM(RTRIM(Apellido2))) >= 3 AND
+    (AniosExperiencia>=0)
+    );
+GO
+--FIN restricción de Profesional Table 
+
+-- RESTRICCIONES HORARIO PROFESIONAL
+USE VITALPRO
+GO
+ALTER TABLE HorarioProfesional
+ADD CONSTRAINT UQ_Horario_Codigo UNIQUE(IdHorario);
+ALTER TABLE HorarioProfesional
+ADD CONSTRAINT CHK_HorarioProfesional CHECK(
+    LEN(LTRIM(RTRIM(DiaSemana))) >= 3 AND
+    (HoraFin > HoraInicio)  
+);
+GO
+-- FIN RESTRICCIONES HORARIO PROFESIONAL
+
+-- RESTRICCIONES ENTRENADOR
+USE VITALPRO
+GO
+ALTER TABLE Entrenador
+ADD CONSTRAINT UQ_Entrenador_Codigo UNIQUE(IdEntrenador);
+ALTER TABLE Entrenador
+ADD CONSTRAINT CHK_ENTRENADOR CHECK(
+    IdEntrenador LIKE 'E%' AND
+    (FechaFinal >= FechaInicio)
+);
+GO
+-- FIN RESTRICCIONES ENTRENADOR
+-- RESTRICCIONES CLIENTES
+ALTER TABLE Clientes
+ADD CONSTRAINT UQ_Clientes_Codigo UNIQUE(NumAfiliacion);
+ALTER TABLE Clientes
+ADD CONSTRAINT CHK_Clientes CHECK (
+    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
+    LEN(LTRIM(RTRIM(Apellido1))) >= 3 AND
+    LEN(LTRIM(RTRIM(Apellido2))) >= 3 AND
+    LEN(LTRIM(RTRIM(Cedula))) >= 9 AND
+    Genero IN ('M', 'F') AND
+    FechaNacimiento <= GETDATE() AND
+    LEN(LTRIM(RTRIM(Telefono))) >= 8 AND
+    CorreoElectronico LIKE '_%@__%.__%' AND
+    FechaIngreso >= FechaNacimiento
+)
+GO
+--cédula única 
+ALTER TABLE Clientes
+ADD CONSTRAINT UQ_Clientes_Cedula UNIQUE (Cedula)
+GO
+-- telefono único 
+ALTER TABLE Clientes
+ADD CONSTRAINT UQ_Clientes_Telefono UNIQUE (Telefono)
+GO
+-- FIN RESTRICCIONES CLIENTES
+
+-- RESTRICCIONES HORARIO CENTRO
+USE VITALPRO
+GO
+ALTER TABLE HorarioCentro
+ADD CONSTRAINT UQ_HorarioCentro_Codigo UNIQUE(Id_Horario);
+ALTER TABLE HorarioCentro 
+ADD CONSTRAINT CHK_HorarioCentro CHECK(
+    (HoraFin >= HoraInicio) AND
+    DiaSemana IN ('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo')
+);
+GO
+-- FIN RESTRICCIONES HORARIO CENTRO
+
+--  RESTRICCIONES EvaluaciónFisica
+USE VITALPRO
+GO
+ALTER TABLE EvaluacionFisica
+ADD CONSTRAINT UQ_EvaluacionFisica_Codigo UNIQUE(Id_EvaluacionFisica);
+ALTER TABLE EvaluacionFisica
+ADD CONSTRAINT CHK_EvaluacionFisica CHECK (
+    Fecha <= GETDATE() AND
+    (Peso > 0) AND
+    (Estatura > 0) AND
+    (PorcentajeGrasaCorporal >= 0) AND
+    (MasaMuscular >= 0) AND
+    LTRIM(RTRIM(NivelResistencia)) >= 3 AND
+    LTRIM(RTRIM(Flexibilidad)) >= 3
+)
+GO
+--  FIN RESTRICCIONES EvaluaciónFisica
+
+-- RESTRICCIONES ESPECIALIDAD ENTRENADOR
+USE VITALPRO
+GO
+ALTER TABLE Especialidad_Entrenador
+ADD CONSTRAINT UQ_EspecialidadEntrenador_Codigo UNIQUE(IdEspecialidad);
+ALTER TABLE Especialidad_Entrenador
+ADD CONSTRAINT CHK_Especialidad_Entrenador CHECK(
+    LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3 
+);
+GO
+-- FIN RESTRICCIONES ESPECIALIDAD ENTRENADOR
+
+-- RESTRICCIONES Entrenador ESPECIALIDAD 
+ALTER TABLE Entrenador_Especialidad
+ADD CONSTRAINT UQ_EntrenadorEspecialidad_Codigo UNIQUE(Id);
+ALTER TABLE Entrenador_Especialidad
+ADD CONSTRAINT UQ_EntrenadorEspecialidad UNIQUE (IdEntrenador, IdEspecialidad);
+--FIN
+-- RESTRICCIONES NUTRICIONISTA
+USE VITALPRO
+GO
+ALTER TABLE Nutricionista
+ADD CONSTRAINT UQ_Nutricionista_Codigo UNIQUE(IdNutricionista);
+ALTER TABLE Nutricionista
+ADD CONSTRAINT CHK_Nutricionista CHECK(
+    IdNutricionista LIKE 'E%' AND
+    (FechaFinal >= FechaInicio)
+);
+-- FIN RESTRICCIONES NUTRICIONISTA
+
+-- RESTRICCIONES Especialidad_Nutricionista
+USE VITALPRO
+GO
+ALTER TABLE Especialidad_Nutricionista
+ADD CONSTRAINT UQ_EspecialidadNutricionista_Codigo UNIQUE(IdEspecialidad);
+ALTER TABLE Especialidad_Nutricionista
+ADD CONSTRAINT CHK_Especialidad_Nutricionista CHECK(
+    LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3 
+);
+GO
+-- FIN RESTRICCIONES Especialidad_Nutricionista
+
+-- RESTRICCIONES Nutricionista_Especialidad
+ALTER TABLE Nutricionista_Especialidad
+ADD CONSTRAINT UQ_NutricionistaEspecialidad_Codigo UNIQUE(Id);
+ALTER TABLE Nutricionista_Especialidad
+ADD CONSTRAINT UQ_NutricionistaEspecialidad UNIQUE (IdNutricionista, IdEspecialidad);
+--FIN 
+
+-- RESTRICCIONES VALOR NUTRICIONAL
+USE VITALPRO
+GO
+ALTER TABLE ValorNutricional
+ADD CONSTRAINT UQ_ValorNutricional_Codigo UNIQUE(IdValorNutricional);
+ALTER TABLE ValorNutricional
+ADD CONSTRAINT CHK_ValorNutricional CHECK (
+    Calorias > 0 AND
+    Proteinas >= 0 AND
+    Carbohidratos >= 0 AND
+    Calorias <= 10000 AND
+    Proteinas <= 500 AND
+    Carbohidratos <= 1000
+)
+GO
+-- FIN RESTRICCIONES VALOR NUTRICIONAL
+
+-- RESTRICCIONES  RECETA
+USE VITALPRO
+GO
+ALTER TABLE Receta
+ADD CONSTRAINT UQ_Receta_Codigo UNIQUE(Id_Receta);
+ALTER TABLE Receta 
+ADD CONSTRAINT Receta_Name UNIQUE(Nombre)
+GO
+ALTER TABLE Receta
+ADD CONSTRAINT CHK_Receta CHECK (
+    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
+    (TiempoPreparacion > 0) AND
+    (TiempoPreparacion <= 600)
+)
+GO
+-- FIN RESTRICCIONES RECETA
+
+-- RESTRICCIONES  UnidadMedida
+USE VITALPRO
+GO
+ALTER TABLE UnidadMedida
+ADD CONSTRAINT UQ_UnidadMedida_Codigo UNIQUE(Id_Unidad);
+ALTER TABLE UnidadMedida 
+ADD CONSTRAINT UnidadMedida_Name UNIQUE(NombreUnidad)
+GO 
+ALTER TABLE UnidadMedida
+ADD CONSTRAINT CHK_UnidadMedida CHECK (
+    LEN(LTRIM(RTRIM(NombreUnidad))) >= 3
+)
+GO
+-- FIN RESTRICCIONES  UnidadMedida
+-- RESTRICCIONES Ingredientes 
+USE VITALPRO
+GO
+ALTER TABLE Ingrediente
+ADD CONSTRAINT UQ_Ingrediente_Codigo UNIQUE(Id_Ingrediente);
+ALTER TABLE Ingrediente 
+ADD CONSTRAINT Ingrediente_Name UNIQUE(Nombre)
+go 
+ALTER TABLE Ingrediente
+ADD CONSTRAINT CHK_Ingrediente CHECK (
+    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
+    LEN(LTRIM(RTRIM(Id_Unidad))) > 0
+)
+GO
+-- FIN RESTRICCIONES Ingredientes 
+
+-- RESTRICCIONES RecetaIngredientes 
+USE VITALPRO
+GO
+ALTER TABLE RecetaIngrediente
+ADD CONSTRAINT UQ_RecetaIngrediente_Codigo UNIQUE(Id_RecetaIngredientes);
+ALTER TABLE RecetaIngrediente
+ADD CONSTRAINT UQ_RecetaIngrediente UNIQUE (Id_Receta,Id_Ingrediente);
+ALTER TABLE RecetaIngrediente
+ADD CONSTRAINT CHK_RecetaIngrediente CHECK (
+    Cantidad > 0 AND
+    TiempoPreparacion > 0 AND
+    TiempoPreparacion <= 180
+)
+GO
+-- FIN RESTRICCIONES RecetaIngredientes
+
+-- RESTRICCIONES PlanAlimenticio 
+USE VITALPRO
+GO
+ALTER TABLE PlanAlimenticio
+ADD CONSTRAINT UQ_PlanAlimenticio_Codigo UNIQUE(CodigoPlan);
+ALTER TABLE PlanAlimenticio
+ADD CONSTRAINT PlanAlimenticio_Name UNIQUE (Nombre)
+GO
+ALTER TABLE PlanAlimenticio
+ADD CONSTRAINT CHK_PlanAlimenticio CHECK (
+    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
+    LEN(LTRIM(RTRIM(MetaNutricional))) >= 5 AND
+    (CaloriasDiariasEstim > 0)
+)
+GO
+-- FIN RESTRICCIONES PlanAlimenticio 
+
+-- RESTRICCIONES Ejercicio
+USE VITALPRO
+GO
+ALTER TABLE Ejercicio
+ADD CONSTRAINT UQ_Ejercicio_Codigo UNIQUE(Id_Ejercicio);
+ALTER Table Ejercicio
+ADD CONSTRAINT Ejercicio_Name UNIQUE (Nombre)
+GO
+ALTER TABLE Ejercicio
+ADD CONSTRAINT CHK_Ejercicio CHECK (
+    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
+    LEN(LTRIM(RTRIM(GrupoMuscularTrabajado))) >= 3 AND
+    CantidadRepeticiones > 0 AND
+    EquipamientoEspecial IN (0, 1)
+)
+GO
+-- FIN
+
+-- RESTRICCIONES RutinaSemana
+USE VITALPRO
+GO
+ALTER TABLE RutinaSemana
+ADD CONSTRAINT CHK_RutinaSemana CHECK (
+    LEN(LTRIM(RTRIM(DiaSemana))) >= 3 AND
+    HoraFin > HoraInicio
+)
+GO
+
+-- FIN RESTRICCIONES RutinaSemana
+
+-- RESTRICCIONES rutina entrenamiento  
 USE VITALPRO
 GO
 
-CREATE PROCEDURE SP_InsertarCentroVitalPro
-    @Nombre VARCHAR(50),
-    @Provincia VARCHAR(15),
-    @Canton VARCHAR(20),
-    @Distrito VARCHAR(40),
-    @DireccionExacta TEXT,
-    @NumContacto VARCHAR(20)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO CentroVitalPro (
-        Nombre, Provincia, Canton, Distrito, DireccionExacta, NumContacto
-    )
-    VALUES (
-        @Nombre, @Provincia, @Canton, @Distrito, @DireccionExacta, @NumContacto
-    );
-END
+ALTER TABLE RutinaEntrenamiento
+ADD CONSTRAINT CHK_RutinaEntrenamiento CHECK (
+    LEN(LTRIM(RTRIM(DescripcionObjetivo))) >= 5 AND
+    LEN(LTRIM(RTRIM(Nivel))) >= 3 AND
+    (DuracionTotalxSemana > 0) AND
+    (EjerciciosXDia > 0)
+)
 GO
+-- FIN RESTRICCIONES rutina entrenamiento 
 
-EXECUTE SP_InsertarCentroVitalPro 
-    'Centro Vital Pro', 
-    'San José', 
-    'San José', 
-    'Carmen', 
-    'Avenida Central, 100 metros al este de la Plaza de la Cultura', 
-    '2222-3333';
-GO
-
--- procedimiento almacenado para realizar inserts de centros 1
-
+-- RESTRICCIONES PLANPERSONALIZADO
 USE VITALPRO
 GO
+ALTER TABLE PlanPersonalizado
+ADD CONSTRAINT CHK_PlanPersonalizado CHECK (
+    (FechaFin >= FechaInicio)
+)
+-- FIN RESTRICCIONES PLANPERSONALIZADO
 
-CREATE PROCEDURE SP_InsertarHorarioCentro
-    @DiaSemana VARCHAR(12),
-    @HoraInicio TIME,
-    @HoraFin TIME,
-    @CodigoUnicoCentro INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    IF EXISTS (
-        SELECT 1 
-        FROM CentroVitalPro 
-        WHERE CodigoUnico = @CodigoUnicoCentro AND Estado = 1
-    )
-    BEGIN
-        INSERT INTO HorarioCentro (
-            DiaSemana, HoraInicio, HoraFin, CodigoUnicoCentro
-        )
-        VALUES (
-            @DiaSemana, @HoraInicio, @HoraFin, @CodigoUnicoCentro
-        );
-    END
-    ELSE
-    BEGIN
-        RAISERROR('No se puede insertar el horario porque el centro esta deshabilitado.', 16, 1);
-    END
-END
-GO
-
-EXECUTE SP_InsertarHorarioCentro 
-    'Lunes', 
-    '08:00:00', 
-    '20:00:00', 
-    1;
-GO
-
-select * from HorarioCentro;
-
-
--- procedimiento almacenado para crear inerts de horarios para centros 2
-
+-- Restricciones para PlanAlimenticio_Comida
 USE VITALPRO
 GO
+ALTER TABLE PlanAlimenticio_Comida
+ADD CONSTRAINT UQ_PlanComida UNIQUE (Id_Comida, CodigoPlan);
+--FIN
 
-CREATE PROCEDURE SP_InsertarProfesional
-    @Nombre VARCHAR(30),
-    @Apellido1 VARCHAR(30),
-    @Apellido2 VARCHAR(30),
-    @CedProfesional VARCHAR(50),
-    @AniosExperiencia INT,
-    @CodigoCentro INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Verificar si el centro está activo
-    IF EXISTS (
-        SELECT 1 
-        FROM CentroVitalPro 
-        WHERE CodigoUnico = @CodigoCentro AND Estado = 1
-    )
-    BEGIN
-        INSERT INTO Profesional (
-            Nombre, Apellido1, Apellido2, CedProfesional, AniosExperiencia, CodigoCentro
-        )
-        VALUES (
-            @Nombre, @Apellido1, @Apellido2, @CedProfesional, @AniosExperiencia, @CodigoCentro
-        );
-    END
-    ELSE
-    BEGIN
-        RAISERROR('No se puede insertar el profesional porque el centro está deshabilitado.', 16, 1);
-    END
-END
-GO
-
-
-EXECUTE SP_InsertarProfesional 
-    'María', 
-    'Gómez', 
-    'López', 
-    'P987654321', 
-    4, 
-    1;
-GO
-
--- prodecimiento almacenado pra crear inserts de profesionales 3
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE SP_InsertarHorarioProfesional
-    @CodigoProfesional INT,
-    @DiaSemana VARCHAR(12),
-    @HoraInicio TIME,
-    @HoraFin TIME
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Verificar si el profesional está activo
-    IF EXISTS (
-        SELECT 1 
-        FROM Profesional 
-        WHERE CodigoProfesional = @CodigoProfesional AND Estado = 1
-    )
-    BEGIN
-        INSERT INTO HorarioProfesional (
-            CodigoProfesional, DiaSemana, HoraInicio, HoraFin
-        )
-        VALUES (
-            @CodigoProfesional, @DiaSemana, @HoraInicio, @HoraFin
-        );
-    END
-    ELSE
-    BEGIN
-        RAISERROR('No se puede insertar el horario porque el profesional está deshabilitado.', 16, 1);
-    END
-END
-GO
-
-
-EXECUTE SP_InsertarHorarioProfesional 
-    1, 
-    'Martes', 
-    '09:00:00', 
-    '17:00:00';
-GO
-
-SELECT * FROM HorarioProfesional;
-
--- procedimiento almacenado para crear inserts de profesionales 4
-
-USE VITALPRO
-GO
-
-CREATE PROCEDURE SP_InsertarEntrenador
-    @FechaInicio DATE,
-    @FechaFinal DATE = NULL, -- permite nulo
-    @CodigoProfesional INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Verificar si el profesional está activo
-    IF EXISTS (
-        SELECT 1 
-        FROM Profesional 
-        WHERE CodigoProfesional = @CodigoProfesional AND Estado = 1
-    )
-    BEGIN
-        INSERT INTO Entrenador (
-            FechaInicio, FechaFinal, CodigoProfesional
-        )
-        VALUES (
-            @FechaInicio, @FechaFinal, @CodigoProfesional
-        );
-    END
-    ELSE
-    BEGIN
-        RAISERROR('No se puede insertar el entrenador porque el profesional está deshabilitado.', 16, 1);
-    END
-END
-GO
-
-EXECUTE SP_InsertarEntrenador 
-    '2023-01-01', 
-    NULL, 
-    1;
-GO
-
-Select * from Entrenador
-GO
--- procedimiento almacenado para crear inserts de entrenadores 5
-
-CREATE PROCEDURE SP_InsertarEspecialidadEntrenador
-    @NombreEspecialidad VARCHAR(50)
-AS
-BEGIN
-    SET NOCOUNT ON;
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM Especialidad_Entrenador 
-        WHERE NombreEspecialidad = @NombreEspecialidad
-    )
-        INSERT INTO Especialidad_Entrenador (NombreEspecialidad)
-        VALUES (@NombreEspecialidad);
-END
-GO
-
-EXECUTE SP_InsertarEspecialidadEntrenador 
-    'Cardio'
-GO
-
-USE VITALPRO
-GO
-Select * from Especialidad_Entrenador
-GO
--- procedimiento almacenado para crear inserts de especialidades de entrenadores 6
-
-
-CREATE PROCEDURE SP_InsertarEntrenadorEspecialidad
-    @IdEntrenador VARCHAR(4),
-    @IdEspecialidad VARCHAR(5)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    -- Verificar que tanto el entrenador como la especialidad estén activos
-    IF EXISTS (
-        SELECT 1 
-        FROM Entrenador 
-        WHERE IdEntrenador = @IdEntrenador AND Estado = 1
-    ) AND EXISTS (
-        SELECT 1 
-        FROM Especialidad_Entrenador 
-        WHERE IdEspecialidad = @IdEspecialidad AND Estado = 1
-    )
-    BEGIN
-        INSERT INTO Entrenador_Especialidad (
-            IdEntrenador, IdEspecialidad
-        )
-        VALUES (
-            @IdEntrenador, @IdEspecialidad
-        );
-    END
-    ELSE
-    BEGIN
-        RAISERROR('No se puede insertar porque el entrenador o la especialidad están deshabilitados.', 16, 1);
-    END
-END
-GO
-
-
-EXECUTE SP_InsertarEntrenadorEspecialidad 
-    'E001',
-	'ES001'
-GO
-
-select * from Entrenador_Especialidad
--- procedimiento almacenado para crear inserts de entrenador con especialidad 7 
-
-USE VITALPRO
-GO
-CREATE PROCEDURE SP_InsertarNutricionista
-    @FechaInicio DATE,
-    @FechaFinal DATE = NULL, -- permite nulo
-    @CodigoProfesional INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Nutricionista (
-        FechaInicio, FechaFinal, CodigoProfesional
-    )
-    VALUES (
-        @FechaInicio, @FechaFinal, @CodigoProfesional
-    );
-END
-GO
-
-
-EXECUTE SP_InsertarNutricionista 
-    '2023-01-15', 
-    NULL, 
-    1;
-GO
-SELECT * FROM Nutricionista;
-GO
--- procedimiento almacenado para crear inserts de nutricionistas 8 
-
-
-
-CREATE PROCEDURE SP_InsertarEspecialidadNutricionista
-    @NombreEspecialidad VARCHAR(50)
-AS
-BEGIN
-    SET NOCOUNT ON;
-    IF NOT EXISTS (
-        SELECT 1 
-        FROM Especialidad_Nutricionista 
-        WHERE NombreEspecialidad = @NombreEspecialidad
-    )
-    BEGIN
-        INSERT INTO Especialidad_Nutricionista (NombreEspecialidad)
-        VALUES (@NombreEspecialidad);
-    END
-END
-GO
-
-
-EXECUTE SP_InsertarEspecialidadNutricionista 
-    'Adapatacion';
-GO
--- procedimiento almacenado para crear inserts de especialidades de nutricionistas 9
-
-SELECT * FROM Especialidad_Nutricionista;
-GO
-
-CREATE PROCEDURE SP_InsertarNutricionistaEspecialidad
-    @IdNutricionista VARCHAR(4),
-    @IdEspecialidad VARCHAR(5)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Nutricionista_Especialidad (
-        IdNutricionista, IdEspecialidad
-    )
-    VALUES (
-        @IdNutricionista, @IdEspecialidad
-    );
-END
-GO
-
-EXECUTE SP_InsertarNutricionistaEspecialidad 
-    'N001',
-    'SN001';
-
-SELECT * FROM Nutricionista_Especialidad;
-GO
--- procedimiento almacenado para crear inserts de nutricionista con especialidad 10
-
-
-CREATE PROCEDURE SP_InsertarValorNutricional
-    @Calorias INT,
-    @Proteinas FLOAT,
-    @Carbohidratos FLOAT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO ValorNutricional (
-        Calorias, Proteinas, Carbohidratos
-    )
-    VALUES (
-        @Calorias, @Proteinas, @Carbohidratos
-    );
-END
-GO
-
-EXECUTE SP_InsertarValorNutricional 
-    300, 
-    15.5, 
-    40.0;
-GO
-SELECT * FROM ValorNutricional;
-GO
--- procedimiento almacenado para crear inserts de valores nutricionales 11
-USE VITALPRO
-GO
-
-CREATE PROCEDURE SP_InsertarReceta
-    @Nombre VARCHAR(50),
-    @TiempoPreparacion INT,
-    @IdValorNutricional INT -- permite nulo
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Receta (
-        Nombre, TiempoPreparacion, IdValorNutricional
-    )
-    VALUES (
-        @Nombre, @TiempoPreparacion, @IdValorNutricional
-    );
-END
-GO
-
-EXECUTE SP_InsertarReceta 
-    'Ensalada Vegana', 
-    10, 
-    1;
-
-SELECT * FROM Receta;
-GO   
--- procedimiento almacenado para crear inserts de recetas 12
-
-
-CREATE PROCEDURE SP_InsertarUnidadMedida
-    @NombreUnidad VARCHAR(20)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO UnidadMedida (
-        NombreUnidad
-    )
-    VALUES (
-        @NombreUnidad
-    );
-END
-GO
-
-EXECUTE SP_InsertarUnidadMedida 
-    'Gramos';
-GO
-SELECT * FROM UnidadMedida;
-GO
--- procedimiento almacenado para crear inserts de unidades de medida 13
-
-CREATE PROCEDURE SP_InsertarIngrediente
-    @Nombre VARCHAR(50),
-    @Id_Unidad VARCHAR(4)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Ingrediente (
-        Nombre, Id_Unidad
-    )
-    VALUES (
-        @Nombre, @Id_Unidad
-    );
-END
-GO
-
-EXECUTE SP_InsertarIngrediente 
-    'Pollo', 
-    'U001';
-GO
-SELECT * FROM Ingrediente;
-GO
--- procedimiento almacenado para crear inserts de ingredientes 14
-
-CREATE PROCEDURE SP_InsertarRecetaIngrediente
-    @Id_Receta INT,
-    @Id_Ingrediente INT,
-    @Cantidad FLOAT,
-    @TiempoPreparacion INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO RecetaIngrediente (
-        Id_Receta, Id_Ingrediente, Cantidad, TiempoPreparacion
-    )
-    VALUES (
-        @Id_Receta, @Id_Ingrediente, @Cantidad, @TiempoPreparacion
-    );
-END
-GO
-
-EXECUTE SP_InsertarRecetaIngrediente 
-    1, 
-    1, 
-    100.0, 
-    5;
-SELECT * FROM RecetaIngrediente;
-GO
--- procedimiento almacenado para crear inserts de ingredientes en recetas 15
-
-
-CREATE PROCEDURE SP_InsertarComida
-    @TipoComida VARCHAR(50),
-    @CodigoPlan INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Comida (
-        TipoComida, CodigoPlan
-    )
-    VALUES (
-        @TipoComida, @CodigoPlan
-    );
-END
-GO
-
-EXECUTE SP_InsertarComida 
-    'Almuerzo', 
-    1;
-SELECT * FROM Comida;
-GO
--- procedimiento almacenado para crear inserts de comidas 16
-
-CREATE PROCEDURE SP_InsertarComidaReceta
-    @Id_Comida INT,
-    @Id_Receta INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO ComidaReceta (
-        Id_Comida, Id_Receta
-    )
-    VALUES (
-        @Id_Comida, @Id_Receta
-    );
-END
-GO
-
-EXECUTE SP_InsertarComidaReceta 
-    1, 
-    1;
-
-SELECT * FROM ComidaReceta;
-GO
--- procedimiento almacenado para crear inserts de recetas asociadas a comidas 17 
-
-CREATE PROCEDURE SP_InsertarPlanAlimenticio
-    @Nombre VARCHAR(50),
-    @MetaNutricional VARCHAR(100) = NULL,
-    @CaloriasDiariasEstim INT = NULL,
-    @Observaciones TEXT = NULL,
-    @IdNutricionista VARCHAR(4)
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO PlanAlimenticio (
-        Nombre, MetaNutricional, CaloriasDiariasEstim, Observaciones, IdNutricionista
-    )
-    VALUES (
-        @Nombre, @MetaNutricional, @CaloriasDiariasEstim, @Observaciones, @IdNutricionista
-    );
-END
-GO
-
-EXECUTE SP_InsertarPlanAlimenticio 
-    'Plan Vegano', 
-    'Perder peso', 
-    1500, 
-    'Plan personalizado para bajar grasa', 
-    'N001';
-
-SELECT * FROM PlanAlimenticio;
-GO
-
--- procedimiento almacenado para crear inserts de planes alimenticios 18
-
-CREATE PROCEDURE SP_InsertarPlanAlimenticioComida
-    @Id_Comida INT,
-    @CodigoPlan INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO PlanAlimenticio_Comida (
-        Id_Comida, CodigoPlan
-    )
-    VALUES (
-        @Id_Comida, @CodigoPlan
-    );
-END
-GO
-
-EXECUTE SP_InsertarPlanAlimenticioComida 
-    1, 
-    1;
-
-SELECT * FROM PlanAlimenticio_Comida;
-GO
--- procedimiento almacenado para crear inserts de comidas asociadas a planes alimenticios 19
-
-
-
-CREATE PROCEDURE SP_InsertarEjercicio
-    @Nombre VARCHAR(50),
-    @GrupoMuscularTrabajado VARCHAR(50),
-    @CantidadRepeticiones INT,
-    @EquipamientoEspecial BIT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Ejercicio (
-        Nombre, GrupoMuscularTrabajado, CantidadRepeticiones, EquipamientoEspecial
-    )
-    VALUES (
-        @Nombre, @GrupoMuscularTrabajado, @CantidadRepeticiones, @EquipamientoEspecial
-    );
-END
-GO
-
-EXECUTE SP_InsertarEjercicio 
-    'Sentadillas', 
-    'Piernas', 
-    12, 
-    0;
-
-SELECT * FROM Ejercicio;
-GO
--- procedimiento almacenado para crear inserts de ejercicios 20
-
-
-CREATE PROCEDURE SP_InsertarRutinaSemana
-    @DiaSemana VARCHAR(12),
-    @HoraInicio TIME,
-    @HoraFin TIME
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO RutinaSemana (
-        DiaSemana, HoraInicio, HoraFin
-    )
-    VALUES (
-        @DiaSemana, @HoraInicio, @HoraFin
-    );
-END
-GO
-
-EXECUTE SP_InsertarRutinaSemana 
-    'Lunes', 
-    '08:00:00', 
-    '10:00:00';
-
-SELECT * FROM RutinaSemana;
-GO
--- procedimiento almacenado para crear inserts de rutina semanal 21
-
-
-CREATE PROCEDURE SP_InsertarRutinaEjercicio
-    @Id_Ejercicio INT,
-    @Id_RutinaSemana INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO RutinaEjercicio (
-        Id_Ejercicio, Id_RutinaSemana
-    )
-    VALUES (
-        @Id_Ejercicio, @Id_RutinaSemana
-    );
-END
-GO
-
-EXECUTE SP_InsertarRutinaEjercicio 
-    1, 
-    1;
-
-SELECT * FROM RutinaEjercicio;
-GO
--- procedimiento almacenado para crear inserts de ejercicios en rutina semanal 22
-
-
-CREATE PROCEDURE SP_InsertarRutinaEntrenamiento
-    @DescripcionObjetivo VARCHAR(100),
-    @Nivel VARCHAR(20),
-    @DuracionTotalxSemana INT,
-    @EjerciciosXDia INT,
-    @IdEntrenador VARCHAR(4),
-    @Id_RutinaSemana INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO RutinaEntrenamiento (
-        DescripcionObjetivo, Nivel, DuracionTotalxSemana, EjerciciosXDia, IdEntrenador, Id_RutinaSemana
-    )
-    VALUES (
-        @DescripcionObjetivo, @Nivel, @DuracionTotalxSemana, @EjerciciosXDia, @IdEntrenador, @Id_RutinaSemana
-    );
-END
-GO
-
-EXECUTE SP_InsertarRutinaEntrenamiento 
-    'Bajar grasa corporal', 
-    'Intermedio', 
-    5, 
-    4, 
-    'E001', 
-    1;
-
-SELECT * FROM RutinaEntrenamiento;
-GO
--- procedimiento almacenado para crear inserts de rutinas de entrenamiento 23
-
-
-CREATE PROCEDURE SP_InsertarCliente
-    @Nombre VARCHAR(30),
-    @Apellido1 VARCHAR(30),
-    @Apellido2 VARCHAR(30),
-    @Cedula VARCHAR(12),
-    @Genero VARCHAR(1),
-    @FechaNacimiento DATE,
-    @Telefono VARCHAR(15),
-    @CorreoElectronico VARCHAR(100),
-    @FechaIngreso DATE,
-    @IdEntrenador VARCHAR(4),
-    @CodigoUnicoCentro INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Clientes (
-        Nombre, Apellido1, Apellido2, Cedula, Genero,
-        FechaNacimiento, Telefono, CorreoElectronico, FechaIngreso,
-        IdEntrenador, CodigoUnicoCentro
-    )
-    VALUES (
-        @Nombre, @Apellido1, @Apellido2, @Cedula, @Genero,
-        @FechaNacimiento, @Telefono, @CorreoElectronico, @FechaIngreso,
-        @IdEntrenador, @CodigoUnicoCentro
-    );
-END
-GO
-
-EXECUTE SP_InsertarCliente 
-    'Juan', 
-    'Pérez', 
-    'Gomez',
-    '501230456',
-    'M',
-    '1990-05-05',
-    '8888-9999',
-    'juan@gmail.com',
-    '2024-01-01',
-    'E001',
-    1;
-
-SELECT * FROM Clientes;
-GO
--- procedimiento almacenado para crear inserts de clientes 24
-
-
-CREATE PROCEDURE SP_InsertarPlanPersonalizado
-    @FechaInicio DATE,
-    @FechaFin DATE,
-    @IdRutina INT,
-    @NumAfiliacion INT,
-    @CodigoPlan INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO PlanPersonalizado (
-        FechaInicio, FechaFin, IdRutina, NumAfiliacion, CodigoPlan
-    )
-    VALUES (
-        @FechaInicio, @FechaFin, @IdRutina, @NumAfiliacion, @CodigoPlan
-    );
-END
-GO
-
-EXECUTE SP_InsertarPlanPersonalizado 
-    '2024-01-01', 
-    '2024-12-31', 
-    1, 
-    1, 
-    1;
-
-SELECT * FROM PlanPersonalizado;
-GO
--- procedimiento almacenado para crear inserts de planes personalizados 25
-
-CREATE PROCEDURE SP_InsertarSesion
-    @TipoSesion VARCHAR(50),
-    @Fecha DATE,
-    @Hora TIME,
-    @Duracion INT,
-    @CodigoUnicoCentro INT,
-    @CodigoProfesional INT,
-    @NumAfiliacion INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO Sesion (
-        TipoSesion, Fecha, Hora, Duracion,
-        CodigoUnicoCentro, CodigoProfesional, NumAfiliacion
-    )
-    VALUES (
-        @TipoSesion, @Fecha, @Hora, @Duracion,
-        @CodigoUnicoCentro, @CodigoProfesional, @NumAfiliacion
-    );
-END
-GO
-
-EXECUTE SP_InsertarSesion 
-    'Entrenamiento Personalizado', 
-    '2024-01-15', 
-    '10:00:00', 
-    60,
-    1, 
-    1, 
-    1;
-GO
-
-USE VITALPRO
-SELECT * FROM Sesion;
-GO
--- procedimiento almacenado para crear inserts de sesiones 26 
-
-
-CREATE PROCEDURE SP_InsertarEvaluacionFisica
-    @Fecha DATE,
-    @Peso FLOAT,
-    @Estatura FLOAT,
-    @PorcentajeGrasaCorporal FLOAT,
-    @MasaMuscular FLOAT,
-    @NivelResistencia VARCHAR(20) = NULL,
-    @Flexibilidad VARCHAR(20) = NULL,
-    @CodigoUnicoCentro INT,
-    @CodigoProfesional INT,
-    @NumAfiliacion INT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    INSERT INTO EvaluacionFisica (
-        Fecha, 
-		Peso, 
-		Estatura, 
-		PorcentajeGrasaCorporal,
-        MasaMuscular, 
-		NivelResistencia, Flexibilidad, CodigoUnicoCentro,
-        CodigoProfesional, NumAfiliacion
-    )
-    VALUES (
-        @Fecha, @Peso, @Estatura, @PorcentajeGrasaCorporal,
-        @MasaMuscular, @NivelResistencia, @Flexibilidad, @CodigoUnicoCentro,
-        @CodigoProfesional, @NumAfiliacion
-    );
-END
-GO
-
-EXECUTE SP_InsertarEvaluacionFisica 
-    '2024-03-10',
-    68.2,
-    1.68,
-    17.3,
-    28.5,
-    'Medio',
-    'Buena',
-    1,
-    1,
-    1;
-GO
--- procedimiento almacenado para crear inserts de evaluaciones físicas 27
-SELECT * FROM EvaluacionFisica;
-GO
--- procedimiento almacenado para crear inserts de evaluaciones físicas 27
