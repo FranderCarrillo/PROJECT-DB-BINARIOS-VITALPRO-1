@@ -1,7 +1,7 @@
 USE VITALPRO
 GO
 
-CREATE PROCEDURE InsertarCentroVitalPro
+CREATE PROCEDURE SP_InsertarCentroVitalPro
     @Nombre VARCHAR(50),
     @Provincia VARCHAR(15),
     @Canton VARCHAR(20),
@@ -21,7 +21,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarCentroVitalPro 
+EXECUTE SP_InsertarCentroVitalPro 
     'Centro Vital Pro', 
     'San José', 
     'San José', 
@@ -35,7 +35,7 @@ GO
 USE VITALPRO
 GO
 
-CREATE PROCEDURE InsertarHorarioCentro
+CREATE PROCEDURE SP_InsertarHorarioCentro
     @DiaSemana VARCHAR(12),
     @HoraInicio TIME,
     @HoraFin TIME,
@@ -53,7 +53,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarHorarioCentro 
+EXECUTE SP_InsertarHorarioCentro 
     'Lunes', 
     '08:00:00', 
     '20:00:00', 
@@ -65,7 +65,7 @@ GO
 USE VITALPRO
 GO
 
-CREATE PROCEDURE InsertarProfesional
+CREATE PROCEDURE SP_InsertarProfesional
     @Nombre VARCHAR(30),
     @Apellido1 VARCHAR(30),
     @Apellido2 VARCHAR(30),
@@ -85,7 +85,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarProfesional 
+EXECUTE SP_InsertarProfesional 
     'María', 
     'Gómez', 
     'López', 
@@ -99,7 +99,7 @@ GO
 USE VITALPRO
 GO
 
-CREATE PROCEDURE InsertarHorarioProfesional
+CREATE PROCEDURE SP_InsertarHorarioProfesional
     @CodigoProfesional INT,
     @DiaSemana VARCHAR(12),
     @HoraInicio TIME,
@@ -117,7 +117,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarHorarioProfesional 
+EXECUTE SP_InsertarHorarioProfesional 
     1, 
     'Martes', 
     '09:00:00', 
@@ -131,7 +131,7 @@ SELECT * FROM HorarioProfesional;
 USE VITALPRO
 GO
 
-CREATE PROCEDURE InsertarEntrenador
+CREATE PROCEDURE SP_InsertarEntrenador
     @FechaInicio DATE,
     @FechaFinal DATE = NULL, -- permite nulo
     @CodigoProfesional INT
@@ -148,16 +148,17 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarEntrenador 
+EXECUTE SP_InsertarEntrenador 
     '2023-01-01', 
     NULL, 
     1;
 GO
 
 Select * from Entrenador
+GO
 -- procedimiento almacenado para crear inserts de entrenadores 5
 
-CREATE PROCEDURE InsertarEspecialidadEntrenador
+CREATE PROCEDURE SP_InsertarEspecialidadEntrenador
     @NombreEspecialidad VARCHAR(50)
 AS
 BEGIN
@@ -167,13 +168,12 @@ BEGIN
         FROM Especialidad_Entrenador 
         WHERE NombreEspecialidad = @NombreEspecialidad
     )
-    BEGIN
         INSERT INTO Especialidad_Entrenador (NombreEspecialidad)
         VALUES (@NombreEspecialidad);
-    END
+END
 GO
 
-EXECUTE InsertarEspecialidadEntrenador 
+EXECUTE SP_InsertarEspecialidadEntrenador 
     'Cardio'
 GO
 
@@ -184,7 +184,7 @@ GO
 -- procedimiento almacenado para crear inserts de especialidades de entrenadores 6
 
 
-CREATE PROCEDURE InsertarEntrenadorEspecialidad
+CREATE PROCEDURE SP_InsertarEntrenadorEspecialidad
     @IdEntrenador VARCHAR(4),
     @IdEspecialidad VARCHAR(5)
 AS
@@ -200,7 +200,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarEntrenadorEspecialidad 
+EXECUTE SP_InsertarEntrenadorEspecialidad 
     'E001',
 	'ES001'
 GO
@@ -208,11 +208,9 @@ GO
 select * from Entrenador_Especialidad
 -- procedimiento almacenado para crear inserts de entrenador con especialidad 7 
 
-DROP PROCEDURE InsertarNutricionista
-
 USE VITALPRO
 GO
-CREATE PROCEDURE InsertarNutricionista
+CREATE PROCEDURE SP_InsertarNutricionista
     @FechaInicio DATE,
     @FechaFinal DATE = NULL, -- permite nulo
     @CodigoProfesional INT
@@ -230,17 +228,18 @@ END
 GO
 
 
-EXECUTE InsertarNutricionista 
+EXECUTE SP_InsertarNutricionista 
     '2023-01-15', 
     NULL, 
     1;
-
+GO
 SELECT * FROM Nutricionista;
+GO
 -- procedimiento almacenado para crear inserts de nutricionistas 8 
 
 
 
-CREATE PROCEDURE InsertarEspecialidadNutricionista
+CREATE PROCEDURE SP_InsertarEspecialidadNutricionista
     @NombreEspecialidad VARCHAR(50)
 AS
 BEGIN
@@ -258,14 +257,15 @@ END
 GO
 
 
-EXECUTE InsertarEspecialidadNutricionista 
+EXECUTE SP_InsertarEspecialidadNutricionista 
     'Adapatacion';
+GO
 -- procedimiento almacenado para crear inserts de especialidades de nutricionistas 9
 
 SELECT * FROM Especialidad_Nutricionista;
 GO
 
-CREATE PROCEDURE InsertarNutricionistaEspecialidad
+CREATE PROCEDURE SP_InsertarNutricionistaEspecialidad
     @IdNutricionista VARCHAR(4),
     @IdEspecialidad VARCHAR(5)
 AS
@@ -281,7 +281,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarNutricionistaEspecialidad 
+EXECUTE SP_InsertarNutricionistaEspecialidad 
     'N001',
     'SN001';
 
@@ -290,7 +290,7 @@ GO
 -- procedimiento almacenado para crear inserts de nutricionista con especialidad 10
 
 
-CREATE PROCEDURE InsertarValorNutricional
+CREATE PROCEDURE SP_InsertarValorNutricional
     @Calorias INT,
     @Proteinas FLOAT,
     @Carbohidratos FLOAT
@@ -307,19 +307,18 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarValorNutricional 
+EXECUTE SP_InsertarValorNutricional 
     300, 
     15.5, 
     40.0;
-
+GO
 SELECT * FROM ValorNutricional;
 GO
 -- procedimiento almacenado para crear inserts de valores nutricionales 11
 USE VITALPRO
 GO
-DROP PROCEDURE InsertarReceta
 
-CREATE PROCEDURE InsertarReceta
+CREATE PROCEDURE SP_InsertarReceta
     @Nombre VARCHAR(50),
     @TiempoPreparacion INT,
     @IdValorNutricional INT -- permite nulo
@@ -336,7 +335,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarReceta 
+EXECUTE SP_InsertarReceta 
     'Ensalada Vegana', 
     10, 
     1;
@@ -346,7 +345,7 @@ GO
 -- procedimiento almacenado para crear inserts de recetas 12
 
 
-CREATE PROCEDURE InsertarUnidadMedida
+CREATE PROCEDURE SP_InsertarUnidadMedida
     @NombreUnidad VARCHAR(20)
 AS
 BEGIN
@@ -361,14 +360,14 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarUnidadMedida 
+EXECUTE SP_InsertarUnidadMedida 
     'Gramos';
-
+GO
 SELECT * FROM UnidadMedida;
 GO
 -- procedimiento almacenado para crear inserts de unidades de medida 13
 
-CREATE PROCEDURE InsertarIngrediente
+CREATE PROCEDURE SP_InsertarIngrediente
     @Nombre VARCHAR(50),
     @Id_Unidad VARCHAR(4)
 AS
@@ -384,13 +383,15 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarIngrediente 
+EXECUTE SP_InsertarIngrediente 
     'Pollo', 
     'U001';
+GO
 SELECT * FROM Ingrediente;
+GO
 -- procedimiento almacenado para crear inserts de ingredientes 14
 
-CREATE PROCEDURE InsertarRecetaIngrediente
+CREATE PROCEDURE SP_InsertarRecetaIngrediente
     @Id_Receta INT,
     @Id_Ingrediente INT,
     @Cantidad FLOAT,
@@ -408,9 +409,9 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarRecetaIngrediente 
+EXECUTE SP_InsertarRecetaIngrediente 
     1, 
-    2, 
+    1, 
     100.0, 
     5;
 SELECT * FROM RecetaIngrediente;
@@ -418,7 +419,7 @@ GO
 -- procedimiento almacenado para crear inserts de ingredientes en recetas 15
 
 
-CREATE PROCEDURE InsertarComida
+CREATE PROCEDURE SP_InsertarComida
     @TipoComida VARCHAR(50),
     @CodigoPlan INT
 AS
@@ -434,14 +435,14 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarComida 
+EXECUTE SP_InsertarComida 
     'Almuerzo', 
     1;
 SELECT * FROM Comida;
 GO
 -- procedimiento almacenado para crear inserts de comidas 16
 
-CREATE PROCEDURE InsertarComidaReceta
+CREATE PROCEDURE SP_InsertarComidaReceta
     @Id_Comida INT,
     @Id_Receta INT
 AS
@@ -457,7 +458,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarComidaReceta 
+EXECUTE SP_InsertarComidaReceta 
     1, 
     1;
 
@@ -465,9 +466,7 @@ SELECT * FROM ComidaReceta;
 GO
 -- procedimiento almacenado para crear inserts de recetas asociadas a comidas 17 
 
-
-
-CREATE PROCEDURE InsertarPlanAlimenticio
+CREATE PROCEDURE SP_InsertarPlanAlimenticio
     @Nombre VARCHAR(50),
     @MetaNutricional VARCHAR(100) = NULL,
     @CaloriasDiariasEstim INT = NULL,
@@ -486,7 +485,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarPlanAlimenticio 
+EXECUTE SP_InsertarPlanAlimenticio 
     'Plan Vegano', 
     'Perder peso', 
     1500, 
@@ -498,7 +497,7 @@ GO
 
 -- procedimiento almacenado para crear inserts de planes alimenticios 18
 
-CREATE PROCEDURE InsertarPlanAlimenticioComida
+CREATE PROCEDURE SP_InsertarPlanAlimenticioComida
     @Id_Comida INT,
     @CodigoPlan INT
 AS
@@ -514,7 +513,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarPlanAlimenticioComida 
+EXECUTE SP_InsertarPlanAlimenticioComida 
     1, 
     1;
 
@@ -524,7 +523,7 @@ GO
 
 
 
-CREATE PROCEDURE InsertarEjercicio
+CREATE PROCEDURE SP_InsertarEjercicio
     @Nombre VARCHAR(50),
     @GrupoMuscularTrabajado VARCHAR(50),
     @CantidadRepeticiones INT,
@@ -542,7 +541,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarEjercicio 
+EXECUTE SP_InsertarEjercicio 
     'Sentadillas', 
     'Piernas', 
     12, 
@@ -553,7 +552,7 @@ GO
 -- procedimiento almacenado para crear inserts de ejercicios 20
 
 
-CREATE PROCEDURE InsertarRutinaSemana
+CREATE PROCEDURE SP_InsertarRutinaSemana
     @DiaSemana VARCHAR(12),
     @HoraInicio TIME,
     @HoraFin TIME
@@ -570,7 +569,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarRutinaSemana 
+EXECUTE SP_InsertarRutinaSemana 
     'Lunes', 
     '08:00:00', 
     '10:00:00';
@@ -580,7 +579,7 @@ GO
 -- procedimiento almacenado para crear inserts de rutina semanal 21
 
 
-CREATE PROCEDURE InsertarRutinaEjercicio
+CREATE PROCEDURE SP_InsertarRutinaEjercicio
     @Id_Ejercicio INT,
     @Id_RutinaSemana INT
 AS
@@ -596,7 +595,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarRutinaEjercicio 
+EXECUTE SP_InsertarRutinaEjercicio 
     1, 
     1;
 
@@ -605,7 +604,7 @@ GO
 -- procedimiento almacenado para crear inserts de ejercicios en rutina semanal 22
 
 
-CREATE PROCEDURE InsertarRutinaEntrenamiento
+CREATE PROCEDURE SP_InsertarRutinaEntrenamiento
     @DescripcionObjetivo VARCHAR(100),
     @Nivel VARCHAR(20),
     @DuracionTotalxSemana INT,
@@ -625,7 +624,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarRutinaEntrenamiento 
+EXECUTE SP_InsertarRutinaEntrenamiento 
     'Bajar grasa corporal', 
     'Intermedio', 
     5, 
@@ -638,7 +637,7 @@ GO
 -- procedimiento almacenado para crear inserts de rutinas de entrenamiento 23
 
 
-CREATE PROCEDURE InsertarCliente
+CREATE PROCEDURE SP_InsertarCliente
     @Nombre VARCHAR(30),
     @Apellido1 VARCHAR(30),
     @Apellido2 VARCHAR(30),
@@ -667,7 +666,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarCliente 
+EXECUTE SP_InsertarCliente 
     'Juan', 
     'Pérez', 
     'Gomez',
@@ -685,7 +684,7 @@ GO
 -- procedimiento almacenado para crear inserts de clientes 24
 
 
-CREATE PROCEDURE InsertarPlanPersonalizado
+CREATE PROCEDURE SP_InsertarPlanPersonalizado
     @FechaInicio DATE,
     @FechaFin DATE,
     @IdRutina INT,
@@ -704,7 +703,7 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarPlanPersonalizado 
+EXECUTE SP_InsertarPlanPersonalizado 
     '2024-01-01', 
     '2024-12-31', 
     1, 
@@ -715,12 +714,11 @@ SELECT * FROM PlanPersonalizado;
 GO
 -- procedimiento almacenado para crear inserts de planes personalizados 25
 
-CREATE PROCEDURE InsertarSesion
+CREATE PROCEDURE SP_InsertarSesion
     @TipoSesion VARCHAR(50),
     @Fecha DATE,
     @Hora TIME,
     @Duracion INT,
-    @Estado VARCHAR(20),
     @CodigoUnicoCentro INT,
     @CodigoProfesional INT,
     @NumAfiliacion INT
@@ -730,31 +728,32 @@ BEGIN
 
     INSERT INTO Sesion (
         TipoSesion, Fecha, Hora, Duracion,
-        Estado, CodigoUnicoCentro, CodigoProfesional, NumAfiliacion
+        CodigoUnicoCentro, CodigoProfesional, NumAfiliacion
     )
     VALUES (
         @TipoSesion, @Fecha, @Hora, @Duracion,
-        @Estado, @CodigoUnicoCentro, @CodigoProfesional, @NumAfiliacion
+        @CodigoUnicoCentro, @CodigoProfesional, @NumAfiliacion
     );
 END
 GO
 
-EXECUTE InsertarSesion 
+EXECUTE SP_InsertarSesion 
     'Entrenamiento Personalizado', 
     '2024-01-15', 
     '10:00:00', 
     60,
-    'Programada', 
     1, 
     1, 
     1;
+GO
 
+USE VITALPRO
 SELECT * FROM Sesion;
 GO
 -- procedimiento almacenado para crear inserts de sesiones 26 
 
 
-CREATE PROCEDURE InsertarEvaluacionFisica
+CREATE PROCEDURE SP_InsertarEvaluacionFisica
     @Fecha DATE,
     @Peso FLOAT,
     @Estatura FLOAT,
@@ -770,8 +769,12 @@ BEGIN
     SET NOCOUNT ON;
 
     INSERT INTO EvaluacionFisica (
-        Fecha, Peso, Estatura, PorcentajeGrasaCorporal,
-        MasaMuscular, NivelResistencia, Flexibilidad, CodigoUnicoCentro,
+        Fecha, 
+		Peso, 
+		Estatura, 
+		PorcentajeGrasaCorporal,
+        MasaMuscular, 
+		NivelResistencia, Flexibilidad, CodigoUnicoCentro,
         CodigoProfesional, NumAfiliacion
     )
     VALUES (
@@ -782,18 +785,19 @@ BEGIN
 END
 GO
 
-EXECUTE InsertarEvaluacionFisica 
-    '2024-01-20', 
-    70.5, 
-    1.75, 
-    15.0, 
-    30.0, 
-    'Alta', 
-    'Media', 
-    1, 
-    1, 
+EXECUTE SP_InsertarEvaluacionFisica 
+    '2024-03-10',
+    68.2,
+    1.68,
+    17.3,
+    28.5,
+    'Medio',
+    'Buena',
+    1,
+    1,
     1;
-
+GO
+-- procedimiento almacenado para crear inserts de evaluaciones físicas 27
 SELECT * FROM EvaluacionFisica;
 GO
 -- procedimiento almacenado para crear inserts de evaluaciones físicas 27

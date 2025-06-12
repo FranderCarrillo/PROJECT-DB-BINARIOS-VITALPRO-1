@@ -454,97 +454,97 @@ GO
 
 
 
-use VITALPRO
-go
-CREATE VIEW View_ClientesEntrenadorCentro AS
-SELECT 
-    C.NumAfiliacion,
-    C.Nombre AS NombreCliente,
-    C.Apellido1,
-    C.Apellido2,
-    C.Cedula,
-    E.IdEntrenador,
-    P.Nombre AS NombreProfesional,
-    CV.Nombre AS CentroNombre
-FROM Clientes C
-INNER JOIN Entrenador E ON C.IdEntrenador = E.IdEntrenador
-INNER JOIN Profesional P ON E.CodigoProfesional = P.CodigoProfesional
-INNER JOIN CentroVitalPro CV ON C.CodigoUnicoCentro = CV.CodigoUnico;
+--use VITALPRO
+--go
+--CREATE VIEW View_ClientesEntrenadorCentro AS
+--SELECT 
+--    C.NumAfiliacion,
+--    C.Nombre AS NombreCliente,
+--    C.Apellido1,
+--    C.Apellido2,
+--    C.Cedula,
+--    E.IdEntrenador,
+--    P.Nombre AS NombreProfesional,
+--    CV.Nombre AS CentroNombre
+--FROM Clientes C
+--INNER JOIN Entrenador E ON C.IdEntrenador = E.IdEntrenador
+--INNER JOIN Profesional P ON E.CodigoProfesional = P.CodigoProfesional
+--INNER JOIN CentroVitalPro CV ON C.CodigoUnicoCentro = CV.CodigoUnico;
 
 
- --Vista de Planes Alimenticios con nombre del nutricionista
+-- --Vista de Planes Alimenticios con nombre del nutricionista
 
-CREATE VIEW View_PlanesAlimenticios AS
-SELECT 
-    PA.CodigoPlan,
-    PA.Nombre AS NombrePlan,
-    PA.MetaNutricional,
-    PA.CaloriasDiariasEstim,
-    N.IdNutricionista,
-    P.Nombre AS NombreNutricionista
-FROM PlanAlimenticio PA
-INNER JOIN Nutricionista N ON PA.IdNutricionista = N.IdNutricionista
-INNER JOIN Profesional P ON N.CodigoProfesional = P.CodigoProfesional;
+--CREATE VIEW View_PlanesAlimenticios AS
+--SELECT 
+--    PA.CodigoPlan,
+--    PA.Nombre AS NombrePlan,
+--    PA.MetaNutricional,
+--    PA.CaloriasDiariasEstim,
+--    N.IdNutricionista,
+--    P.Nombre AS NombreNutricionista
+--FROM PlanAlimenticio PA
+--INNER JOIN Nutricionista N ON PA.IdNutricionista = N.IdNutricionista
+--INNER JOIN Profesional P ON N.CodigoProfesional = P.CodigoProfesional;
 
---Vista de Rutinas con descripción y entrenador
-
-
-CREATE VIEW View_RutinasEntrenamiento AS
-SELECT 
-    RE.Id_Rutina,
-    RE.DescripcionObjetivo,
-    RE.Nivel,
-    RE.DuracionTotalxSemana,
-    RE.EjerciciosXDia,
-    E.IdEntrenador,
-    P.Nombre AS NombreEntrenador
-FROM RutinaEntrenamiento RE
-INNER JOIN Entrenador E ON RE.IdEntrenador = E.IdEntrenador
-INNER JOIN Profesional P ON E.CodigoProfesional = P.CodigoProfesional;
+----Vista de Rutinas con descripción y entrenador
 
 
---Vista de Sesiones con Cliente y Profesional
-
-CREATE VIEW View_SesionesClientesProfesionales AS
-SELECT 
-    S.Id_Sesion,
-    S.TipoSesion,
-    S.Fecha,
-    S.Hora,
-    S.Estado,
-    C.Nombre + ' ' + C.Apellido1 AS Cliente,
-    P.Nombre + ' ' + P.Apellido1 AS Profesional
-FROM Sesion S
-INNER JOIN Clientes C ON S.NumAfiliacion = C.NumAfiliacion
-INNER JOIN Profesional P ON S.CodigoProfesional = P.CodigoProfesional;
+--CREATE VIEW View_RutinasEntrenamiento AS
+--SELECT 
+--    RE.Id_Rutina,
+--    RE.DescripcionObjetivo,
+--    RE.Nivel,
+--    RE.DuracionTotalxSemana,
+--    RE.EjerciciosXDia,
+--    E.IdEntrenador,
+--    P.Nombre AS NombreEntrenador
+--FROM RutinaEntrenamiento RE
+--INNER JOIN Entrenador E ON RE.IdEntrenador = E.IdEntrenador
+--INNER JOIN Profesional P ON E.CodigoProfesional = P.CodigoProfesional;
 
 
---Vista de Evaluaciones físicas por cliente
+----Vista de Sesiones con Cliente y Profesional
 
-CREATE VIEW View_EvaluacionesFisicas AS
-SELECT 
-    EF.Id_EvaluacionFisica,
-    EF.Fecha,
-    EF.Peso,
-    EF.Estatura,
-    EF.PorcentajeGrasaCorporal,
-    EF.MasaMuscular,
-    C.Nombre + ' ' + C.Apellido1 AS Cliente
-FROM EvaluacionFisica EF
-INNER JOIN Clientes C ON EF.NumAfiliacion = C.NumAfiliacion;
-GO
+--CREATE VIEW View_SesionesClientesProfesionales AS
+--SELECT 
+--    S.Id_Sesion,
+--    S.TipoSesion,
+--    S.Fecha,
+--    S.Hora,
+--    S.Estado,
+--    C.Nombre + ' ' + C.Apellido1 AS Cliente,
+--    P.Nombre + ' ' + P.Apellido1 AS Profesional
+--FROM Sesion S
+--INNER JOIN Clientes C ON S.NumAfiliacion = C.NumAfiliacion
+--INNER JOIN Profesional P ON S.CodigoProfesional = P.CodigoProfesional;
 
-SELECT * FROM View_ClientesEntrenadorCentro;
-go
 
-SELECT * FROM View_PlanesAlimenticios
-go
+----Vista de Evaluaciones físicas por cliente
 
-SELECT * FROM View_RutinasEntrenamiento
-go
+--CREATE VIEW View_EvaluacionesFisicas AS
+--SELECT 
+--    EF.Id_EvaluacionFisica,
+--    EF.Fecha,
+--    EF.Peso,
+--    EF.Estatura,
+--    EF.PorcentajeGrasaCorporal,
+--    EF.MasaMuscular,
+--    C.Nombre + ' ' + C.Apellido1 AS Cliente
+--FROM EvaluacionFisica EF
+--INNER JOIN Clientes C ON EF.NumAfiliacion = C.NumAfiliacion;
+--GO
 
-SELECT * FROM View_SesionesClientesProfesionales
-go
+--SELECT * FROM View_ClientesEntrenadorCentro;
+--go
 
-SELECT * FROM View_EvaluacionesFisicas
-go
+--SELECT * FROM View_PlanesAlimenticios
+--go
+
+--SELECT * FROM View_RutinasEntrenamiento
+--go
+
+--SELECT * FROM View_SesionesClientesProfesionales
+--go
+
+--SELECT * FROM View_EvaluacionesFisicas
+--go

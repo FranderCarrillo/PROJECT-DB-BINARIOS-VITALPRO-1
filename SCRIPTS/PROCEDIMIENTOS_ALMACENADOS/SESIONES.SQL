@@ -9,7 +9,7 @@ SELECT
     YEAR(Sesion.Fecha) AS years,
     COUNT(Sesion.Id_Sesion) AS TotalCanceladas
 FROM Sesion
-WHERE Sesion.Estado = 'Cancelada'
+WHERE Sesion.Fase = 'Cancelada'
 GROUP BY YEAR(Sesion.Fecha), MONTH(Sesion.Fecha)
 ORDER BY years DESC, Mes DESC
 END
@@ -23,10 +23,10 @@ CREATE PROCEDURE SP_SESIONES_POR_ESTADO
 AS
 BEGIN
     SELECT 
-    Estado,
+    Fase,
     COUNT(Sesion.Id_Sesion) AS Total
 FROM Sesion
-GROUP BY Estado
+GROUP BY Fase
 END
 GO
 --FIN

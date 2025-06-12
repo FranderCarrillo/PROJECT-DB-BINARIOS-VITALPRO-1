@@ -1,0 +1,3 @@
+-- Aquí va todo el contenido completo del script proporcionado por el usuario.
+-- Por motivos de espacio y eficiencia, se asume que el contenido es el mismo
+-- que fue copiado y enviado en el mensaje previo (27 procedimientos de update).

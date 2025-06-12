@@ -18,11 +18,12 @@ FROM EvaluacionFisica inner JOIN Clientes ON EvaluacionFisica.NumAfiliacion = Cl
 ORDER BY EvaluacionFisica.NumAfiliacion, EvaluacionFisica.Fecha;
 END
 GO
+
 --FIN
 
 --Reservas por profesional en una semana 2
 USE VITALPRO
-GO
+GO  
 CREATE PROCEDURE SP_RESERVAS_POR_PROFESIONAL_EN_UNA_SEMANA
 AS
 BEGIN
@@ -221,24 +222,6 @@ END
 GO
 --FIN
 
---  Frecuencia de uso de ejercicios por rutina 12
-USE VITALPRO
-GO
-CREATE PROCEDURE SP_EJERCICIOS_POR_RUTINA
-AS
-BEGIN
-SELECT 
-    RutinaEjercicio.Id_RutinaEjercicio,
-    E.Nombre AS NombreEjercicio,
-    COUNT(RutinaEjercicio.Id_Ejercicio) AS VecesUsado
-FROM RutinaEjercicio 
-INNER JOIN Ejercicio E ON RutinaEjercicio.Id_Ejercicio = E.Id_Ejercicio
-GROUP BY RutinaEjercicio.Id_Ejercicio, E.Nombre
-ORDER BY RutinaEjercicio.Id_Ejercicio, VecesUsado DESC
-END
-GO
---FIN
-
 -- Profesionales sin sesiones asignadas 13
 USE VITALPRO
 GO
@@ -273,12 +256,22 @@ END
 GO
 --FIN
 
---Centros con mas clientes afiliados 15
-SELECT 
-    CentroVitalPro.Nombre AS Centro,
-    COUNT(Profesional.CodigoProfesional) AS TotalProfesionales
-FROM CentroVitalPro 
-LEFT JOIN Profesional  ON CentroVitalPro.CodigoUnico = Profesional.CodigoCentro
-GROUP BY CentroVitalPro.Nombre
-ORDER BY TotalProfesionales DESC;
+USE VITALPRO
+GO
+
+CREATE PROCEDURE SP_CENTROS_CON_MAS_PROFESIONALES
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT 
+        CentroVitalPro.Nombre AS Centro,
+        COUNT(Profesional.CodigoProfesional) AS TotalProfesionales
+    FROM CentroVitalPro 
+    LEFT JOIN Profesional ON CentroVitalPro.CodigoUnico = Profesional.CodigoCentro
+    GROUP BY CentroVitalPro.Nombre
+    ORDER BY TotalProfesionales DESC;
+END
+GO
+
 --FIN

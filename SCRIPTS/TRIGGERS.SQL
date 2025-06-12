@@ -217,3 +217,35 @@ GO
 -- trigger unidad de medidad, asignar automaticamente el consecutivo
 -- Se durmio a las 2:00 am, y se desperto a las 6:00 am, y no pudo dormir mas, por eso se hizo este trigger
 
+CREATE TRIGGER trg_Insert_Sesion
+ON Sesion
+INSTEAD OF INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Insertar los datos con Fase establecido automáticamente en 'Completado'
+    INSERT INTO Sesion (
+        TipoSesion,
+        Fecha,
+        Hora,
+        Duracion,
+        CodigoUnicoCentro,
+        CodigoProfesional,
+        NumAfiliacion,
+        Fase,
+        Estado
+    )
+    SELECT 
+        TipoSesion,
+        Fecha,
+        Hora,
+        Duracion,
+        CodigoUnicoCentro,
+        CodigoProfesional,
+        NumAfiliacion,
+        'Completado',
+        ISNULL(Estado, 1)
+    FROM INSERTED;
+END;
+GO

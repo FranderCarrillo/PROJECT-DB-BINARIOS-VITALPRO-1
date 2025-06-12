@@ -1,8 +1,8 @@
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarCentroVitalPro
-    @IdCentro INT,
+CREATE PROCEDURE SP_ActualizarCentroVitalPro
+    @CodigoUnico INT,
     @Nombre VARCHAR(50),
     @Provincia VARCHAR(15),
     @Canton VARCHAR(20),
@@ -21,7 +21,7 @@ BEGIN
         Distrito = @Distrito,
         DireccionExacta = @DireccionExacta,
         NumContacto = @NumContacto
-    WHERE IdCentro = @IdCentro;
+    WHERE CodigoUnico = @CodigoUnico;
 END
 GO
 
@@ -41,9 +41,9 @@ EXEC ActualizarCentroVitalPro
 
 USE VITALPRO
 GO
-
-CREATE PROCEDURE ActualizarHorarioCentro
-    @IdHorarioCentro INT,
+    
+CREATE PROCEDURE SP_ActualizarHorarioCentro
+    @Id_Horario INT,
     @DiaSemana VARCHAR(12),
     @HoraInicio TIME,
     @HoraFin TIME,
@@ -58,7 +58,7 @@ BEGIN
         HoraInicio = @HoraInicio,
         HoraFin = @HoraFin,
         CodigoUnicoCentro = @CodigoUnicoCentro
-    WHERE IdHorarioCentro = @IdHorarioCentro;
+    WHERE Id_Horario = @Id_Horario;
 END
 GO
 
@@ -80,7 +80,7 @@ EXEC ActualizarHorarioCentro
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarProfesional
+CREATE PROCEDURE SP_ActualizarProfesional
     @CodigoProfesional INT,
     @Nombre VARCHAR(30),
     @Apellido1 VARCHAR(30),
@@ -125,7 +125,7 @@ EXEC ActualizarProfesional
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarHorarioProfesional
+CREATE PROCEDURE SP_ActualizarHorarioProfesional
     @IdHorario INT,
     @CodigoProfesional INT,
     @DiaSemana VARCHAR(12),
@@ -163,7 +163,7 @@ EXEC ActualizarHorarioProfesional
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarEntrenador
+CREATE PROCEDURE SP_ActualizarEntrenador
     @IdEntrenador INT,
     @FechaInicio DATE,
     @FechaFinal DATE = NULL,
@@ -198,7 +198,7 @@ EXEC ActualizarEntrenador
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarEspecialidadEntrenador
+CREATE PROCEDURE SP_ActualizarEspecialidadEntrenador
     @IdEspecialidad VARCHAR(5),
     @NombreEspecialidad VARCHAR(50)
 AS
@@ -227,7 +227,7 @@ EXEC ActualizarEspecialidadEntrenador
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarEntrenadorEspecialidad
+CREATE PROCEDURE SP_ActualizarEntrenadorEspecialidad
     @Id VARCHAR(5),
     @IdEntrenador VARCHAR(4),
     @IdEspecialidad VARCHAR(5)
@@ -259,7 +259,7 @@ EXEC ActualizarEntrenadorEspecialidad
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarNutricionista
+CREATE PROCEDURE SP_ActualizarNutricionista
     @IdNutricionista VARCHAR(4),
     @FechaInicio DATE,
     @FechaFinal DATE = NULL,
@@ -294,7 +294,7 @@ EXEC ActualizarNutricionista
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarEspecialidadNutricionista
+CREATE PROCEDURE SP_ActualizarEspecialidadNutricionista
     @IdEspecialidad VARCHAR(5),
     @NombreEspecialidad VARCHAR(50)
 AS
@@ -323,7 +323,7 @@ EXEC ActualizarEspecialidadNutricionista
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarNutricionistaEspecialidad
+CREATE PROCEDURE SP_ActualizarNutricionistaEspecialidad
     @Id VARCHAR(5),
     @IdNutricionista VARCHAR(4),
     @IdEspecialidad VARCHAR(5)
@@ -331,7 +331,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE Especialidad_Nutricionista
+    UPDATE Nutricionista_Especialidad
     SET 
         IdNutricionista = @IdNutricionista,
         IdEspecialidad = @IdEspecialidad
@@ -355,7 +355,7 @@ EXEC ActualizarNutricionistaEspecialidad
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarValorNutricional
+CREATE PROCEDURE SP_ActualizarValorNutricional
     @IdValorNutricional INT,
     @Calorias INT,
     @Proteinas FLOAT,
@@ -390,7 +390,7 @@ EXEC ActualizarValorNutricional
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarReceta
+CREATE PROCEDURE SP_ActualizarReceta
     @Id_Receta INT,
     @Nombre VARCHAR(50),
     @TiempoPreparacion INT,
@@ -425,7 +425,7 @@ EXEC ActualizarReceta
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarUnidadMedida
+CREATE PROCEDURE SP_ActualizarUnidadMedida
     @Id_Unidad VARCHAR(4),
     @NombreUnidad VARCHAR(20)
 AS
@@ -454,8 +454,8 @@ EXEC ActualizarUnidadMedida
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarIngrediente
-    @IdIngrediente INT,
+CREATE PROCEDURE SP_ActualizarIngrediente
+    @Id_Ingrediente INT,
     @Nombre VARCHAR(50),
     @Id_Unidad VARCHAR(4)
 AS
@@ -466,7 +466,7 @@ BEGIN
     SET 
         Nombre = @Nombre,
         Id_Unidad = @Id_Unidad
-    WHERE IdIngrediente = @IdIngrediente;
+    WHERE Id_Ingrediente = @Id_Ingrediente;
 END
 GO
 
@@ -486,7 +486,7 @@ EXEC ActualizarIngrediente
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarRecetaIngrediente
+CREATE PROCEDURE SP_ActualizarRecetaIngrediente
     @Id_RecetaIngredientes INT,
     @Id_Receta INT,
     @Id_Ingrediente INT,
@@ -525,7 +525,7 @@ EXEC ActualizarRecetaIngrediente
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarComida
+CREATE PROCEDURE SP_ActualizarComida
     @Id_Comida INT,
     @TipoComida VARCHAR(50),
     @CodigoPlan INT
@@ -557,7 +557,7 @@ EXEC ActualizarComida
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarComidaReceta
+CREATE PROCEDURE SP_ActualizarComidaReceta
     @Id_ComidaReceta INT,
     @Id_Comida INT,
     @Id_Receta INT
@@ -589,7 +589,7 @@ EXEC ActualizarComidaReceta
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarPlanAlimenticio
+CREATE PROCEDURE SP_ActualizarPlanAlimenticio
     @CodigoPlan INT,
     @Nombre VARCHAR(50),
     @MetaNutricional VARCHAR(100) = NULL,
@@ -630,7 +630,7 @@ EXEC ActualizarPlanAlimenticio
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarPlanAlimenticioComida
+CREATE PROCEDURE SP_ActualizarPlanAlimenticioComida
     @Id_PlanAlimenticio_Comida INT,
     @Id_Comida INT,
     @CodigoPlan INT
@@ -662,7 +662,7 @@ EXEC ActualizarPlanAlimenticioComida
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarEjercicio
+CREATE PROCEDURE SP_ActualizarEjercicio
     @Id_Ejercicio INT,
     @Nombre VARCHAR(50),
     @GrupoMuscularTrabajado VARCHAR(50),
@@ -700,7 +700,7 @@ EXEC ActualizarEjercicio
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarRutinaSemana
+CREATE PROCEDURE SP_ActualizarRutinaSemana
     @Id_RutinaSemana INT,
     @DiaSemana VARCHAR(12),
     @HoraInicio TIME,
@@ -735,7 +735,7 @@ EXEC ActualizarRutinaSemana
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarRutinaEjercicio
+CREATE PROCEDURE SP_ActualizarRutinaEjercicio
     @Id_RutinaEjercicio INT,
     @Id_Ejercicio INT,
     @Id_RutinaSemana INT
@@ -767,7 +767,7 @@ EXEC ActualizarRutinaEjercicio
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarRutinaEntrenamiento
+CREATE PROCEDURE SP_ActualizarRutinaEntrenamiento
     @Id_Rutina INT,
     @DescripcionObjetivo VARCHAR(100),
     @Nivel VARCHAR(20),
@@ -812,7 +812,7 @@ EXEC ActualizarRutinaEntrenamiento
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarCliente
+CREATE PROCEDURE SP_ActualizarCliente
     @NumAfiliacion INT,
     @Nombre VARCHAR(30),
     @Apellido1 VARCHAR(30),
@@ -871,7 +871,7 @@ EXEC ActualizarCliente
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarPlanPersonalizado
+CREATE PROCEDURE SP_ActualizarPlanPersonalizado
     @IdPlanPersonalizado INT,
     @FechaInicio DATE,
     @FechaFin DATE,
@@ -909,22 +909,19 @@ EXEC ActualizarPlanPersonalizado
 -- procedimiento almacenado para realizar updates de planes personalizados 25
 
 
-
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarSesion
+CREATE PROCEDURE SP_ActualizarSesion
     @Id_Sesion INT,
     @TipoSesion VARCHAR(50),
     @Fecha DATE,
     @Hora TIME,
-    @PersonalAsignado VARCHAR(50),
     @Duracion INT,
-    @Sede VARCHAR(50),
-    @Estado VARCHAR(20),
     @CodigoUnicoCentro INT,
     @CodigoProfesional INT,
-    @NumAfiliacion INT
+    @NumAfiliacion INT,
+    @Fase VARCHAR(20)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -934,13 +931,11 @@ BEGIN
         TipoSesion = @TipoSesion,
         Fecha = @Fecha,
         Hora = @Hora,
-        PersonalAsignado = @PersonalAsignado,
         Duracion = @Duracion,
-        Sede = @Sede,
-        Estado = @Estado,
         CodigoUnicoCentro = @CodigoUnicoCentro,
         CodigoProfesional = @CodigoProfesional,
-        NumAfiliacion = @NumAfiliacion
+        NumAfiliacion = @NumAfiliacion,
+        Fase = @Fase
     WHERE Id_Sesion = @Id_Sesion;
 END
 GO
@@ -970,7 +965,7 @@ EXEC ActualizarSesion
 USE VITALPRO
 GO
 
-CREATE PROCEDURE ActualizarEvaluacionFisica
+CREATE PROCEDURE SP_ActualizarEvaluacionFisica
     @Id_EvaluacionFisica INT,
     @Fecha DATE,
     @Peso FLOAT,
