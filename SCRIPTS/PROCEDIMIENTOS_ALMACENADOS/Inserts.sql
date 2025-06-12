@@ -179,12 +179,24 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO Entrenador (
-        FechaInicio, FechaFinal, CodigoProfesional
+    -- Verificar si el profesional está activo
+    IF EXISTS (
+        SELECT 1 
+        FROM Profesional 
+        WHERE CodigoProfesional = @CodigoProfesional AND Estado = 1
     )
-    VALUES (
-        @FechaInicio, @FechaFinal, @CodigoProfesional
-    );
+    BEGIN
+        INSERT INTO Entrenador (
+            FechaInicio, FechaFinal, CodigoProfesional
+        )
+        VALUES (
+            @FechaInicio, @FechaFinal, @CodigoProfesional
+        );
+    END
+    ELSE
+    BEGIN
+        RAISERROR('No se puede insertar el entrenador porque el profesional está deshabilitado.', 16, 1);
+    END
 END
 GO
 
@@ -231,14 +243,31 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO Entrenador_Especialidad (
-        IdEntrenador, IdEspecialidad
+    -- Verificar que tanto el entrenador como la especialidad estén activos
+    IF EXISTS (
+        SELECT 1 
+        FROM Entrenador 
+        WHERE IdEntrenador = @IdEntrenador AND Estado = 1
+    ) AND EXISTS (
+        SELECT 1 
+        FROM Especialidad_Entrenador 
+        WHERE IdEspecialidad = @IdEspecialidad AND Estado = 1
     )
-    VALUES (
-        @IdEntrenador, @IdEspecialidad
-    );
+    BEGIN
+        INSERT INTO Entrenador_Especialidad (
+            IdEntrenador, IdEspecialidad
+        )
+        VALUES (
+            @IdEntrenador, @IdEspecialidad
+        );
+    END
+    ELSE
+    BEGIN
+        RAISERROR('No se puede insertar porque el entrenador o la especialidad están deshabilitados.', 16, 1);
+    END
 END
 GO
+
 
 EXECUTE SP_InsertarEntrenadorEspecialidad 
     'E001',
