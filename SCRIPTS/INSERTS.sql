@@ -22,14 +22,15 @@ END
 GO
 
 EXECUTE SP_InsertarCentroVitalPro 
-    'Centro Vital Pro', 
-    'San José', 
-    'San José', 
-    'Carmen', 
-    'Avenida Central, 100 metros al este de la Plaza de la Cultura', 
-    '2222-3333';
+    'Hojancha Vital Pro', 
+    'Guanacaste', 
+    'Hojancha', 
+    'Hojancha', 
+    '50 metros al este de la casa de Samuel', 
+    '2659-3333';
 GO
 
+select * from CentroVitalPro
 -- procedimiento almacenado para realizar inserts de centros 1
 
 USE VITALPRO
@@ -68,7 +69,7 @@ EXECUTE SP_InsertarHorarioCentro
     'Lunes', 
     '08:00:00', 
     '20:00:00', 
-    1;
+    4;
 GO
 
 select * from HorarioCentro;
@@ -116,11 +117,12 @@ EXECUTE SP_InsertarProfesional
     'María', 
     'Gómez', 
     'López', 
-    'P987654321', 
+    '507960123', 
     4, 
     1;
 GO
 
+select * from Profesional
 -- prodecimiento almacenado pra crear inserts de profesionales 3
 
 USE VITALPRO
@@ -398,8 +400,8 @@ END
 GO
 
 EXECUTE SP_InsertarValorNutricional 
-    300, 
-    15.5, 
+    250, 
+    15.5,
     40.0;
 GO
 SELECT * FROM ValorNutricional;

@@ -19,8 +19,10 @@ ADD CONSTRAINT CHK_CentroVitalPro CHECK (
 USE VITALPRO
 GO
 ALTER TABLE Profesional
-ADD CONSTRAINT UC_CodigoProfesional UNIQUE (CedProfesional);
+ADD CONSTRAINT UC_CodigoProfesional UNIQUE (CodigoProfesional);
 GO 
+ALTER TABLE Profesional 
+ADD CONSTRAINT UC_CedulaProfesional UNIQUE (CedProfesional);
 
 ALTER TABLE Profesional
 ADD CONSTRAINT CHK_profesional CHECK (
@@ -35,14 +37,24 @@ GO
 -- RESTRICCIONES HORARIO PROFESIONAL
 USE VITALPRO
 GO
+
 ALTER TABLE HorarioProfesional
-ADD CONSTRAINT UQ_Horario_Codigo UNIQUE(IdHorario);
+ADD CONSTRAINT UQ_HorarioProfesional_ProfesionalDia UNIQUE (CodigoProfesional, DiaSemana);
+GO
+
+ALTER TABLE HorarioProfesional
+ADD CONSTRAINT UQ_HorarioProfesional_IdHorario UNIQUE(IdHorario);
+GO
+
+
 ALTER TABLE HorarioProfesional
 ADD CONSTRAINT CHK_HorarioProfesional CHECK(
-    LEN(LTRIM(RTRIM(DiaSemana))) >= 3 AND
-    (HoraFin > HoraInicio)  
+    (LEN(LTRIM(RTRIM(DiaSemana))) >= 3) AND
+    (HoraFin > HoraInicio) AND
+    DiaSemana IN ('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado')
 );
 GO
+
 -- FIN RESTRICCIONES HORARIO PROFESIONAL
 
 -- RESTRICCIONES ENTRENADOR
@@ -60,6 +72,8 @@ GO
 -- RESTRICCIONES CLIENTES
 ALTER TABLE Clientes
 ADD CONSTRAINT UQ_Clientes_Codigo UNIQUE(NumAfiliacion);
+ALTER TABLE Clientes 
+ADD CONSTRAINT UC_CedulaCliente UNIQUE (Cedula);
 ALTER TABLE Clientes
 ADD CONSTRAINT CHK_Clientes CHECK (
     LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
@@ -84,16 +98,21 @@ GO
 -- FIN RESTRICCIONES CLIENTES
 
 -- RESTRICCIONES HORARIO CENTRO
+
 USE VITALPRO
 GO
+-- Agrega una restricción de unicidad para evitar duplicados de Día + Centro
+ALTER TABLE HorarioCentro
+ADD CONSTRAINT UQ_HorarioCentro_CentroDia UNIQUE (CodigoUnicoCentro, DiaSemana);
 ALTER TABLE HorarioCentro
 ADD CONSTRAINT UQ_HorarioCentro_Codigo UNIQUE(Id_Horario);
 ALTER TABLE HorarioCentro 
 ADD CONSTRAINT CHK_HorarioCentro CHECK(
     (HoraFin >= HoraInicio) AND
-    DiaSemana IN ('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo')
+    DiaSemana IN ('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado')
 );
 GO
+
 -- FIN RESTRICCIONES HORARIO CENTRO
 
 --  RESTRICCIONES EvaluaciónFisica
@@ -120,10 +139,16 @@ GO
 ALTER TABLE Especialidad_Entrenador
 ADD CONSTRAINT UQ_EspecialidadEntrenador_Codigo UNIQUE(IdEspecialidad);
 ALTER TABLE Especialidad_Entrenador
+ADD CONSTRAINT UQ_EspecialidadEntrenador_Name UNIQUE (NombreEspecialidad);
+ALTER TABLE Especialidad_Entrenador
 ADD CONSTRAINT CHK_Especialidad_Entrenador CHECK(
     LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3 
 );
 GO
+
+DELETE FROM Especialidad_Entrenador
+WHERE IdEspecialidad = 2;
+
 -- FIN RESTRICCIONES ESPECIALIDAD ENTRENADOR
 
 -- RESTRICCIONES Entrenador ESPECIALIDAD 
@@ -136,7 +161,7 @@ ADD CONSTRAINT UQ_EntrenadorEspecialidad UNIQUE (IdEntrenador, IdEspecialidad);
 USE VITALPRO
 GO
 ALTER TABLE Nutricionista
-ADD CONSTRAINT UQ_Nutricionista_Codigo UNIQUE(IdNutricionista);
+ADD CONSTRAINT UQ_Nutricionista_Codigo UNIQUE(IdNutricionista); 
 ALTER TABLE Nutricionista
 ADD CONSTRAINT CHK_Nutricionista CHECK(
     IdNutricionista LIKE 'E%' AND
@@ -149,6 +174,8 @@ USE VITALPRO
 GO
 ALTER TABLE Especialidad_Nutricionista
 ADD CONSTRAINT UQ_EspecialidadNutricionista_Codigo UNIQUE(IdEspecialidad);
+ALTER TABLE Especialidad_Nutricionista
+ADD CONSTRAINT UQ_Nutricionista_Name UNIQUE(NombreEspecialidad);
 ALTER TABLE Especialidad_Nutricionista
 ADD CONSTRAINT CHK_Especialidad_Nutricionista CHECK(
     LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3 
@@ -167,7 +194,12 @@ ADD CONSTRAINT UQ_NutricionistaEspecialidad UNIQUE (IdNutricionista, IdEspeciali
 USE VITALPRO
 GO
 ALTER TABLE ValorNutricional
-ADD CONSTRAINT UQ_ValorNutricional_Codigo UNIQUE(IdValorNutricional);
+ADD CONSTRAINT UQ_ValorNutricional_ValoresUnicos
+UNIQUE (Calorias, Proteinas, Carbohidratos);
+-- ADD CONSTRAINT UQ_ValorNutricional_Codigo UNIQUE(IdValorNutricional);
+-- ALTER TABLE ValorNutricional
+-- ADD CONSTRAINT UQ_ValorNutricional_Calorias UNIQUE(Calorias);
+
 ALTER TABLE ValorNutricional
 ADD CONSTRAINT CHK_ValorNutricional CHECK (
     Calorias > 0 AND
