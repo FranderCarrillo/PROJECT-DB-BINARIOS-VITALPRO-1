@@ -1,10 +1,27 @@
+--restricción de CentroVitalPro Table 
+USE VITALPRO
+GO
+ALTER TABLE CentroVitalPro
+ADD CONSTRAINT UQ_Centro_NombreDistrito UNIQUE(Nombre,Distrito);
+GO
+ALTER TABLE CentroVitalPro
+ADD CONSTRAINT UQ_Centro_Numero UNIQUE(NumContacto);
 
+ALTER TABLE CentroVitalPro
+ADD CONSTRAINT UQ_Centro_Codigo UNIQUE(CodigoUnico);
+
+ALTER TABLE CentroVitalPro
+ADD CONSTRAINT CHK_CentroVitalPro CHECK (
+    LEN(LTRIM(RTRIM(Nombre)))>=3 AND
+    LEN(LTRIM(RTRIM( NumContacto))) >=8
+)
 --restricción de Profesional Table 
 USE VITALPRO
 GO
 ALTER TABLE Profesional
-ADD CONSTRAINT UC_CodigoProfesional UNIQUE (CedProfesional) 
+ADD CONSTRAINT UC_CodigoProfesional UNIQUE (CedProfesional);
 GO 
+
 ALTER TABLE Profesional
 ADD CONSTRAINT CHK_profesional CHECK (
     LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
@@ -19,6 +36,8 @@ GO
 USE VITALPRO
 GO
 ALTER TABLE HorarioProfesional
+ADD CONSTRAINT UQ_Horario_Codigo UNIQUE(IdHorario);
+ALTER TABLE HorarioProfesional
 ADD CONSTRAINT CHK_HorarioProfesional CHECK(
     LEN(LTRIM(RTRIM(DiaSemana))) >= 3 AND
     (HoraFin > HoraInicio)  
@@ -30,12 +49,17 @@ GO
 USE VITALPRO
 GO
 ALTER TABLE Entrenador
+ADD CONSTRAINT UQ_Entrenador_Codigo UNIQUE(IdEntrenador);
+ALTER TABLE Entrenador
 ADD CONSTRAINT CHK_ENTRENADOR CHECK(
+    IdEntrenador LIKE 'E%' AND
     (FechaFinal >= FechaInicio)
 );
 GO
 -- FIN RESTRICCIONES ENTRENADOR
 -- RESTRICCIONES CLIENTES
+ALTER TABLE Clientes
+ADD CONSTRAINT UQ_Clientes_Codigo UNIQUE(NumAfiliacion);
 ALTER TABLE Clientes
 ADD CONSTRAINT CHK_Clientes CHECK (
     LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
@@ -62,9 +86,12 @@ GO
 -- RESTRICCIONES HORARIO CENTRO
 USE VITALPRO
 GO
+ALTER TABLE HorarioCentro
+ADD CONSTRAINT UQ_HorarioCentro_Codigo UNIQUE(Id_Horario);
 ALTER TABLE HorarioCentro 
 ADD CONSTRAINT CHK_HorarioCentro CHECK(
-    (HoraFin >= HoraInicio)
+    (HoraFin >= HoraInicio) AND
+    DiaSemana IN ('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo')
 );
 GO
 -- FIN RESTRICCIONES HORARIO CENTRO
@@ -72,6 +99,8 @@ GO
 --  RESTRICCIONES EvaluaciónFisica
 USE VITALPRO
 GO
+ALTER TABLE EvaluacionFisica
+ADD CONSTRAINT UQ_EvaluacionFisica_Codigo UNIQUE(Id_EvaluacionFisica);
 ALTER TABLE EvaluacionFisica
 ADD CONSTRAINT CHK_EvaluacionFisica CHECK (
     Fecha <= GETDATE() AND
@@ -89,18 +118,28 @@ GO
 USE VITALPRO
 GO
 ALTER TABLE Especialidad_Entrenador
+ADD CONSTRAINT UQ_EspecialidadEntrenador_Codigo UNIQUE(IdEspecialidad);
+ALTER TABLE Especialidad_Entrenador
 ADD CONSTRAINT CHK_Especialidad_Entrenador CHECK(
     LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3 
 );
 GO
 -- FIN RESTRICCIONES ESPECIALIDAD ENTRENADOR
 
-
+-- RESTRICCIONES Entrenador ESPECIALIDAD 
+ALTER TABLE Entrenador_Especialidad
+ADD CONSTRAINT UQ_EntrenadorEspecialidad_Codigo UNIQUE(Id);
+ALTER TABLE Entrenador_Especialidad
+ADD CONSTRAINT UQ_EntrenadorEspecialidad UNIQUE (IdEntrenador, IdEspecialidad);
+--FIN
 -- RESTRICCIONES NUTRICIONISTA
 USE VITALPRO
 GO
 ALTER TABLE Nutricionista
+ADD CONSTRAINT UQ_Nutricionista_Codigo UNIQUE(IdNutricionista);
+ALTER TABLE Nutricionista
 ADD CONSTRAINT CHK_Nutricionista CHECK(
+    IdNutricionista LIKE 'E%' AND
     (FechaFinal >= FechaInicio)
 );
 -- FIN RESTRICCIONES NUTRICIONISTA
@@ -109,16 +148,26 @@ ADD CONSTRAINT CHK_Nutricionista CHECK(
 USE VITALPRO
 GO
 ALTER TABLE Especialidad_Nutricionista
+ADD CONSTRAINT UQ_EspecialidadNutricionista_Codigo UNIQUE(IdEspecialidad);
+ALTER TABLE Especialidad_Nutricionista
 ADD CONSTRAINT CHK_Especialidad_Nutricionista CHECK(
     LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3 
 );
 GO
 -- FIN RESTRICCIONES Especialidad_Nutricionista
 
+-- RESTRICCIONES Nutricionista_Especialidad
+ALTER TABLE Nutricionista_Especialidad
+ADD CONSTRAINT UQ_NutricionistaEspecialidad_Codigo UNIQUE(Id);
+ALTER TABLE Nutricionista_Especialidad
+ADD CONSTRAINT UQ_NutricionistaEspecialidad UNIQUE (IdNutricionista, IdEspecialidad);
+--FIN 
 
 -- RESTRICCIONES VALOR NUTRICIONAL
 USE VITALPRO
 GO
+ALTER TABLE ValorNutricional
+ADD CONSTRAINT UQ_ValorNutricional_Codigo UNIQUE(IdValorNutricional);
 ALTER TABLE ValorNutricional
 ADD CONSTRAINT CHK_ValorNutricional CHECK (
     Calorias > 0 AND
@@ -134,13 +183,15 @@ GO
 -- RESTRICCIONES  RECETA
 USE VITALPRO
 GO
+ALTER TABLE Receta
+ADD CONSTRAINT UQ_Receta_Codigo UNIQUE(Id_Receta);
 ALTER TABLE Receta 
 ADD CONSTRAINT Receta_Name UNIQUE(Nombre)
 GO
 ALTER TABLE Receta
 ADD CONSTRAINT CHK_Receta CHECK (
     LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
- (TiempoPreparacion > 0) AND
+    (TiempoPreparacion > 0) AND
     (TiempoPreparacion <= 600)
 )
 GO
@@ -149,6 +200,8 @@ GO
 -- RESTRICCIONES  UnidadMedida
 USE VITALPRO
 GO
+ALTER TABLE UnidadMedida
+ADD CONSTRAINT UQ_UnidadMedida_Codigo UNIQUE(Id_Unidad);
 ALTER TABLE UnidadMedida 
 ADD CONSTRAINT UnidadMedida_Name UNIQUE(NombreUnidad)
 GO 
@@ -161,6 +214,8 @@ GO
 -- RESTRICCIONES Ingredientes 
 USE VITALPRO
 GO
+ALTER TABLE Ingrediente
+ADD CONSTRAINT UQ_Ingrediente_Codigo UNIQUE(Id_Ingrediente);
 ALTER TABLE Ingrediente 
 ADD CONSTRAINT Ingrediente_Name UNIQUE(Nombre)
 go 
@@ -176,6 +231,10 @@ GO
 USE VITALPRO
 GO
 ALTER TABLE RecetaIngrediente
+ADD CONSTRAINT UQ_RecetaIngrediente_Codigo UNIQUE(Id_RecetaIngredientes);
+ALTER TABLE RecetaIngrediente
+ADD CONSTRAINT UQ_RecetaIngrediente UNIQUE (Id_Receta,Id_Ingrediente);
+ALTER TABLE RecetaIngrediente
 ADD CONSTRAINT CHK_RecetaIngrediente CHECK (
     Cantidad > 0 AND
     TiempoPreparacion > 0 AND
@@ -188,6 +247,8 @@ GO
 USE VITALPRO
 GO
 ALTER TABLE PlanAlimenticio
+ADD CONSTRAINT UQ_PlanAlimenticio_Codigo UNIQUE(CodigoPlan);
+ALTER TABLE PlanAlimenticio
 ADD CONSTRAINT PlanAlimenticio_Name UNIQUE (Nombre)
 GO
 ALTER TABLE PlanAlimenticio
@@ -199,9 +260,11 @@ ADD CONSTRAINT CHK_PlanAlimenticio CHECK (
 GO
 -- FIN RESTRICCIONES PlanAlimenticio 
 
--- RESTRICCIONES PlanAlimenticio 
+-- RESTRICCIONES Ejercicio
 USE VITALPRO
 GO
+ALTER TABLE Ejercicio
+ADD CONSTRAINT UQ_Ejerci_Codigo UNIQUE(CodigoPlan);
 ALTER Table Ejercicio
 ADD CONSTRAINT Ejercicio_Name UNIQUE (Nombre)
 GO
@@ -213,7 +276,7 @@ ADD CONSTRAINT CHK_Ejercicio CHECK (
     EquipamientoEspecial IN (0, 1)
 )
 GO
--- FIN RESTRICCIONES PlanAlimenticio 
+-- FIN
 
 -- RESTRICCIONES RutinaSemana
 USE VITALPRO
@@ -244,15 +307,16 @@ GO
 -- RESTRICCIONES PLANPERSONALIZADO
 USE VITALPRO
 GO
-
 ALTER TABLE PlanPersonalizado
 ADD CONSTRAINT CHK_PlanPersonalizado CHECK (
     (FechaFin >= FechaInicio)
 )
 -- FIN RESTRICCIONES PLANPERSONALIZADO
 
--- RESTRICCIONES RUTINASEMANA
+-- Restricciones para PlanAlimenticio_Comida
 USE VITALPRO
 GO
+ALTER TABLE PlanAlimenticio_Comida
+ADD CONSTRAINT UQ_PlanComida UNIQUE (Id_Comida, CodigoPlan);
+--FIN
 
--- FIN RESTRICCIONES RUTINASEMANA
