@@ -246,7 +246,7 @@ CREATE TABLE Receta (
     Id_Receta INT NOT NULL IDENTITY(1,1),
     Nombre VARCHAR(50) NOT NULL,
     TiempoPreparacion INT NOT NULL,
-    IdValorNutricional INT,
+    IdValorNutricional INT NOT NULL,
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_Receta PRIMARY KEY (Id_Receta),
     CONSTRAINT FK_Receta_ValorNutricional FOREIGN KEY (IdValorNutricional) REFERENCES ValorNutricional(IdValorNutricional)
@@ -410,7 +410,6 @@ CREATE TABLE RutinaEjercicio (
 )
 ON Entrenamiento
 GO
-CREATE TABLE 
 EXECUTE sp_help RutinaEjercicio
 GO
 
