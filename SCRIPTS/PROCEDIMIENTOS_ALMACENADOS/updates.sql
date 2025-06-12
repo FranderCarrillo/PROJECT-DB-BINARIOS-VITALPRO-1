@@ -21,7 +21,8 @@ BEGIN
         Distrito = @Distrito,
         DireccionExacta = @DireccionExacta,
         NumContacto = @NumContacto
-    WHERE CodigoUnico = @CodigoUnico;
+    WHERE CodigoUnico = @CodigoUnico
+    AND Estado = 1;
 END
 GO
 
@@ -58,7 +59,8 @@ BEGIN
         HoraInicio = @HoraInicio,
         HoraFin = @HoraFin,
         CodigoUnicoCentro = @CodigoUnicoCentro
-    WHERE Id_Horario = @Id_Horario;
+    WHERE Id_Horario = @Id_Horario
+    AND Estado = 1;
 END
 GO
 
@@ -100,7 +102,8 @@ BEGIN
         CedProfesional = @CedProfesional,
         AniosExperiencia = @AniosExperiencia,
         CodigoCentro = @CodigoCentro
-    WHERE CodigoProfesional = @CodigoProfesional;
+    WHERE CodigoProfesional = @CodigoProfesional
+    AND Estado = 1;
 END
 GO
 
@@ -141,7 +144,8 @@ BEGIN
         DiaSemana = @DiaSemana,
         HoraInicio = @HoraInicio,
         HoraFin = @HoraFin
-    WHERE IdHorario = @IdHorario;
+    WHERE IdHorario = @IdHorario
+    AND Estado =1;
 END
 GO
 
@@ -177,7 +181,8 @@ BEGIN
         FechaInicio = @FechaInicio,
         FechaFinal = @FechaFinal,
         CodigoProfesional = @CodigoProfesional
-    WHERE IdEntrenador = @IdEntrenador;
+    WHERE IdEntrenador = @IdEntrenador
+    AND Estado = 1;
 END
 GO
 
@@ -208,7 +213,8 @@ BEGIN
     UPDATE Especialidad_Entrenador
     SET 
         NombreEspecialidad = @NombreEspecialidad
-    WHERE IdEspecialidad = @IdEspecialidad;
+    WHERE IdEspecialidad = @IdEspecialidad
+    AND Estado = 1;
 END
 GO
 
@@ -239,7 +245,8 @@ BEGIN
     SET 
         IdEntrenador = @IdEntrenador,
         IdEspecialidad = @IdEspecialidad
-    WHERE Id = @Id;
+    WHERE Id = @Id
+    AND Estado = 1;
 END
 GO
 
@@ -273,7 +280,8 @@ BEGIN
         FechaInicio = @FechaInicio,
         FechaFinal = @FechaFinal,
         CodigoProfesional = @CodigoProfesional
-    WHERE IdNutricionista = @IdNutricionista;
+    WHERE IdNutricionista = @IdNutricionista
+    AND Estado = 1;
 END
 GO
 
@@ -304,7 +312,8 @@ BEGIN
     UPDATE Especialidad_Nutricionista
     SET 
         NombreEspecialidad = @NombreEspecialidad
-    WHERE IdEspecialidad = @IdEspecialidad;
+    WHERE IdEspecialidad = @IdEspecialidad
+    AND Estado = 1;
 END
 GO
 
@@ -335,7 +344,8 @@ BEGIN
     SET 
         IdNutricionista = @IdNutricionista,
         IdEspecialidad = @IdEspecialidad
-    WHERE Id = @Id;
+    WHERE Id = @Id
+    AND EStado = 1;
 END
 GO
 
@@ -369,7 +379,8 @@ BEGIN
         Calorias = @Calorias,
         Proteinas = @Proteinas,
         Carbohidratos = @Carbohidratos
-    WHERE IdValorNutricional = @IdValorNutricional;
+    WHERE IdValorNutricional = @IdValorNutricional
+    AND Estado = 1;
 END
 GO
 
@@ -404,7 +415,8 @@ BEGIN
         Nombre = @Nombre,
         TiempoPreparacion = @TiempoPreparacion,
         IdValorNutricional = @IdValorNutricional
-    WHERE Id_Receta = @Id_Receta;
+    WHERE Id_Receta = @Id_Receta
+    AND Estado = 1;
 END
 GO
 
@@ -435,7 +447,8 @@ BEGIN
     UPDATE UnidadMedida
     SET 
         NombreUnidad = @NombreUnidad
-    WHERE Id_Unidad = @Id_Unidad;
+    WHERE Id_Unidad = @Id_Unidad
+    AND Estado = 1;
 END
 GO
 
@@ -466,7 +479,8 @@ BEGIN
     SET 
         Nombre = @Nombre,
         Id_Unidad = @Id_Unidad
-    WHERE Id_Ingrediente = @Id_Ingrediente;
+    WHERE Id_Ingrediente = @Id_Ingrediente
+    AND Estado = 1;
 END
 GO
 
@@ -502,7 +516,8 @@ BEGIN
         Id_Ingrediente = @Id_Ingrediente,
         Cantidad = @Cantidad,
         TiempoPreparacion = @TiempoPreparacion
-    WHERE Id_RecetaIngredientes = @Id_RecetaIngredientes;
+    WHERE Id_RecetaIngredientes = @Id_RecetaIngredientes
+    AND Estado = 1;
 END
 GO
 
@@ -537,7 +552,8 @@ BEGIN
     SET 
         TipoComida = @TipoComida,
         CodigoPlan = @CodigoPlan
-    WHERE Id_Comida = @Id_Comida;
+    WHERE Id_Comida = @Id_Comida
+    AND Estado = 1;
 END
 GO
 
@@ -569,7 +585,8 @@ BEGIN
     SET 
         Id_Comida = @Id_Comida,
         Id_Receta = @Id_Receta
-    WHERE Id_ComidaReceta = @Id_ComidaReceta;
+    WHERE Id_ComidaReceta = @Id_ComidaReceta
+    AND Estado = 1;
 END
 GO
 
@@ -607,7 +624,8 @@ BEGIN
         CaloriasDiariasEstim = @CaloriasDiariasEstim,
         Observaciones = @Observaciones,
         IdNutricionista = @IdNutricionista
-    WHERE CodigoPlan = @CodigoPlan;
+    WHERE CodigoPlan = @CodigoPlan
+    AND Estado = 1;
 END
 GO
 
@@ -642,7 +660,8 @@ BEGIN
     SET 
         Id_Comida = @Id_Comida,
         CodigoPlan = @CodigoPlan
-    WHERE Id_PlanAlimenticio_Comida = @Id_PlanAlimenticio_Comida;
+    WHERE Id_PlanAlimenticio_Comida = @Id_PlanAlimenticio_Comida
+    AND Estado = 1;
 END
 GO
 
@@ -678,7 +697,8 @@ BEGIN
         GrupoMuscularTrabajado = @GrupoMuscularTrabajado,
         CantidadRepeticiones = @CantidadRepeticiones,
         EquipamientoEspecial = @EquipamientoEspecial
-    WHERE Id_Ejercicio = @Id_Ejercicio;
+    WHERE Id_Ejercicio = @Id_Ejercicio
+    AND Estado = 1;
 END
 GO
 
@@ -714,7 +734,8 @@ BEGIN
         DiaSemana = @DiaSemana,
         HoraInicio = @HoraInicio,
         HoraFin = @HoraFin
-    WHERE Id_RutinaSemana = @Id_RutinaSemana;
+    WHERE Id_RutinaSemana = @Id_RutinaSemana
+    AND Estado = 1;
 END
 GO
 
@@ -747,7 +768,8 @@ BEGIN
     SET 
         Id_Ejercicio = @Id_Ejercicio,
         Id_RutinaSemana = @Id_RutinaSemana
-    WHERE Id_RutinaEjercicio = @Id_RutinaEjercicio;
+    WHERE Id_RutinaEjercicio = @Id_RutinaEjercicio
+    AND Estado = 1;
 END
 GO
 
@@ -787,7 +809,8 @@ BEGIN
         EjerciciosXDia = @EjerciciosXDia,
         IdEntrenador = @IdEntrenador,
         Id_RutinaSemana = @Id_RutinaSemana
-    WHERE Id_Rutina = @Id_Rutina;
+    WHERE Id_Rutina = @Id_Rutina
+    AND Estado = 1; 
 END
 GO
 
@@ -842,7 +865,8 @@ BEGIN
         FechaIngreso = @FechaIngreso,
         IdEntrenador = @IdEntrenador,
         CodigoUnicoCentro = @CodigoUnicoCentro
-    WHERE NumAfiliacion = @NumAfiliacion;
+    WHERE NumAfiliacion = @NumAfiliacion
+    AND Estado = 1;
 END
 GO
 
@@ -889,7 +913,8 @@ BEGIN
         IdRutina = @IdRutina,
         NumAfiliacion = @NumAfiliacion,
         CodigoPlan = @CodigoPlan
-    WHERE IdPlanPersonalizado = @IdPlanPersonalizado;
+    WHERE IdPlanPersonalizado = @IdPlanPersonalizado
+    AND Estado = 1;
 END
 GO
 
@@ -938,7 +963,8 @@ BEGIN
         CodigoProfesional = @CodigoProfesional,
         NumAfiliacion = @NumAfiliacion,
         Fase = @Fase
-    WHERE Id_Sesion = @Id_Sesion;
+    WHERE Id_Sesion = @Id_Sesion
+    AND Estado = 1;
 END
 GO
 
@@ -996,7 +1022,8 @@ BEGIN
         CodigoUnicoCentro = @CodigoUnicoCentro,
         CodigoProfesional = @CodigoProfesional,
         NumAfiliacion = @NumAfiliacion
-    WHERE Id_EvaluacionFisica = @Id_EvaluacionFisica;
+    WHERE Id_EvaluacionFisica = @Id_EvaluacionFisica
+    AND Estado = 1; 
 END
 GO
 
