@@ -130,224 +130,142 @@ GO
 -- FIN RESTRICCIONES ENTRENADOR
 
 
--- RESTRICCIONES CLIENTES
-ALTER TABLE Clientes
-ADD CONSTRAINT CHK_Clientes CHECK (
-    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
-    LEN(LTRIM(RTRIM(Apellido1))) >= 3 AND
-    LEN(LTRIM(RTRIM(Apellido2))) >= 3 AND
-    LEN(LTRIM(RTRIM(Cedula))) >= 9 AND
-    Genero IN ('M', 'F') AND
-    FechaNacimiento <= GETDATE() AND
-    LEN(LTRIM(RTRIM(Telefono))) >= 8 AND
-    CorreoElectronico LIKE '_%@__%.__%' AND
-    FechaIngreso >= FechaNacimiento
-)
-GO
---cédula única 
-ALTER TABLE Clientes
-ADD CONSTRAINT UQ_Clientes_Cedula UNIQUE (Cedula)
-GO
--- telefono único 
-ALTER TABLE Clientes
-ADD CONSTRAINT UQ_Clientes_Telefono UNIQUE (Telefono)
-GO
--- FIN RESTRICCIONES CLIENTES
-
--- RESTRICCIONES HORARIO CENTRO
+--- validaciones especialidad entrenador
 USE VITALPRO
 GO
-ALTER TABLE HorarioCentro 
-ADD CONSTRAINT CHK_HorarioCentro CHECK(
-    (HoraFin >= HoraInicio)
-);
-GO
--- FIN RESTRICCIONES HORARIO CENTRO
 
---  RESTRICCIONES EvaluaciónFisica
-USE VITALPRO
-GO
-ALTER TABLE EvaluacionFisica
-ADD CONSTRAINT CHK_EvaluacionFisica CHECK (
-    Fecha <= GETDATE() AND
-    (Peso > 0) AND
-    (Estatura > 0) AND
-    (PorcentajeGrasaCorporal >= 0) AND
-    (MasaMuscular >= 0) AND
-    LTRIM(RTRIM(NivelResistencia)) >= 3 AND
-    LTRIM(RTRIM(Flexibilidad)) >= 3
-)
-GO
---  FIN RESTRICCIONES EvaluaciónFisica
-
--- RESTRICCIONES ESPECIALIDAD ENTRENADOR
-USE VITALPRO
-GO
+-- Validar que el ID tenga exactamente 5 caracteres
 ALTER TABLE Especialidad_Entrenador
-ADD CONSTRAINT CHK_Especialidad_Entrenador CHECK(
-    LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3 
-);
+ADD CONSTRAINT CHK_EspecEntrenador_Id CHECK (
+    LEN(LTRIM(RTRIM(IdEspecialidad))) = 5
+)
 GO
--- FIN RESTRICCIONES ESPECIALIDAD ENTRENADOR
 
+-- Validar que el nombre de la especialidad tenga al menos 3 caracteres
+ALTER TABLE Especialidad_Entrenador
+ADD CONSTRAINT CHK_EspecEntrenador_Nombre CHECK (
+    LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3
+)
+GO
 
--- RESTRICCIONES NUTRICIONISTA
+-- Validar que el estado sea 0 o 1
+ALTER TABLE Especialidad_Entrenador
+ADD CONSTRAINT CHK_EspecEntrenador_Estado CHECK (
+    Estado IN (0, 1)
+)
+GO
+
+-- fin validaciones especialidad entrenador
+
+-- validaciones nutricionista
 USE VITALPRO
 GO
+
+-- Validar que el ID del nutricionista tenga exactamente 4 caracteres
 ALTER TABLE Nutricionista
-ADD CONSTRAINT CHK_Nutricionista CHECK(
-    (FechaFinal >= FechaInicio)
-);
--- FIN RESTRICCIONES NUTRICIONISTA
+ADD CONSTRAINT CHK_Nutricionista_Id CHECK (
+    LEN(LTRIM(RTRIM(IdNutricionista))) = 4
+)
+GO
 
--- RESTRICCIONES Especialidad_Nutricionista
+-- Validar que la fecha final (si se especifica) sea igual o posterior a la fecha de inicio
+ALTER TABLE Nutricionista
+ADD CONSTRAINT CHK_Nutricionista_Fechas CHECK (
+    FechaFinal IS NULL OR FechaFinal >= FechaInicio
+)
+GO
+
+-- Validar que el estado sea 0 o 1
+ALTER TABLE Nutricionista
+ADD CONSTRAINT CHK_Nutricionista_Estado CHECK (
+    Estado IN (0, 1)
+)
+GO
+-- fin validaciones nutricionista
+
+ -- validaciones especialidad nutricionista
 USE VITALPRO
 GO
+
+-- Validar que el ID tenga exactamente 5 caracteres
 ALTER TABLE Especialidad_Nutricionista
-ADD CONSTRAINT CHK_Especialidad_Nutricionista CHECK(
-    LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3 
-);
+ADD CONSTRAINT CHK_EspecNutricionista_Id CHECK (
+    LEN(LTRIM(RTRIM(IdEspecialidad))) = 5
+)
 GO
--- FIN RESTRICCIONES Especialidad_Nutricionista
+
+-- Validar que el nombre tenga al menos 3 caracteres
+ALTER TABLE Especialidad_Nutricionista
+ADD CONSTRAINT CHK_EspecNutricionista_Nombre CHECK (
+    LEN(LTRIM(RTRIM(NombreEspecialidad))) >= 3
+)
+GO
+
+-- Validar que Estado sea 0 o 1
+ALTER TABLE Especialidad_Nutricionista
+ADD CONSTRAINT CHK_EspecNutricionista_Estado CHECK (
+    Estado IN (0, 1)
+)
+GO
+
+ALTER TABLE Especialidad_Nutricionista
+ADD CONSTRAINT UQ_EspecNutricionista_Nombre UNIQUE (NombreEspecialidad)
+GO
+
+ -- fin validaciones especialidad nutricionista
 
 
--- RESTRICCIONES VALOR NUTRICIONAL
-USE VITALPRO
+ -- validaciones valor nutricional
+ USE VITALPRO
 GO
+
+-- Validar que los valores nutricionales no sean negativos
 ALTER TABLE ValorNutricional
-ADD CONSTRAINT CHK_ValorNutricional CHECK (
-    Calorias > 0 AND
+ADD CONSTRAINT CHK_VN_ValoresPositivos CHECK (
+    Calorias >= 0 AND
     Proteinas >= 0 AND
-    Carbohidratos >= 0 AND
-    Calorias <= 10000 AND
-    Proteinas <= 500 AND
-    Carbohidratos <= 1000
+    Carbohidratos >= 0
 )
 GO
--- FIN RESTRICCIONES VALOR NUTRICIONAL
 
--- RESTRICCIONES  RECETA
+-- Validar que Estado sea 0 o 1
+ALTER TABLE ValorNutricional
+ADD CONSTRAINT CHK_VN_Estado CHECK (
+    Estado IN (0, 1)
+)
+GO
+
+
+-- final validaciones valor nutricional
+
+
+-- validaciones receta
+
 USE VITALPRO
 GO
-ALTER TABLE Receta 
-ADD CONSTRAINT Receta_Name UNIQUE(Nombre)
-GO
+
+-- Validar que el nombre tenga al menos 3 caracteres
 ALTER TABLE Receta
-ADD CONSTRAINT CHK_Receta CHECK (
-    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
- (TiempoPreparacion > 0) AND
-    (TiempoPreparacion <= 600)
-)
-GO
--- FIN RESTRICCIONES RECETA
-
--- RESTRICCIONES  UnidadMedida
-USE VITALPRO
-GO
-ALTER TABLE UnidadMedida 
-ADD CONSTRAINT UnidadMedida_Name UNIQUE(NombreUnidad)
-GO 
-ALTER TABLE UnidadMedida
-ADD CONSTRAINT CHK_UnidadMedida CHECK (
-    LEN(LTRIM(RTRIM(NombreUnidad))) >= 3
-)
-GO
--- FIN RESTRICCIONES  UnidadMedida
--- RESTRICCIONES Ingredientes 
-USE VITALPRO
-GO
-ALTER TABLE Ingrediente 
-ADD CONSTRAINT Ingrediente_Name UNIQUE(Nombre)
-go 
-ALTER TABLE Ingrediente
-ADD CONSTRAINT CHK_Ingrediente CHECK (
-    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
-    LEN(LTRIM(RTRIM(Id_Unidad))) > 0
-)
-GO
--- FIN RESTRICCIONES Ingredientes 
-
--- RESTRICCIONES RecetaIngredientes 
-USE VITALPRO
-GO
-ALTER TABLE RecetaIngrediente
-ADD CONSTRAINT CHK_RecetaIngrediente CHECK (
-    Cantidad > 0 AND
-    TiempoPreparacion > 0 AND
-    TiempoPreparacion <= 180
-)
-GO
--- FIN RESTRICCIONES RecetaIngredientes
-
--- RESTRICCIONES PlanAlimenticio 
-USE VITALPRO
-GO
-ALTER TABLE PlanAlimenticio
-ADD CONSTRAINT PlanAlimenticio_Name UNIQUE (Nombre)
-GO
-ALTER TABLE PlanAlimenticio
-ADD CONSTRAINT CHK_PlanAlimenticio CHECK (
-    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
-    LEN(LTRIM(RTRIM(MetaNutricional))) >= 5 AND
-    (CaloriasDiariasEstim > 0)
-)
-GO
--- FIN RESTRICCIONES PlanAlimenticio 
-
--- RESTRICCIONES PlanAlimenticio 
-USE VITALPRO
-GO
-ALTER Table Ejercicio
-ADD CONSTRAINT Ejercicio_Name UNIQUE (Nombre)
-GO
-ALTER TABLE Ejercicio
-ADD CONSTRAINT CHK_Ejercicio CHECK (
-    LEN(LTRIM(RTRIM(Nombre))) >= 3 AND
-    LEN(LTRIM(RTRIM(GrupoMuscularTrabajado))) >= 3 AND
-    CantidadRepeticiones > 0 AND
-    EquipamientoEspecial IN (0, 1)
-)
-GO
--- FIN RESTRICCIONES PlanAlimenticio 
-
--- RESTRICCIONES RutinaSemana
-USE VITALPRO
-GO
-ALTER TABLE RutinaSemana
-ADD CONSTRAINT CHK_RutinaSemana CHECK (
-    LEN(LTRIM(RTRIM(DiaSemana))) >= 3 AND
-    HoraFin > HoraInicio
+ADD CONSTRAINT CHK_Receta_Nombre CHECK (
+    LEN(LTRIM(RTRIM(Nombre))) >= 3
 )
 GO
 
--- FIN RESTRICCIONES RutinaSemana
-
--- RESTRICCIONES rutina entrenamiento  
-USE VITALPRO
-GO
-
-ALTER TABLE RutinaEntrenamiento
-ADD CONSTRAINT CHK_RutinaEntrenamiento CHECK (
-    LEN(LTRIM(RTRIM(DescripcionObjetivo))) >= 5 AND
-    LEN(LTRIM(RTRIM(Nivel))) >= 3 AND
-    (DuracionTotalxSemana > 0) AND
-    (EjerciciosXDia > 0)
+-- Validar que el tiempo de preparación sea mayor o igual a 0
+ALTER TABLE Receta
+ADD CONSTRAINT CHK_Receta_TiempoPreparacion CHECK (
+    TiempoPreparacion >= 0
 )
 GO
--- FIN RESTRICCIONES rutina entrenamiento 
 
--- RESTRICCIONES PLANPERSONALIZADO
-USE VITALPRO
-GO
-
-ALTER TABLE PlanPersonalizado
-ADD CONSTRAINT CHK_PlanPersonalizado CHECK (
-    (FechaFin >= FechaInicio)
+-- Validar que Estado sea 0 o 1
+ALTER TABLE Receta
+ADD CONSTRAINT CHK_Receta_Estado CHECK (
+    Estado IN (0, 1)
 )
--- FIN RESTRICCIONES PLANPERSONALIZADO
-
--- RESTRICCIONES RUTINASEMANA
-USE VITALPRO
 GO
 
--- FIN RESTRICCIONES RUTINASEMANA
+
+-- final validaciones receta
+
+
