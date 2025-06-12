@@ -22,6 +22,7 @@ BEGIN
         DireccionExacta = @DireccionExacta,
         NumContacto = @NumContacto
     WHERE CodigoUnico = @CodigoUnico;
+    AND Estado = 1; -- Asegurarse de que el centro esté activo
 END
 GO
 
@@ -59,6 +60,7 @@ BEGIN
         HoraFin = @HoraFin,
         CodigoUnicoCentro = @CodigoUnicoCentro
     WHERE Id_Horario = @Id_Horario;
+    AND Estado = 1; -- Asegurarse de que el horario esté activo
 END
 GO
 
@@ -101,6 +103,7 @@ BEGIN
         AniosExperiencia = @AniosExperiencia,
         CodigoCentro = @CodigoCentro
     WHERE CodigoProfesional = @CodigoProfesional;
+    AND Estado = 1; -- Asegurarse de que el profesional esté activo
 END
 GO
 
@@ -142,6 +145,7 @@ BEGIN
         HoraInicio = @HoraInicio,
         HoraFin = @HoraFin
     WHERE IdHorario = @IdHorario;
+    AND Estado = 1; -- Asegurarse de que el horario esté activo
 END
 GO
 
@@ -178,6 +182,7 @@ BEGIN
         FechaFinal = @FechaFinal,
         CodigoProfesional = @CodigoProfesional
     WHERE IdEntrenador = @IdEntrenador;
+    AND Estado = 1; -- Asegurarse de que el entrenador esté activo
 END
 GO
 
@@ -209,6 +214,7 @@ BEGIN
     SET 
         NombreEspecialidad = @NombreEspecialidad
     WHERE IdEspecialidad = @IdEspecialidad;
+    AND Estado = 1; -- Asegurarse de que la especialidad esté activa
 END
 GO
 
@@ -240,6 +246,7 @@ BEGIN
         IdEntrenador = @IdEntrenador,
         IdEspecialidad = @IdEspecialidad
     WHERE Id = @Id;
+    AND Estado = 1; -- Asegurarse de que la relación esté activa
 END
 GO
 
@@ -274,6 +281,7 @@ BEGIN
         FechaFinal = @FechaFinal,
         CodigoProfesional = @CodigoProfesional
     WHERE IdNutricionista = @IdNutricionista;
+    AND Estado = 1; -- Asegurarse de que el nutricionista esté activo
 END
 GO
 
@@ -305,6 +313,7 @@ BEGIN
     SET 
         NombreEspecialidad = @NombreEspecialidad
     WHERE IdEspecialidad = @IdEspecialidad;
+    AND Estado = 1; -- Asegurarse de que la especialidad esté activa
 END
 GO
 
@@ -336,6 +345,7 @@ BEGIN
         IdNutricionista = @IdNutricionista,
         IdEspecialidad = @IdEspecialidad
     WHERE Id = @Id;
+    AND Estado = 1; -- Asegurarse de que la relación esté activa
 END
 GO
 
@@ -370,6 +380,7 @@ BEGIN
         Proteinas = @Proteinas,
         Carbohidratos = @Carbohidratos
     WHERE IdValorNutricional = @IdValorNutricional;
+    AND Estado = 1; -- Asegurarse de que el valor nutricional esté activo
 END
 GO
 
@@ -405,6 +416,7 @@ BEGIN
         TiempoPreparacion = @TiempoPreparacion,
         IdValorNutricional = @IdValorNutricional
     WHERE Id_Receta = @Id_Receta;
+    AND Estado = 1; -- Asegurarse de que la receta esté activa
 END
 GO
 
@@ -436,6 +448,7 @@ BEGIN
     SET 
         NombreUnidad = @NombreUnidad
     WHERE Id_Unidad = @Id_Unidad;
+    AND Estado = 1; -- Asegurarse de que la unidad de medida esté activa
 END
 GO
 
@@ -467,6 +480,7 @@ BEGIN
         Nombre = @Nombre,
         Id_Unidad = @Id_Unidad
     WHERE Id_Ingrediente = @Id_Ingrediente;
+    AND Estado = 1; -- Asegurarse de que el ingrediente esté activo
 END
 GO
 
@@ -503,6 +517,7 @@ BEGIN
         Cantidad = @Cantidad,
         TiempoPreparacion = @TiempoPreparacion
     WHERE Id_RecetaIngredientes = @Id_RecetaIngredientes;
+    AND Estado = 1; -- Asegurarse de que la relación esté activa
 END
 GO
 
@@ -538,6 +553,7 @@ BEGIN
         TipoComida = @TipoComida,
         CodigoPlan = @CodigoPlan
     WHERE Id_Comida = @Id_Comida;
+    AND Estado = 1; -- Asegurarse de que la comida esté activa
 END
 GO
 
@@ -569,7 +585,8 @@ BEGIN
     SET 
         Id_Comida = @Id_Comida,
         Id_Receta = @Id_Receta
-    WHERE Id_ComidaReceta = @Id_ComidaReceta;
+    WHERE Id_ComidaReceta = @Id_ComidaReceta; 
+    AND Estado = 1; -- Asegurarse de que la relación esté activa
 END
 GO
 
@@ -608,6 +625,7 @@ BEGIN
         Observaciones = @Observaciones,
         IdNutricionista = @IdNutricionista
     WHERE CodigoPlan = @CodigoPlan;
+    AND Estado = 1; -- Asegurarse de que el plan alimenticio esté activo
 END
 GO
 
@@ -643,6 +661,7 @@ BEGIN
         Id_Comida = @Id_Comida,
         CodigoPlan = @CodigoPlan
     WHERE Id_PlanAlimenticio_Comida = @Id_PlanAlimenticio_Comida;
+    AND Estado = 1; -- Asegurarse de que la relación esté activa
 END
 GO
 
@@ -679,6 +698,7 @@ BEGIN
         CantidadRepeticiones = @CantidadRepeticiones,
         EquipamientoEspecial = @EquipamientoEspecial
     WHERE Id_Ejercicio = @Id_Ejercicio;
+    AND Estado = 1; -- Asegurarse de que el ejercicio esté activo
 END
 GO
 
@@ -715,6 +735,7 @@ BEGIN
         HoraInicio = @HoraInicio,
         HoraFin = @HoraFin
     WHERE Id_RutinaSemana = @Id_RutinaSemana;
+    AND Estado = 1; -- Asegurarse de que la rutina semanal esté activa
 END
 GO
 
@@ -748,6 +769,7 @@ BEGIN
         Id_Ejercicio = @Id_Ejercicio,
         Id_RutinaSemana = @Id_RutinaSemana
     WHERE Id_RutinaEjercicio = @Id_RutinaEjercicio;
+    AND Estado = 1; -- Asegurarse de que la relación esté activa
 END
 GO
 
@@ -788,6 +810,7 @@ BEGIN
         IdEntrenador = @IdEntrenador,
         Id_RutinaSemana = @Id_RutinaSemana
     WHERE Id_Rutina = @Id_Rutina;
+    AND Estado = 1; -- Asegurarse de que la rutina de entrenamiento esté activa
 END
 GO
 
@@ -843,6 +866,7 @@ BEGIN
         IdEntrenador = @IdEntrenador,
         CodigoUnicoCentro = @CodigoUnicoCentro
     WHERE NumAfiliacion = @NumAfiliacion;
+    AND Estado = 1; -- Asegurarse de que el cliente esté activo
 END
 GO
 
@@ -890,6 +914,7 @@ BEGIN
         NumAfiliacion = @NumAfiliacion,
         CodigoPlan = @CodigoPlan
     WHERE IdPlanPersonalizado = @IdPlanPersonalizado;
+    AND Estado = 1; -- Asegurarse de que el plan personalizado esté activo
 END
 GO
 
@@ -939,6 +964,7 @@ BEGIN
         NumAfiliacion = @NumAfiliacion,
         Fase = @Fase
     WHERE Id_Sesion = @Id_Sesion;
+    AND Estado = 1; -- Asegurarse de que la sesión esté activa
 END
 GO
 
@@ -997,6 +1023,7 @@ BEGIN
         CodigoProfesional = @CodigoProfesional,
         NumAfiliacion = @NumAfiliacion
     WHERE Id_EvaluacionFisica = @Id_EvaluacionFisica;
+    AND  Estado = 1; -- Asegurarse de que la evaluación física esté activa
 END
 GO
 
