@@ -44,12 +44,23 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO HorarioCentro (
-        DiaSemana, HoraInicio, HoraFin, CodigoUnicoCentro
+    IF EXISTS (
+        SELECT 1 
+        FROM CentroVitalPro 
+        WHERE CodigoUnico = @CodigoUnicoCentro AND Estado = 1
     )
-    VALUES (
-        @DiaSemana, @HoraInicio, @HoraFin, @CodigoUnicoCentro
-    );
+    BEGIN
+        INSERT INTO HorarioCentro (
+            DiaSemana, HoraInicio, HoraFin, CodigoUnicoCentro
+        )
+        VALUES (
+            @DiaSemana, @HoraInicio, @HoraFin, @CodigoUnicoCentro
+        );
+    END
+    ELSE
+    BEGIN
+        RAISERROR('No se puede insertar el horario porque el centro esta deshabilitado.', 16, 1);
+    END
 END
 GO
 
@@ -59,6 +70,9 @@ EXECUTE SP_InsertarHorarioCentro
     '20:00:00', 
     1;
 GO
+
+select * from HorarioCentro;
+
 
 -- procedimiento almacenado para crear inerts de horarios para centros 2
 
@@ -76,14 +90,27 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO Profesional (
-        Nombre, Apellido1, Apellido2, CedProfesional, AniosExperiencia, CodigoCentro
+    -- Verificar si el centro está activo
+    IF EXISTS (
+        SELECT 1 
+        FROM CentroVitalPro 
+        WHERE CodigoUnico = @CodigoCentro AND Estado = 1
     )
-    VALUES (
-        @Nombre, @Apellido1, @Apellido2, @CedProfesional, @AniosExperiencia, @CodigoCentro
-    );
+    BEGIN
+        INSERT INTO Profesional (
+            Nombre, Apellido1, Apellido2, CedProfesional, AniosExperiencia, CodigoCentro
+        )
+        VALUES (
+            @Nombre, @Apellido1, @Apellido2, @CedProfesional, @AniosExperiencia, @CodigoCentro
+        );
+    END
+    ELSE
+    BEGIN
+        RAISERROR('No se puede insertar el profesional porque el centro está deshabilitado.', 16, 1);
+    END
 END
 GO
+
 
 EXECUTE SP_InsertarProfesional 
     'María', 
@@ -108,14 +135,27 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    INSERT INTO HorarioProfesional (
-        CodigoProfesional, DiaSemana, HoraInicio, HoraFin
+    -- Verificar si el profesional está activo
+    IF EXISTS (
+        SELECT 1 
+        FROM Profesional 
+        WHERE CodigoProfesional = @CodigoProfesional AND Estado = 1
     )
-    VALUES (
-        @CodigoProfesional, @DiaSemana, @HoraInicio, @HoraFin
-    );
+    BEGIN
+        INSERT INTO HorarioProfesional (
+            CodigoProfesional, DiaSemana, HoraInicio, HoraFin
+        )
+        VALUES (
+            @CodigoProfesional, @DiaSemana, @HoraInicio, @HoraFin
+        );
+    END
+    ELSE
+    BEGIN
+        RAISERROR('No se puede insertar el horario porque el profesional está deshabilitado.', 16, 1);
+    END
 END
 GO
+
 
 EXECUTE SP_InsertarHorarioProfesional 
     1, 

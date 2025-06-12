@@ -5,6 +5,9 @@
  --DROP DATABASE VITALPRO;
  --GO
 
+USE master
+GO
+
 Create database VITALPRO
 ON PRIMARY
 (NAME = VITALPRO_Data,
@@ -109,7 +112,7 @@ CREATE TABLE Profesional (
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_Profesional PRIMARY KEY (CodigoProfesional),
     CONSTRAINT FK_Profesional_Centro FOREIGN KEY (CodigoCentro) REFERENCES CentroVitalPro(CodigoUnico)
-)
+) 
 GO
 
 EXECUTE sp_help Profesional
@@ -141,6 +144,7 @@ CREATE TABLE Entrenador (
     CONSTRAINT PK_Entrenador PRIMARY KEY (IdEntrenador),
     CONSTRAINT FK_Entrenador_Profesional FOREIGN KEY (CodigoProfesional) REFERENCES Profesional(CodigoProfesional)
 )
+ON Entrenamiento
 GO
 
 EXECUTE sp_help Entrenador
@@ -153,6 +157,7 @@ CREATE TABLE Especialidad_Entrenador (
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_Especialidad_Entrenador PRIMARY KEY (IdEspecialidad)
 )
+ON Entrenamiento
 GO
 
 EXECUTE sp_help Especialidad_Entrenador
@@ -169,6 +174,7 @@ CREATE TABLE Entrenador_Especialidad (
     CONSTRAINT FK_EE_Entrenador FOREIGN KEY (IdEntrenador) REFERENCES Entrenador(IdEntrenador),
     CONSTRAINT FK_EE_Especialidad FOREIGN KEY (IdEspecialidad) REFERENCES Especialidad_Entrenador(IdEspecialidad)
 )
+ON Entrenamiento
 GO
 
 EXECUTE sp_help Entrenador_Especialidad
@@ -184,6 +190,7 @@ CREATE TABLE Nutricionista (
     CONSTRAINT PK_Nutricionista PRIMARY KEY (IdNutricionista),
     CONSTRAINT FK_Nutricionista_Profesional FOREIGN KEY (CodigoProfesional) REFERENCES Profesional(CodigoProfesional)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help Nutricionista
@@ -196,6 +203,7 @@ CREATE TABLE Especialidad_Nutricionista (
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_Especialidad_Nutricionista PRIMARY KEY (IdEspecialidad)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help Especialidad_Nutricionista
@@ -212,6 +220,7 @@ CREATE TABLE Nutricionista_Especialidad (
     CONSTRAINT FK_NE_Nutricionista FOREIGN KEY (IdNutricionista) REFERENCES Nutricionista(IdNutricionista),
     CONSTRAINT FK_NE_Especialidad FOREIGN KEY (IdEspecialidad) REFERENCES Especialidad_Nutricionista(IdEspecialidad)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help Nutricionista_Especialidad
@@ -226,6 +235,7 @@ CREATE TABLE ValorNutricional (
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_ValorNutricional PRIMARY KEY (IdValorNutricional)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help ValorNutricional
@@ -241,6 +251,7 @@ CREATE TABLE Receta (
     CONSTRAINT PK_Receta PRIMARY KEY (Id_Receta),
     CONSTRAINT FK_Receta_ValorNutricional FOREIGN KEY (IdValorNutricional) REFERENCES ValorNutricional(IdValorNutricional)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help Receta
@@ -253,6 +264,7 @@ CREATE TABLE UnidadMedida (
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_UnidadMedida PRIMARY KEY (Id_Unidad)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help UnidadMedida
@@ -267,6 +279,7 @@ CREATE TABLE Ingrediente (
     CONSTRAINT PK_Ingredientes PRIMARY KEY (Id_Ingrediente),
     CONSTRAINT FK_Ingredientes_Unidad FOREIGN KEY (Id_Unidad) REFERENCES UnidadMedida(Id_Unidad)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help Ingrediente
@@ -284,6 +297,7 @@ CREATE TABLE RecetaIngrediente (
     CONSTRAINT FK_RecetaIngrediente_Receta FOREIGN KEY (Id_Receta) REFERENCES Receta(Id_Receta),
     CONSTRAINT FK_RecetaIngrediente_Ingrediente FOREIGN KEY (Id_Ingrediente) REFERENCES Ingrediente(Id_Ingrediente)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help RecetaIngrediente
@@ -297,6 +311,7 @@ CREATE TABLE Comida (
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_Comida PRIMARY KEY (Id_Comida)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help Comida
@@ -312,6 +327,7 @@ CREATE TABLE ComidaReceta (
     CONSTRAINT FK_ComidaReceta_Comida FOREIGN KEY (Id_Comida) REFERENCES Comida(Id_Comida),
     CONSTRAINT FK_ComidaReceta_Receta FOREIGN KEY (Id_Receta) REFERENCES Receta(Id_Receta)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help ComidaReceta
@@ -329,6 +345,7 @@ CREATE TABLE PlanAlimenticio (
     CONSTRAINT PK_PlanAlimenticio PRIMARY KEY (CodigoPlan),
     CONSTRAINT FK_PlanAlimenticio_Nutricionista FOREIGN KEY (IdNutricionista) REFERENCES Nutricionista(IdNutricionista)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help PlanAlimenticio
@@ -344,6 +361,7 @@ CREATE TABLE PlanAlimenticio_Comida(
     CONSTRAINT FK_PlanAlimenticioComida_Comida FOREIGN KEY (Id_Comida) REFERENCES Comida(Id_Comida),
     CONSTRAINT FK_PlanAlimenticioComida_PlanAlimenticio FOREIGN KEY (CodigoPlan) REFERENCES PlanAlimenticio(CodigoPlan)
 )
+ON Nutricion
 GO
 
 EXECUTE sp_help PlanAlimenticio_Comida
@@ -359,6 +377,7 @@ CREATE TABLE Ejercicio (
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_Ejercicio PRIMARY KEY (Id_Ejercicio)
 )
+ON Entrenamiento
 GO
 
 EXECUTE sp_help Ejercicio
@@ -373,6 +392,7 @@ CREATE TABLE RutinaSemana (
     Estado BIT DEFAULT 1,
     CONSTRAINT PK_RutinaSemana PRIMARY KEY (Id_RutinaSemana)
 )
+ON Entrenamiento
 GO
 
 EXECUTE sp_help RutinaSemana
@@ -388,8 +408,9 @@ CREATE TABLE RutinaEjercicio (
     CONSTRAINT FK_RE_Ejercicio FOREIGN KEY (Id_Ejercicio) REFERENCES Ejercicio(Id_Ejercicio),
     CONSTRAINT FK_RE_RutinaSemana FOREIGN KEY (Id_RutinaSemana) REFERENCES RutinaSemana(Id_RutinaSemana)
 )
+ON Entrenamiento
 GO
-
+CREATE TABLE 
 EXECUTE sp_help RutinaEjercicio
 GO
 
@@ -407,6 +428,7 @@ CREATE TABLE RutinaEntrenamiento (
     CONSTRAINT FK_Rutina_Entrenador FOREIGN KEY (IdEntrenador) REFERENCES Entrenador(IdEntrenador),
     CONSTRAINT FK_RutinaSemana_Rutina FOREIGN KEY (Id_RutinaSemana) REFERENCES RutinaSemana(Id_RutinaSemana)
 )
+ON Entrenamiento
 GO
 
 EXECUTE sp_help RutinaEntrenamiento

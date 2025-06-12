@@ -331,7 +331,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    UPDATE Nutricionista_Especialidad
+    UPDATE Especialidad_Nutricionista
     SET 
         IdNutricionista = @IdNutricionista,
         IdEspecialidad = @IdEspecialidad
@@ -909,8 +909,10 @@ EXEC ActualizarPlanPersonalizado
 -- procedimiento almacenado para realizar updates de planes personalizados 25
 
 
+
 USE VITALPRO
 GO
+
 
 CREATE PROCEDURE SP_ActualizarSesion
     @Id_Sesion INT,
@@ -939,6 +941,7 @@ BEGIN
     WHERE Id_Sesion = @Id_Sesion;
 END
 GO
+
 
 /*
 -- Ejemplo de uso:
