@@ -21,16 +21,16 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarCentroVitalPro 
-    'Hojancha Vital Pro', 
-    'Guanacaste', 
-    'Hojancha', 
-    'Hojancha', 
-    '50 metros al este de la casa de Samuel', 
-    '2659-3333';
-GO
+--EXECUTE SP_InsertarCentroVitalPro 
+--    'Hojancha Vital Pro', 
+--    'Guanacaste', 
+--    'Hojancha', 
+--    'Hojancha', 
+--    '50 metros al este de la casa de Samuel', 
+--    '2659-3333';
+--GO
 
-select * from CentroVitalPro
+--select * from CentroVitalPro
 -- procedimiento almacenado para realizar inserts de centros 1
 
 USE VITALPRO
@@ -65,14 +65,14 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarHorarioCentro 
-    'Lunes', 
-    '08:00:00', 
-    '20:00:00', 
-    4;
-GO
+--EXECUTE SP_InsertarHorarioCentro 
+--    'Lunes', 
+--    '08:00:00', 
+--    '20:00:00', 
+--    4;
+--GO
 
-select * from HorarioCentro;
+--select * from HorarioCentro;
 
 
 -- procedimiento almacenado para crear inerts de horarios para centros 2
@@ -113,16 +113,16 @@ END
 GO
 
 
-EXECUTE SP_InsertarProfesional 
-    'María', 
-    'Gómez', 
-    'López', 
-    '507960123', 
-    4, 
-    1;
-GO
+--EXECUTE SP_InsertarProfesional 
+--    'María', 
+--    'Gómez', 
+--    'López', 
+--    '507960123', 
+--    4, 
+--    1;
+--GO
 
-select * from Profesional
+--select * from Profesional
 -- prodecimiento almacenado pra crear inserts de profesionales 3
 
 USE VITALPRO
@@ -159,14 +159,14 @@ END
 GO
 
 
-EXECUTE SP_InsertarHorarioProfesional 
-    1, 
-    'Martes', 
-    '09:00:00', 
-    '17:00:00';
-GO
+--EXECUTE SP_InsertarHorarioProfesional 
+--    1, 
+--    'Martes', 
+--    '09:00:00', 
+--    '17:00:00';
+--GO
 
-SELECT * FROM HorarioProfesional;
+--SELECT * FROM HorarioProfesional;
 
 -- procedimiento almacenado para crear inserts de profesionales 4
 
@@ -202,14 +202,14 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarEntrenador 
-    '2023-01-01', 
-    NULL, 
-    1;
-GO
+--EXECUTE SP_InsertarEntrenador 
+--    '2023-01-01', 
+--    NULL, 
+--    1;
+--GO
 
-Select * from Entrenador
-GO
+--Select * from Entrenador
+--GO
 -- procedimiento almacenado para crear inserts de entrenadores 5
 
 CREATE PROCEDURE SP_InsertarEspecialidadEntrenador
@@ -223,14 +223,14 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarEspecialidadEntrenador 
-    'Cardio'
-GO
+--EXECUTE SP_InsertarEspecialidadEntrenador 
+--    'Cardio'
+--GO
 
-USE VITALPRO
-GO
-Select * from Especialidad_Entrenador
-GO
+--USE VITALPRO
+--GO
+--Select * from Especialidad_Entrenador
+--GO
 -- procedimiento almacenado para crear inserts de especialidades de entrenadores 6
 
 
@@ -267,12 +267,12 @@ END
 GO
 
 
-EXECUTE SP_InsertarEntrenadorEspecialidad 
-    'E001',
-	'ES001'
-GO
+--EXECUTE SP_InsertarEntrenadorEspecialidad 
+--    'E001',
+--	'ES001'
+--GO
 
-select * from Entrenador_Especialidad
+--select * from Entrenador_Especialidad
 -- procedimiento almacenado para crear inserts de entrenador con especialidad 7 
 
 USE VITALPRO
@@ -306,13 +306,13 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarNutricionista 
-    '2023-01-15', 
-    NULL, 
-    1;
-GO
-SELECT * FROM Nutricionista;
-GO
+--EXECUTE SP_InsertarNutricionista 
+--    '2023-01-15', 
+--    NULL, 
+--    1;
+--GO
+--SELECT * FROM Nutricionista;
+--GO
 -- procedimiento almacenado para crear inserts de nutricionistas 8 
 
 
@@ -331,13 +331,13 @@ END
 GO
 
 
-EXECUTE SP_InsertarEspecialidadNutricionista 
-    'Adapatacion';
-GO
--- procedimiento almacenado para crear inserts de especialidades de nutricionistas 9
+--EXECUTE SP_InsertarEspecialidadNutricionista 
+--    'Adapatacion';
+--GO
+---- procedimiento almacenado para crear inserts de especialidades de nutricionistas 9
 
-SELECT * FROM Especialidad_Nutricionista;
-GO
+--SELECT * FROM Especialidad_Nutricionista;
+--GO
 
 USE VITALPRO
 GO
@@ -373,12 +373,12 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarNutricionistaEspecialidad 
-    'N001',
-    'SN001';
+--EXECUTE SP_InsertarNutricionistaEspecialidad 
+--    'N001',
+--    'SN001';
 
-SELECT * FROM Nutricionista_Especialidad;
-GO
+--SELECT * FROM Nutricionista_Especialidad;
+--GO
 -- procedimiento almacenado para crear inserts de nutricionista con especialidad 10
 
 
@@ -399,13 +399,13 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarValorNutricional 
-    250, 
-    15.5,
-    40.0;
-GO
-SELECT * FROM ValorNutricional;
-GO
+--EXECUTE SP_InsertarValorNutricional 
+--    250, 
+--    15.5,
+--    40.0;
+--GO
+--SELECT * FROM ValorNutricional;
+--GO
 -- procedimiento almacenado para crear inserts de valores nutricionales 11
 USE VITALPRO
 GO
@@ -439,13 +439,15 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarReceta 
-    'Ensalada Vegana', 
-    10, 
-    1;
+--USe VITALPRO
+--GO
+--EXECUTE SP_InsertarReceta 
+--    'Ensalada Vegana', 
+--    10, 
+--    1;
 
-SELECT * FROM Receta;
-GO   
+--SELECT * FROM Receta;
+--GO   
 -- procedimiento almacenado para crear inserts de recetas 12
 
 
@@ -464,11 +466,11 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarUnidadMedida 
-    'Gramos';
-GO
-SELECT * FROM UnidadMedida;
-GO
+--EXECUTE SP_InsertarUnidadMedida 
+--    'Gramos';
+--GO
+--SELECT * FROM UnidadMedida;
+--GO
 -- procedimiento almacenado para crear inserts de unidades de medida 13
 
 CREATE PROCEDURE SP_InsertarIngrediente
@@ -499,12 +501,12 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarIngrediente 
-    'Pollo', 
-    'U001';
-GO
-SELECT * FROM Ingrediente;
-GO
+--EXECUTE SP_InsertarIngrediente 
+--    'Pollo', 
+--    'U001';
+--GO
+--SELECT * FROM Ingrediente;
+--GO
 -- procedimiento almacenado para crear inserts de ingredientes 14
 
 CREATE PROCEDURE SP_InsertarRecetaIngrediente
@@ -541,13 +543,13 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarRecetaIngrediente 
-    1, 
-    1, 
-    100.0, 
-    5;
-SELECT * FROM RecetaIngrediente;
-GO
+--EXECUTE SP_InsertarRecetaIngrediente 
+--    1, 
+--    1, 
+--    100.0, 
+--    5;
+--SELECT * FROM RecetaIngrediente;
+--GO
 -- procedimiento almacenado para crear inserts de ingredientes en recetas 15
 
 CREATE PROCEDURE SP_InsertarPlanAlimenticio
@@ -577,15 +579,15 @@ END
 GO
 
 
-EXECUTE SP_InsertarPlanAlimenticio 
-    'Plan Vegano', 
-    'Perder peso', 
-    1500, 
-    'Plan personalizado para bajar grasa', 
-    'N001';
+--EXECUTE SP_InsertarPlanAlimenticio 
+--    'Plan Vegano', 
+--    'Perder peso', 
+--    1500, 
+--    'Plan personalizado para bajar grasa', 
+--    'N001';
 
-SELECT * FROM PlanAlimenticio;
-GO
+--SELECT * FROM PlanAlimenticio;
+--GO
 
 
 CREATE PROCEDURE SP_InsertarComida
@@ -616,11 +618,12 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarComida 
-    'Almuerzo', 
-    1;
-SELECT * FROM Comida;
-GO
+--EXECUTE SP_InsertarComida 
+--    'Desayuno', 
+--    1;
+--GO
+--SELECT * FROM Comida;
+--GO
 -- procedimiento almacenado para crear inserts de comidas 16
 
 CREATE PROCEDURE SP_InsertarComidaReceta
@@ -657,12 +660,12 @@ END
 GO
 
 
-EXECUTE SP_InsertarComidaReceta 
-    1, 
-    1;
-
-SELECT * FROM ComidaReceta;
-GO
+--EXECUTE SP_InsertarComidaReceta 
+--    1, 
+--    1;
+--GO
+--SELECT * FROM ComidaReceta;
+--GO
 -- procedimiento almacenado para crear inserts de recetas asociadas a comidas 17 
 
 -- procedimiento almacenado para crear inserts de planes alimenticios 18
@@ -695,12 +698,12 @@ END
 GO
 
 
-EXECUTE SP_InsertarPlanAlimenticioComida 
-    1, 
-    1;
-
-SELECT * FROM PlanAlimenticio_Comida;
-GO
+--EXECUTE SP_InsertarPlanAlimenticioComida 
+--    1, 
+--    1;
+--GO
+--SELECT * FROM PlanAlimenticio_Comida;
+--GO
 -- procedimiento almacenado para crear inserts de comidas asociadas a planes alimenticios 19
 
 
@@ -723,14 +726,14 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarEjercicio 
-    'Sentadillas', 
-    'Piernas', 
-    12, 
-    0;
+--EXECUTE SP_InsertarEjercicio 
+--    'Sentadillas', 
+--    'Piernas', 
+--    12, 
+--    0;
 
-SELECT * FROM Ejercicio;
-GO
+--SELECT * FROM Ejercicio;
+--GO
 
 ---- CAMBIAR RELACION
 CREATE PROCEDURE SP_InsertarRutinaEntrenamiento
@@ -760,14 +763,14 @@ END
 GO
 
 
-EXECUTE SP_InsertarRutinaEntrenamiento 
-    'Bajar grasa corporal', 
-    'Intermedio',
-    4, 
-    'E001';
-GO
-SELECT * FROM RutinaEntrenamiento;
-GO
+--EXECUTE SP_InsertarRutinaEntrenamiento 
+--    'Volumen', 
+--    'Avanzado',
+--    4, 
+--    'E001';
+--GO
+--SELECT * FROM RutinaEntrenamiento;
+--GO
 
 -- procedimiento almacenado para crear inserts de ejercicios 20
 
@@ -798,14 +801,14 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarRutinaSemana 
-    'Lunes', 
-    '08:00:00', 
-    '10:00:00',
-    1;
+--EXECUTE SP_InsertarRutinaSemana 
+--    'Martes', 
+--    '08:00:00', 
+--    '10:00:00',
+--    1;
 
-SELECT * FROM RutinaSemana;
-GO
+--SELECT * FROM RutinaSemana;
+--GO
 -- procedimiento almacenado para crear inserts de rutina semanal 21
 
 
@@ -837,12 +840,12 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarRutinaEjercicio 
-    1, 
-    1;
+--EXECUTE SP_InsertarRutinaEjercicio 
+--    1, 
+--    1;
 
-SELECT * FROM RutinaEjercicio;
-GO
+--SELECT * FROM RutinaEjercicio;
+--GO
 -- procedimiento almacenado para crear inserts de ejercicios en rutina semanal 22
 
 -- procedimiento almacenado para crear inserts de rutinas de entrenamiento 23
@@ -890,21 +893,21 @@ END
 GO
 
 
-EXECUTE SP_InsertarCliente 
-    'Juan', 
-    'Pérez', 
-    'Gomez',
-    '501230456',
-    'M',
-    '1990-05-05',
-    '8888-9999',
-    'juan@gmail.com',
-    '2024-01-01',
-    'E001',
-    1;
-
-SELECT * FROM Clientes;
-GO
+--EXECUTE SP_InsertarCliente 
+--    'Juan', 
+--    'Pérez', 
+--    'Gomez',
+--    '501230456',
+--    'M',
+--    '1990-05-05',
+--    '8888-9999',
+--    'juan@gmail.com',
+--    '2024-01-01',
+--    'E001',
+--    1;
+--GO
+--SELECT * FROM Clientes;
+--GO
 -- procedimiento almacenado para crear inserts de clientes 24
 
 
@@ -945,15 +948,15 @@ END
 GO
 
 
-EXECUTE SP_InsertarPlanPersonalizado 
-    '2024-01-01', 
-    '2024-12-31', 
-    1, 
-    1, 
-    1;
-
-SELECT * FROM PlanPersonalizado;
-GO
+--EXECUTE SP_InsertarPlanPersonalizado 
+--    '2024-01-01', 
+--    '2024-12-31', 
+--    1, 
+--    1, 
+--    1;
+--GO
+--SELECT * FROM PlanPersonalizado;
+--GO
 -- procedimiento almacenado para crear inserts de planes personalizados 25
 
 CREATE PROCEDURE SP_InsertarSesion
@@ -993,19 +996,20 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarSesion 
-    'Entrenamiento Personalizado', 
-    '2024-01-15', 
-    '10:00:00', 
-    60,
-    1, 
-    1, 
-    1;
-GO
+--EXECUTE SP_InsertarSesion 
+--    'Entrenamiento', 
+--    '2024-01-15', 
+--    '10:00:00', 
+--    60,
+--    1, 
+--    1, 
+--    1;
+--GO
 
-USE VITALPRO
-SELECT * FROM Sesion;
-GO
+--USE VITALPRO
+--SELECT * FROM Sesion;
+--GO
+
 -- procedimiento almacenado para crear inserts de sesiones 26 
 
 
@@ -1058,18 +1062,18 @@ BEGIN
 END
 GO
 
-EXECUTE SP_InsertarEvaluacionFisica 
-    '2024-03-10',
-    68.2,
-    1.68,
-    17.3,
-    28.5,
-    'Medio',
-    'Buena',
-    1,
-    1,
-    1;
-GO
--- procedimiento almacenado para crear inserts de evaluaciones físicas 27
-SELECT * FROM EvaluacionFisica;
-GO
+--EXECUTE SP_InsertarEvaluacionFisica 
+--    '2024-03-10',
+--    68.2,
+--    1.68,
+--    17.3,
+--    28.5,
+--    'Intermedio',
+--    'Buena',
+--    1,
+--    1,
+--    1;
+--GO
+---- procedimiento almacenado para crear inserts de evaluaciones físicas 27
+--SELECT * FROM EvaluacionFisica;
+--GO
